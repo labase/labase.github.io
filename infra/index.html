@@ -23,34 +23,10 @@
         # Copyright © 2022  Carlo Oliveira <carlo@nce.ufrj.br>,
         # `Labase <http://labase.selfip.org/>`__; `GPL <http://is.gd/3Udt>`__.
         # SPDX-License-Identifier: (GPLv3-or-later AND LGPL-2.0-only) WITH bison-exception
-        from browser import document, alert, html, window, ajax, timer, svg
-        from browser.template import Template
-        GAMES = dict(jeronimo="lorinda samantha", empodera="anita kristen",
-                bully="kathleen parisa", genes="lorinda natalia")
-        REPOSITORY = "https://raw.githubusercontent.com/kwarwp/{}/master/{}/"
-        # Template("_tt_").render(titulo="Super Python")
-        modulepaths = [ 'https://raw.githubusercontent.com/kwarwp/lorinda/master/samantha/',
-        'https://raw.githubusercontent.com/labase/labase.github.io/main/game/' ];
-        if window.GONE:
-            game = document.query.getlist("game")
-            if len(game) == 1 and game[0] in GAMES:
-                Template("_tt_").render(titulo=game[0].capitalize())
-                module = REPOSITORY.format(*(GAMES[game[0]].split()))
-                modulepaths[0] = module
-                print('modulepaths', modulepaths, module)
-            window.brython ( { 'pythonpath' : modulepaths } );
-        window.GONE = 0
-        print(window.GONE)
-        # from  samantha import main
-        Template("_version_").render(version="22.09")
-        print("ok")
-
-        import main
-        print("ok ag")
 </script>
 <div id="_main_" style="position:relative; width:100%; height:100%;">
     <div id="pydiv" style="margin: 0 auto; position:relative; top:0px;">
-        <img src="/image/supygirls_ide.png" alt="SUPYGIRLS"
+        <img src="https://i.imgur.com/hib4z1f.png" alt="EM CONSTRUÇÂO"
              style="width:100vw; height:100vh; object-fit: cover;"/>
         <div style="position: absolute; top: 50%; left: 50%; opacity:0.3;
             margin-top: -100px; margin-left: -100px; width: 200px; height: 200px;">
