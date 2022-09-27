@@ -20,6 +20,7 @@ Added
 - Code to run games
 - Version to run from wsgi
 - Added to labase.github.io
+- New game runner at github
 
 
 `22.07`_
