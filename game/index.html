@@ -34,11 +34,14 @@
         if window.GONE:
             game = document.query.getlist("game")
             if len(game) == 1 and game[0] in GAMES:
-                Template("_tt_").render(titulo=game[0].capitalize())
+                Template("_tt_").render(titulo=game[0].capitalize()+ " - SuperPython")
                 module = REPOSITORY.format(*(GAMES[game[0]].split()))
                 modulepaths[0] = module
                 print('modulepaths', modulepaths, module)
-            window.brython ( { 'pythonpath' : modulepaths } );
+            else:
+                Template("_tt_").render(titulo="Jeronimo - SuperPython")
+
+            window.brython ( { 'pythonpath' : modulepaths } )
         window.GONE = 0
         print(window.GONE)
         # from  samantha import main
@@ -57,7 +60,6 @@
             <img src="https://imgur.com/uc56UAq.gif" width="200px" alt="LOADING" style=""/>
         </div>
     </div>
-</div>
 </div>
 <div style="position:absolute; top:700px; left:2px; height: 10px;">
     <p>
