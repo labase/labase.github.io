@@ -2,7 +2,7 @@ Executor de Jogos SuperPython
 =============================
  |Daniel Pisa|
 
-Executor de Games Inteligentes Desenvolvidos na Escola Daniel Pisa em Costa Barros.
+Executor de Games Inteligentes Desenvolvidos na Escola Daniel Piza em Costa Barros.
 
   |python| |license| |github|  |rtfd|
 
@@ -17,12 +17,13 @@ Executor de Games Inteligentes Desenvolvidos na Escola Daniel Pisa em Costa Barr
 Jogos Daniel Pisa
 ------------------
 
-Diversos jogos foram desenvolvidos ao longo dos anos na Daniel Pisa
+Diversos jogos foram desenvolvidos ao longo dos anos na Daniel Piza
 
-* `Jogo da Genética`_  - Aprendendo a usar herdogramas
+* `Jogo da Genética`_  - Aprendendo a usar herdogramas.
 * `Bullying`_ - Lidando com a perseguição discriminatória nas escolas.
-* `Empoderamento`_ - Mostrando a influência das mulheres na sociedade
-* `Jeronimo`_ - A vida de São Jeronimo
+* `Empoderamento`_ - Mostrando a influência das mulheres na sociedade.
+* `Jeronimo`_ - A vida de São Jeronimo.
+* `Citonópolis`_ - Uma Aventura na cidade da célula orgânica.
 
 -------
 
@@ -65,6 +66,8 @@ LABASE_ - NCE_ - UFRJ_
 
 .. |license| image:: https://img.shields.io/github/license/labase/supyplay
    :target: https://raw.githubusercontent.com/labase/supyplay/main/LICENSE
+
+.. _Citonópolis: https://bit.ly/g_citonopolis
 
 .. _Jogo da Genética: https://bit.ly/g_genes
 
