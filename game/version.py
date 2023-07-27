@@ -31,5 +31,8 @@ Changelog
 .. versionadded::    22.09
         Support import from other files.
 
+.. versionadded::    23.05
+        Add citonópolis game (01).
+
 """
-__version__ = "22.09"
+__version__ = "23.05"

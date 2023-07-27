@@ -12,6 +12,13 @@ The format is based on `Keep a Changelog`_.
 -------------
 - to be defined
 
+`23.05`_
+----------------
+
+Added
++++++
+- Citonópolis Game
+
 `22.09`_
 ----------------
 
@@ -51,6 +58,7 @@ LABASE_ - NCE_ - UFRJ_
 .. _Keep a Changelog: https://keepachangelog.com/en/1.0.0/
 .. _22.07: https://github.com/labase/supyplay/releases
 .. _22.09: https://github.com/labase/supyplay/releases
+.. _23.05: https://github.com/labase/supyplay/releases
 
 .. |LABASE| image:: https://cetoli.gitlab.io/spyms/image/labase-logo-8.png
    :target: http://labase.activufrj.nce.ufrj.br
