@@ -6,6 +6,7 @@ Changelog
 ---------
 .. versionadded::    23.08
         revise for wsgi (16).
+        add game controller (16).
 
 .. versionadded::    20.07
         add version file.
@@ -25,7 +26,7 @@ Changelog
 import bottle
 from bottle import Bottle, redirect, request, get, static_file
 # name and list your controllers here so their routes become accessible.
-from . import img_dir, js_dir, css_dir, tpl_dir
+from . import img_dir, js_dir, css_dir, tpl_dir, gam_dir
 # Enable debugging, which gives us tracebacks
 bottle.DEBUG = True
 
@@ -61,11 +62,16 @@ def ajs(filepath):
 
 
 # Static Routes
-# @get("/css/<filepath:re:.*\.(js|css|map)>")
 @get("/css/<filepath:re:.*\.(js|css|map)>")
 def ajs(filepath):
     print("/css/<filepath:re:.*\.(js|css|map)>", css_dir)
     return static_file(filepath, root=css_dir)
+
+
+@get("/game/<filepath:re:.*\.html>")
+def ajs(filepath):
+    print("/css/<filepath:re:.*\.(js|css|map)>", css_dir)
+    return static_file(filepath, root=gam_dir)
 
 
 # Static Routes

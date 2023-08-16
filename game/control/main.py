@@ -12,6 +12,7 @@ Changelog
 ---------
 .. versionadded::    23.08
         revise for wsgi (16).
+        add game controller binder (16a).
         
 .. versionadded::    20.07
         add version file.
@@ -71,6 +72,7 @@ _ = application
 application.mount("/stlib", static_controller.appbottle)
 application.mount("/<:re:.*>/image", static_controller.appbottle)
 application.mount("/<:re:.*>/css", static_controller.appbottle)
+application.mount("/<:re:.*>/game", static_controller.appbottle)
 application.mount("/site", static_controller.appbottle)
 # application.mount("/<:path>/play/<:re:.*>/__code/", code_controller.appbottle)
 application.mount("/<:path>/play/", play_controller.appbottle)

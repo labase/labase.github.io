@@ -6,6 +6,7 @@ Changelog
 ---------
 .. versionadded::    23.08
         revise for wsgi (16).
+        add game controller dir (16a).
 
 .. versionadded::    20.07
         add version file.
@@ -26,10 +27,11 @@ import os
 # Enable debugging, which gives us tracebacks
 project_server = os.path.dirname(os.path.abspath(__file__))
 js_dir = os.path.join(project_server, '../view/stlib')
+gam_dir = os.path.join(project_server, '../../game')
 css_dir = os.path.join(project_server, '../../css')
 img_dir = os.path.join(project_server, '../../image')
 tpl_dir = os.path.join(project_server, '../view/tpl')
 inf_dir = os.path.join(project_server, '../..')
 py_dir = os.path.join(project_server, '../view')
 model_dir = os.path.join(project_server, '../model')
-print("js_dir = ", js_dir)
+# print("js_dir = ", js_dir)
