@@ -26,7 +26,7 @@ Changelog
 import bottle
 from bottle import Bottle, redirect, request, get, static_file
 # name and list your controllers here so their routes become accessible.
-from . import img_dir, js_dir, css_dir, tpl_dir, gam_dir
+from . import img_dir, js_dir, css_dir, tpl_dir, gam_dir, py_dir
 # Enable debugging, which gives us tracebacks
 bottle.DEBUG = True
 
@@ -66,6 +66,12 @@ def ajs(filepath):
 def ajs(filepath):
     print("/css/<filepath:re:.*\.(js|css|map)>", css_dir)
     return static_file(filepath, root=css_dir)
+
+
+@get("/view/<filepath:re:.*\.py>")
+def ajs(filepath):
+    print("/view/<filepath:re:.*\.(js|css|map)>", py_dir)
+    return static_file(filepath, root=py_dir)
 
 
 @get("/game/<filepath:re:.*\.html>")

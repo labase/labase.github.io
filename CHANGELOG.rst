@@ -12,6 +12,14 @@ The format is based on `Keep a Changelog`_.
 -------------
 - to be defined
 
+`23.08`_
+----------------
+
+Added
++++++
+- Revise for wsgi (16).
+- Add game mounting point (16).
+
 `23.05`_
 ----------------
 
@@ -59,6 +67,7 @@ LABASE_ - NCE_ - UFRJ_
 .. _22.07: https://github.com/labase/supyplay/releases
 .. _22.09: https://github.com/labase/supyplay/releases
 .. _23.05: https://github.com/labase/supyplay/releases
+.. _23.08: https://github.com/labase/supyplay/releases
 
 .. |LABASE| image:: https://cetoli.gitlab.io/spyms/image/labase-logo-8.png
    :target: http://labase.activufrj.nce.ufrj.br
