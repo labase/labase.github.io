@@ -64,7 +64,7 @@
 
         from browser import document, alert, html, window
         from _core.pager import Action as Act
-        Act(document, html)
+        Act(document, html).build()
 
 
     </script>
@@ -127,7 +127,7 @@
 <div class="main-content">
     <div class="container">
         <!-- start of posts -->
-        <div class="columns is-multiline is-centered has-text-centered">
+        <div id="_panel" class="columns is-multiline is-centered has-text-centered">
 
             <!-- start of post -->
             <div class="column is-4">
@@ -244,7 +244,7 @@
 </div>
 <!-- end of footer -->
 <!-- end of footer -->
-<div class="modal" id="_modal">
+<div class="modal" id="_modal_mod">
 
     <div class="modal-background"></div>
 
