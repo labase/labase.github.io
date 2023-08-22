@@ -19,11 +19,11 @@ Changelog
 import uuid
 from unittest.mock import patch
 from collections import namedtuple
-from dataclasses import dataclass
+from dataclasses import dataclass, asdict
+
 ELEM_ID = "opn eng dis clo exi mod name_ desc_".split()
 
-Level = namedtuple("Level", "title descript name m_dsc m_tit m_nam hpn hpd img")
-# ObjectId = namedtuple("ObjectId", ELEM_ID)
+Level = namedtuple("Level", "descript name title m_dsc m_tit m_nam hpn hpd img")
 ObjectId = namedtuple("ObjectId", "opn eng dis clo exi mod name_ desc_")
 TEX0 = dict(descript="Create a new Python project - New Project - Click Here",
             name="Novo Projeto - Clique Aqui",
@@ -65,18 +65,54 @@ class DataSource:
     def __init__(self):
         @dataclass
         class LevelData:
-            desc: str
+            descript: str
             name: str
             title: str
+            m_dsc: str
+            m_tit: str
+            m_nam: str
+            hpn: str
+            hpd: str
+            img: str
             pad: str
 
+            def as_dict(self):
+                    return {k: str(v) for k, v in asdict(self).items()}
+        @dataclass
+        class LevelContent:
+            pid: str
+            pad: list
+
+            def as_dict(self):
+                    return {k: str(v) for k, v in asdict(self).items()}
+            def upsert(self, _pad):
+                data = _pad if isinstance(_pad,list) else [_pad]
+                self.pad = self.pad + data if self.pad else data
         self.data_buffer = {}
         self.level = LevelData
+        self.content = LevelContent
 
-    def save(self, desc, name, title, pad=None):
-        pad = pad or str(uuid.uuid4().fields[-1])[:9]
-        data = self.level(desc, name, title, pad)
+    def save_cnt(self, pid, pad):
+        # print("save_cnt(self, pid, pad)", pid, pad, self.data_buffer[pid])
+        data = self.data_buffer[pid].pad if pid in self.data_buffer else []
+        _ = data.extend(pad) if isinstance(pad, list) else data.append(pad)
+        if pid in self.data_buffer:
+            self.data_buffer[pid].upsert(data)
+        else:
+            self.data_buffer[pid] = self.content(pid, data)
+
+    def load_cnt(self, pid):
+        data = self.data_buffer[pid].pad
+        print("load_cnt",pid, data)
+        data = [self.data_buffer[pd] for pd in data if pd in self.data_buffer]
+
+        return data
+
+    def save(self, descript, name, title, m_dsc,  m_tit,  m_nam, hpn,  hpd,  img,  pad=None):
         import json
+        pad = pad or str(uuid.uuid4().fields[-1])[:9]
+        data = [""]*6+[pad]
+        data = self.level(descript, name, title, m_dsc,  m_tit,  m_nam, hpn,  hpd,  img, pad).as_dict()
         self.data_buffer[pad] = json.dumps(data)
         return data
 
@@ -84,7 +120,7 @@ class DataSource:
         import json
         data = json.loads(self.data_buffer[pad])
         data = self.level(**data)
-        return data
+        return data.as_dict()
 
 class Action:
 
@@ -98,8 +134,17 @@ class Action:
         self.tagr = (html.P, html.BUTTON, html.HEADER, html.SECTION, html.FORM,
                      html.FIELDSET, html.INPUT, html.LEGEND, html.LABEL, html.FOOTER)
         self.modal = {}
-        # self.modal_id = [f"_modal_{suf}" for suf in "opn eng dis clo exi mod pna pde".split()]
+        self.data = DataSource()
         self.bnd = [self.open_modal, self.execute_modal] + [self.close_modal] * 3
+        self.levels = self.populate()
+    def populate(self):
+        p = self.data.save(**LEVEL["projeto"]._asdict(), pad="__projeto@__")
+        k = self.data.save(**LEVEL["pacote"]._asdict(), pad="__pacote@__")
+        md = self.data.save(**LEVEL["modulo"]._asdict(), pad="__modulo@__")
+        lvs = dict(__projeto__="__projeto@__", __pacote__="__pacote@__", __modulo__="__modulo@__")
+        [self.data.save_cnt(pid, pad) for pid, pad in lvs.items()]
+        return lvs
+
     def build(self):
         self.document["_panel"].html = ""
         current_level_text = LEVEL[self.current_level]
@@ -154,14 +199,6 @@ class Action:
         d, f, a, i, s, h = self.tags
         p, b, hd, sc, fm, fs, ip, lg, lb, ft = self.tagr
         mod, opn, eng, dis, clo, exi = OI.mod, OI.opn, OI.eng, OI.dis, OI.clo, OI.exi
-        # tx = LEVEL[level]
-        # md, me, md, mc, mx, m5, m6, m7 = [f'_modal_{_ix}' for _ix in range(7)]
-        # md, mo, me, md, mc, mx, m5 = self.modal_id
-        # descript = "Defina seu novo projeto"
-        # name = "Novo Project - Clique Aqui"
-        # title = "Novo Projeto"
-        # hpr = "O nome do projeto com uma única palavra minúscula e sem acentos."
-        # hpd = "Um texto de uma linha descrevendo o projeto."
         descript = tx.m_tit
         name = tx.name
         title = tx.title
@@ -211,13 +248,12 @@ if __name__ == '__main__':
     cd = act.create_card(LEVEL["projeto"])
     # _html.DIV.DIV.assert_any_call()
     print(_add.mock_calls)
-    print(_html.DIV.mock_calls)
-    print(_html.BUTTON.mock_calls)
-    print(" ".join(ELEM_ID))
-    print(OI._asdict())
-    print()
-    #assert act.modal_btn == dc[ix[1]], (act.modal_btn, dc[ix[1]])
-    #mk[ix[1]].bind.assert_called_with()
+    ds = DataSource()
+    ind = ds.save("adesc", "aname", "atitle", *([""]*6))
+    print(ind)
+    print(ds.load(ind["pad"]))
+    print(act.data.load_cnt("__projeto__"))
+    print(act.data.data_buffer)
 '''
 <div class="modal" id="_modal">
     <div class="modal-background"></div>
