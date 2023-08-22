@@ -23,7 +23,7 @@ from dataclasses import dataclass, asdict
 
 ELEM_ID = "opn eng dis clo exi mod name_ desc_".split()
 
-Level = namedtuple("Level", "descript name title m_dsc m_tit m_nam hpn hpd img")
+Level = namedtuple("Level", "descript name title m_dsc m_tit m_nam h_nam h_dsc h_tit")
 ObjectId = namedtuple("ObjectId", "opn eng dis clo exi mod name_ desc_")
 TEX0 = dict(descript="Create a new Python project - New Project - Click Here",
             name="Novo Projeto - Clique Aqui",
@@ -31,9 +31,9 @@ TEX0 = dict(descript="Create a new Python project - New Project - Click Here",
             m_dsc="Defina seu novo projeto",
             m_nam="Novo Projeto- Clique Aqui",
             m_tit="Descreva seu Novo Projeto",
-            hpn="O nome do projeto com uma única palavra minúscula e sem acentos.",
-            hpd="Um texto de uma linha descrevendo o projeto.",
-            img="../image/montroig.jpg"
+            h_nam="O nome do projeto com uma única palavra minúscula e sem acentos.",
+            h_dsc="Um texto de uma linha descrevendo o projeto.",
+            h_tit="../image/montroig.jpg"
             )
 TEX1 = dict(descript="Create a new Python packet - New Packet - Click Here",
             name="Novo Pacote - Clique Aqui",
@@ -41,9 +41,9 @@ TEX1 = dict(descript="Create a new Python packet - New Packet - Click Here",
             m_dsc="Defina seu novo pacote",
             m_nam="Novo Pacote - Clique Aqui",
             m_tit="Descreva seu Novo Pacote",
-            hpn="O nome do pacote com uma única palavra minúscula e sem acentos.",
-            hpd="Um texto de uma linha descrevendo o pacote.",
-            img="../image/garden.jpg"
+            h_nam="O nome do pacote com uma única palavra minúscula e sem acentos.",
+            h_dsc="Um texto de uma linha descrevendo o pacote.",
+            h_tit="../image/garden.jpg"
             )
 TEX2 = dict(descript="Create a new Python Module - New Module - Click Here",
             name="Novo Módulo - Clique Aqui",
@@ -51,9 +51,9 @@ TEX2 = dict(descript="Create a new Python Module - New Module - Click Here",
             m_dsc="Defina seu novo Módulo",
             m_nam="Novo Módulo - Clique Aqui",
             m_tit="Descreva seu Novo Módulo",
-            hpn="O nome do Módulo com uma única palavra minúscula e sem acentos.",
-            hpd="Um texto de uma linha descrevendo o Módulo.",
-            img="../image/montroig.jpg"
+            h_nam="O nome do Módulo com uma única palavra minúscula e sem acentos.",
+            h_dsc="Um texto de uma linha descrevendo o Módulo.",
+            h_tit="../image/montroig.jpg"
             )
 LEVEL = dict(projeto=Level(**{s: str(t) for s, t in TEX0.items()}),
              pacote=Level(**{s: str(t) for s, t in TEX1.items()}),
@@ -71,9 +71,9 @@ class DataSource:
             m_dsc: str
             m_tit: str
             m_nam: str
-            hpn: str
-            hpd: str
-            img: str
+            h_nam: str
+            h_dsc: str
+            h_tit: str
             pad: str
 
             def as_dict(self):
@@ -108,11 +108,11 @@ class DataSource:
 
         return data
 
-    def save(self, descript, name, title, m_dsc,  m_tit,  m_nam, hpn,  hpd,  img,  pad=None):
+    def save(self, descript, name, title, m_dsc,  m_tit,  m_nam, h_nam,  h_dsc,  h_tit,  pad=None):
         import json
         pad = pad or str(uuid.uuid4().fields[-1])[:9]
         data = [""]*6+[pad]
-        data = self.level(descript, name, title, m_dsc,  m_tit,  m_nam, hpn,  hpd,  img, pad).as_dict()
+        data = self.level(descript, name, title, m_dsc,  m_tit,  m_nam, h_nam,  h_dsc,  h_tit, pad).as_dict()
         self.data_buffer[pad] = json.dumps(data)
         return data
 
@@ -122,6 +122,20 @@ class DataSource:
         data = self.level(**data)
         return data.as_dict()
 
+class Html:
+    def __init__(self, html):
+        self.tags = html.DIV, html.FIGURE, html.A, html.IMG, html.SPAN, html.H4
+        self.tagr = (html.P, html.BUTTON, html.HEADER, html.SECTION, html.FORM,
+                     html.FIELDSET, html.INPUT, html.LEGEND, html.LABEL, html.FOOTER)
+        self.tags_one = "d, f, a, i, s, h".split(", ")
+        self.tags_two = "p, b, hd, sc, fm, fs, ip, lg, lb, ft".split(", ")
+        [setattr(self, name, value) for name, value in zip(self.tags_one, self.tags)]
+        [setattr(self, name, value) for name, value in zip(self.tags_two, self.tagr)]
+    def get_one(self):
+        return [getattr(self, name) for name in self.tags_one]
+    def get_two(self):
+        return [getattr(self, name) for name in self.tags_two]
+
 class Action:
 
     def __init__(self, document, html):
@@ -130,9 +144,10 @@ class Action:
         self.current_level = "projeto"
         self.level = {lvl: nxt for lvl, nxt in level_state}
         self.modal_id = [suf for suf in ELEM_ID]
-        self.tags = html.DIV, html.FIGURE, html.A, html.IMG, html.SPAN, html.H4
-        self.tagr = (html.P, html.BUTTON, html.HEADER, html.SECTION, html.FORM,
-                     html.FIELDSET, html.INPUT, html.LEGEND, html.LABEL, html.FOOTER)
+        # self.tags = html.DIV, html.FIGURE, html.A, html.IMG, html.SPAN, html.H4
+        # self.tagr = (html.P, html.BUTTON, html.HEADER, html.SECTION, html.FORM,
+        #              html.FIELDSET, html.INPUT, html.LEGEND, html.LABEL, html.FOOTER)
+        self.h_one = Html(html)
         self.modal = {}
         self.data = DataSource()
         self.bnd = [self.open_modal, self.execute_modal] + [self.close_modal] * 3
@@ -171,19 +186,19 @@ class Action:
         # print(self.modal[""])
         name, desc = self.modal["name_"].value, self.modal["desc_"].value,
         self.modal["mod"].classList.remove('is-active')
-        img = LEVEL[self.current_level].img
+        h_tit = LEVEL[self.current_level].h_tit
         inst = f"Entre no Projeto {name.capitalize()} -Clique Aqui"
-        texto = Level(f"Projeto {name.capitalize()}", desc, inst, *(["_NO_"]*5+[img]))
+        texto = Level(f"Projeto {name.capitalize()}", desc, inst, *(["_NO_"]*5+[h_tit]))
         s = "opacity:0.7; position: absolute; min-width: 400%; min-height: 400%; top=-25%; left=0px;"
         _ = self.document["_panel"] <= self.create_card(texto, s, f"_prj_{name}_")
 
     def create_card(self, v, style=None, bind_id=None):
-        d, f, a, i, s, h = self.tags
+        d, f, a, i, s, h = self.h_one.get_one()
         o = bind_id or OI.opn
-        img, title, name, descript = v.img, v.title, v.name, v.descript
+        h_tit, title, name, descript = v.h_tit, v.title, v.name, v.descript
         style = style or "opacity:0.5; filter:brightness(200%) blur(1px)"
         card = d(
-            d(d(f(a(i(src=img, style=style)), Class="image is-4by3 is-clipped"), Class="card-image") +
+            d(d(f(a(i(src=h_tit, style=style)), Class="image is-4by3 is-clipped"), Class="card-image") +
             d(s(title), Class="card-content is-overlay is-size-1 has-text-weight-bold has-text-black") +
             d(h(name, Class="title is-4"), Class="card-content-header") +
             s(descript)  # , id=m1)
@@ -196,19 +211,19 @@ class Action:
                      d(ip(id=_name, name=_name, type="text", placeholder=ph, Class="input") +
                        p(hlp, Class="help"), Class="control"))
 
-        d, f, a, i, s, h = self.tags
-        p, b, hd, sc, fm, fs, ip, lg, lb, ft = self.tagr
+        d, f, a, i, s, h = self.h_one.get_one()
+        p, b, hd, sc, fm, fs, ip, lg, lb, ft = self.h_one.get_two()
         mod, opn, eng, dis, clo, exi = OI.mod, OI.opn, OI.eng, OI.dis, OI.clo, OI.exi
         descript = tx.m_tit
         name = tx.name
         title = tx.title
-        hpn, hpd = tx.hpn, tx.hpd
+        h_nam, h_dsc = tx.h_nam, tx.h_dsc
         ii, ig = "button is-info", "button is-danger"
         card = d(
             d(hd(p(descript, Class="modal-card-title") +
                  b(Class="delete", id=exi, ariaLabel="close"), Class="modal-card-head") +
             sc(d(fm(
-                fs(lg(title) + field(hlp=hpn) + field(_name=ELEM_ID[-1], hlp=hpd, ph="descreve o projeto")),
+                fs(lg(title) + field(hlp=h_nam) + field(_name=ELEM_ID[-1], hlp=h_dsc, ph="descreve o projeto")),
                 Class="form-horizontal"), Class="content"), Class="modal-card-body") +
             ft(b("Enviar", Class=ii, id=eng) + b("Cancelar", Class=ii, id=dis) +
                b("Fechar", Class=ig, id=clo), Class="modal-card-foot"), Class="modal-card"),
