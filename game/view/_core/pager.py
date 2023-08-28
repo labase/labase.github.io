@@ -7,6 +7,7 @@
 Changelog
 ---------
 .. versionadded::    23.08
+        Support the creation of a new level panel (28).
         Refactor for small data entry, new card and modal (22).
         Registra os três níveis e inicia o datasource (21a).
         Gerencia a mudança de nível no cliente (21).
@@ -31,8 +32,8 @@ class DATA:
                 title="Novo Projeto",
                 extra="../image/montroig.jpg"
                 )
-    MOD0 = dict(descript="Defina seu novo pacote",
-                name="Novo Pacote - Clique Aqui",
+    MOD0 = dict(descript="Defina seu novo Projeto",
+                name="Novo Projeto - Clique Aqui",
                 title="Descreva seu Novo Pacote",
                 extra=("O nome do pacote com uma única palavra minúscula e sem acentos.",
                        "Um texto de uma linha descrevendo o pacote."),
@@ -65,6 +66,7 @@ LEVEL = dict(projeto=Level(**{s: str(t) for s, t in DATA.TEX0.items()}),
              pacote_modal=Level(**{s: str(t) for s, t in DATA.MOD1.items()}),
              modulo=Level(**{s: str(t) for s, t in DATA.TEX2.items()}),
              modulo_modal=Level(**{s: str(t) for s, t in DATA.MOD2.items()}))
+LEVELS = "projeto pacote modulo".split()
 
 
 class DataSource:
@@ -80,11 +82,11 @@ class DataSource:
             def __init__(self, descript: str, name: str, title: str, extra: str, pad: str):
                 self.descript, self.name, self.title, self.extra =  descript, name, title, extra
                 self.pad = pad
-            def asdict(self):
+            def as_dictionary(self):
                 return {k: getattr(self, k) for k in "descript, name, title, extra".split(", ")}
 
             def as_dict(self):
-                return {k: str(v) for k, v in self.asdict().items()}
+                return {k: str(v) for k, v in self.as_dictionary().items()}
 
         # @dataclass
         class LevelContent:
@@ -93,10 +95,10 @@ class DataSource:
 
             def __init__(self, pid, pad):
                 self.pid, self.pad = pid, pad
-            def asdict(self):
+            def as_dictionary(self):
                 return {k: getattr(self, k) for k in "pid pad".split()}
             def as_dict(self):
-                return {k: str(v) for k, v in self.asdict().items()}
+                return {k: str(v) for k, v in self.as_dictionary().items()}
 
             def upsert(self, _pad):
                 data = _pad if isinstance(_pad, list) else [_pad]
@@ -142,10 +144,10 @@ class DataSource:
 
 class Html:
     def __init__(self, html):
-        self.tags = html.DIV, html.FIGURE, html.A, html.IMG, html.SPAN, html.H4
+        self.tags = html.DIV, html.FIGURE, html.A, html.IMG, html.SPAN, html.H4, html.H1
         self.tagr = (html.P, html.BUTTON, html.HEADER, html.SECTION, html.FORM,
                      html.FIELDSET, html.INPUT, html.LEGEND, html.LABEL, html.FOOTER)
-        self.tags_one = "d, f, a, i, s, h".split(", ")
+        self.tags_one = "d, f, a, i, s, h, h1".split(", ")
         self.tags_two = "p, b, hd, sc, fm, fs, ip, lg, lb, ft".split(", ")
         [setattr(self, name, value) for name, value in zip(self.tags_one, self.tags)]
         [setattr(self, name, value) for name, value in zip(self.tags_two, self.tagr)]
@@ -164,6 +166,7 @@ class Action:
         level_state = zip("projeto pacote modulo".split(), "pacote modulo projeto".split())
         self.current_level = "projeto"
         self.level = {lvl: nxt for lvl, nxt in level_state}
+        self.content = {k: 0 for k in self.level.keys()}
         self.modal_id = [suf for suf in ELEM_ID]
         self.h_one = Html(html)
         self.modal = {}
@@ -207,30 +210,50 @@ class Action:
         self.modal["mod"].classList.remove('is-active')
         extra = LEVEL[self.current_level].extra
         inst = f"Entre no Projeto {name.capitalize()} -Clique Aqui"
+        level_off = self.content[self.current_level]
+        top,left = (level_off // 4) * -100, (level_off % 4) * -100
+        print(level_off, top, left)
+        s = f"opacity:0.7; position: absolute; min-width: 400%; min-height: 400%; top:{top}%; left:{left}%;"
+        _panel_text = Level(desc, f"Projeto {name.capitalize()}", name, extra)
+        _binder = lambda *_: self.create_panel(_panel_text)
         texto = Level(desc, inst, f"Projeto {name.capitalize()}", extra)
-        s = "opacity:0.7; position: absolute; min-width: 400%; min-height: 400%; top=-25%; left=0px;"
-        _ = self.document["_panel"] <= self.create_card(texto, s, f"_prj_{name}_")
+        self.content[self.current_level] += 1
+        _ = self.document["_panel"] <= self.create_card(texto, s, f"_prj_{name}_", _binder=_binder)
 
-    def create_card(self, v, style=None, bind_id=None):
-        d, f, a, i, s, h = self.h_one.get_one()
+    def create_panel(self, v):
+        self.current_level = self.level[self.current_level]
+        _ = self.document["_panel_title"].html = v.name
+        _ = self.document["_panel_subtitle"].html = v.descript
+        _ = self.document["_panel"].html = ""
+        s = "opacity:0.5; filter:brightness(200%) blur(4px)"
+        lev = self.current_level.capitalize()
+        dsl = f"Create a new Python {lev} - New {lev} - Click Here"
+        lvd = LEVEL[self.current_level].extra
+        _create_button = Level(dsl, f"Novo {lev} - Clique Aqui", f"Novo {lev}", lvd)
+        _binder, bnd = self.open_modal, f"_prj_{self.current_level}_"
+        _ = self.document["_panel"] <= self.create_card(_create_button, s, bind_id=bnd, _binder=_binder)
+
+    def create_card(self, v, style=None, bind_id=None, _binder=None):
+        d, f, a, i, s, h, _ = self.h_one.get_one()
         o = bind_id or OI.opn
         h_tit, title, name, descript = v.extra, v.title, v.name, v.descript
         style = style or "opacity:0.5; filter:brightness(200%) blur(1px)"
         card = d(
-            d(d(f(a(i(src=h_tit, style=style)), Class="image is-4by3 is-clipped"), Class="card-image") +
+            hdl := d(d(f(a(i(src=h_tit, style=style)), Class="image is-4by3 is-clipped"), Class="card-image") +
               d(s(title), Class="card-content is-overlay is-size-1 has-text-weight-bold has-text-black") +
               d(h(name, Class="title is-4"), Class="card-content-header") +
               s(descript)  # , id=m1)
               , Class="card", style="height:100%; overflow:hidden", id=o), Class="column is-4")
+        hdl.bind("click", _binder) if _binder else None
         return card
 
     def create_modal(self, tx, tm):
-        def field(_name=ELEM_ID[-2], ph="nomedoprojeto", hlp=""):
+        def field(_name=ELEM_ID[-2], ph="nome_do_projeto", hlp=""):
             return d(lb(name, For=_name, Class="label") +
                      d(ip(id=_name, name=_name, type="text", placeholder=ph, Class="input") +
                        p(hlp, Class="help"), Class="control"))
 
-        d, f, a, i, s, h = self.h_one.get_one()
+        d, f, a, i, s, h, h1 = self.h_one.get_one()
         p, b, hd, sc, fm, fs, ip, lg, lb, ft = self.h_one.get_two()
         mod, opn, eng, dis, clo, exi = OI.mod, OI.opn, OI.eng, OI.dis, OI.clo, OI.exi
         descript = tm.title

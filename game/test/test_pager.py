@@ -53,10 +53,10 @@ class TestCorePager(unittest.TestCase):
         _ = {idx:binder(idx, dc[idx]) for idx in ix}
         # magic_doc = AddMock
         # magic_doc["_panel"].html = MagicMock(name="doc_panel")
-        t_one, t_two = "d, f, a, i, s, h".split(", "), "p, b, hd, sc, fm, fs, ip, lg, lb, ft".split(", ")
+        t_one, t_two = "d, f, a, i, s, h, h1".split(", "), "p, b, hd, sc, fm, fs, ip, lg, lb, ft".split(", ")
         # magic_doc.__add__ = self._add = MagicMock(name="doc_add")
         # magic_doc.__getitem__.return_value = self._get = MagicMock(name="doc_get")
-        _html.DIV, _html.FIGURE, _html.A, _html.IMG, _html.SPAN, _html.H4 = html_mock(t_one)[1].values()
+        _html.DIV, _html.FIGURE, _html.A, _html.IMG, _html.SPAN, _html.H4, _html.H1 = html_mock(t_one)[1].values()
         (_html.P, _html.BUTTON, _html.HEADER, _html.SECTION, _html.FORM,
         _html.FIELDSET, _html.INPUT, _html.LEGEND, _html.LABEL, _html.FOOTER) = html_mock(t_two)[1].values()
         self.am =AddMock
