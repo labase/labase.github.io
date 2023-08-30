@@ -26,6 +26,7 @@ Level = namedtuple("Level", "descript name title extra")
 ObjectId = namedtuple("ObjectId", "opn eng dis clo exi mod name_ desc_")
 OI = ObjectId(**{suf: str(suf if "_" in suf else f"_modal_{suf}") for suf in ELEM_ID})
 
+
 class DATA:
     TEX0 = dict(descript="Create a new Python project - New Project - Click Here",
                 name="Novo Projeto - Clique Aqui",
@@ -60,6 +61,8 @@ class DATA:
                 extra=("O nome do Módulo com uma única palavra minúscula e sem acentos.",
                        "Um texto de uma linha descrevendo o Módulo."),
                 )
+
+
 LEVEL = dict(projeto=Level(**{s: str(t) for s, t in DATA.TEX0.items()}),
              projeto_modal=Level(**{s: str(t) for s, t in DATA.MOD0.items()}),
              pacote=Level(**{s: str(t) for s, t in DATA.TEX1.items()}),
@@ -80,8 +83,9 @@ class DataSource:
             pad: str
 
             def __init__(self, descript: str, name: str, title: str, extra: str, pad: str):
-                self.descript, self.name, self.title, self.extra =  descript, name, title, extra
+                self.descript, self.name, self.title, self.extra = descript, name, title, extra
                 self.pad = pad
+
             def as_dictionary(self):
                 return {k: getattr(self, k) for k in "descript, name, title, extra".split(", ")}
 
@@ -95,8 +99,10 @@ class DataSource:
 
             def __init__(self, pid, pad):
                 self.pid, self.pad = pid, pad
+
             def as_dictionary(self):
                 return {k: getattr(self, k) for k in "pid pad".split()}
+
             def as_dict(self):
                 return {k: str(v) for k, v in self.as_dictionary().items()}
 
@@ -108,7 +114,6 @@ class DataSource:
         self.level = LevelData
         self.content = LevelContent
 
-
     def save_cnt(self, pid, pad):
         # print("save_cnt(self, pid, pad)", pid, pad, self.data_buffer[pid])
         data = self.data_buffer[pid].pad if pid in self.data_buffer else []
@@ -118,7 +123,6 @@ class DataSource:
         else:
             self.data_buffer[pid] = self.content(pid, data)
 
-
     def load_cnt(self, pid):
         data = self.data_buffer[pid].pad
         print("load_cnt", pid, data)
@@ -126,14 +130,12 @@ class DataSource:
 
         return data
 
-
     def save(self, descript, name, title, extra, pad=None):
         import json
         pad = pad or str(uuid.uuid4().fields[-1])[:9]
         data = self.level(descript, name, title, extra, pad).as_dict()
         self.data_buffer[pad] = json.dumps(data)
         return data
-
 
     def load(self, pad):
         import json
@@ -211,7 +213,7 @@ class Action:
         extra = LEVEL[self.current_level].extra
         inst = f"Entre no Projeto {name.capitalize()} -Clique Aqui"
         level_off = self.content[self.current_level]
-        top,left = (level_off // 4) * -100, (level_off % 4) * -100
+        top, left = (level_off // 4) * -100, (level_off % 4) * -100
         print(level_off, top, left)
         s = f"opacity:0.7; position: absolute; min-width: 400%; min-height: 400%; top:{top}%; left:{left}%;"
         _panel_text = Level(desc, f"Projeto {name.capitalize()}", name, extra)
@@ -240,10 +242,10 @@ class Action:
         style = style or "opacity:0.5; filter:brightness(200%) blur(1px)"
         card = d(
             hdl := d(d(f(a(i(src=h_tit, style=style)), Class="image is-4by3 is-clipped"), Class="card-image") +
-              d(s(title), Class="card-content is-overlay is-size-1 has-text-weight-bold has-text-black") +
-              d(h(name, Class="title is-4"), Class="card-content-header") +
-              s(descript)  # , id=m1)
-              , Class="card", style="height:100%; overflow:hidden", id=o), Class="column is-4")
+                     d(s(title), Class="card-content is-overlay is-size-1 has-text-weight-bold has-text-black") +
+                     d(h(name, Class="title is-4"), Class="card-content-header") +
+                     s(descript),  # , id=m1)
+                     Class="card", style="height:100%; overflow:hidden", id=o), Class="column is-4")
         hdl.bind("click", _binder) if _binder else None
         return card
 
