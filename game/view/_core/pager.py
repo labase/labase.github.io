@@ -241,10 +241,10 @@ class Action:
         h_tit, title, name, descript = v.extra, v.title, v.name, v.descript
         style = style or "opacity:0.5; filter:brightness(200%) blur(1px)"
         card = d(
-            hdl := d(d(f(a(i(src=h_tit, style=style)), Class="image is-4by3 is-clipped"), Class="card-image") +
-                     d(s(title), Class="card-content is-overlay is-size-1 has-text-weight-bold has-text-black") +
-                     d(h(name, Class="title is-4"), Class="card-content-header") +
-                     s(descript),  # , id=m1)
+            hdl := d([d(f(a(i(src=h_tit, style=style)), Class="image is-4by3 is-clipped"), Class="card-image"),
+                     d(s(title), Class="card-content is-overlay is-size-1 has-text-weight-bold has-text-black"),
+                     d(h(name, Class="title is-4"), Class="card-content-header"),
+                     s(descript)],  # , id=m1)
                      Class="card", style="height:100%; overflow:hidden", id=o), Class="column is-4")
         hdl.bind("click", _binder) if _binder else None
         return card
@@ -274,27 +274,35 @@ class Action:
             Class="modal", id=mod)
         return card
 
+
 def to_yaml():
     class DHtml(dict):
 
-        def __init__(self,ct=(), **kwargs):
+        def __init__(self, ct=(), **kwargs):
             super().__init__(**kwargs)
+            self.ct = ct
 
-            self.dct = dict(**kwargs) if not ct else [ct, dict(**kwargs)]
+            self.dct = dict(**kwargs)  # if not ct else [ct, dict(**kwargs)]
+            # self.dct = dict(**kwargs) if not ct else [ct, dict(**kwargs)]
             # self.tags = html.DIV, html.FIGURE, html.A, html.IMG, html.SPAN, html.H4, html.H1
             # self.tagr = (html.P, html.BUTTON, html.HEADER, html.SECTION, html.FORM,
             #              html.FIELDSET, html.INPUT, html.LEGEND, html.LABEL, html.FOOTER)
             self.tags_one = "d, f, a, i, s, h, h1".split(", ")
             self.tags_two = "p, b, hd, sc, fm, fs, ip, lg, lb, ft".split(", ")
             [setattr(self, name, lambda ctn=(), n=name, **kwa: self._to_dict(ctn, n, **kwa)) for name in self.tags_one]
-            # [setattr(self, name, lambda *args, **kwa: self._to_dict(*args, **kwa)) for name in self.tags_two]
+            [setattr(self, name, lambda ctn=(), n=name, **kwa: self._to_dict(ctn, n, **kwa)) for name in self.tags_two]
 
         # def _to_dict(self, _d_name, *args, **kwa):
         def _to_dict(self, ct, n, **kwa):
-
+            self.ct = ct
             # super().__init__(DHtml, **{_d_name: [args[0] if args else [], dict(**kwa)]})
             self.dct = _items = DHtml(**{n: [ct if ct else [], dict(**kwa)]})
-            return self.dct
+            # return DHtml(self.dct)
+            # return dict(ct=ct, **self.dct) if ct else dict(self.dct)
+            return DHtml(ct=ct, **self.dct) if ct else DHtml(**self.dct)
+
+        def get_two(self):
+            return [getattr(self, name) for name in self.tags_two]
 
         def get_one(self):
             return [getattr(self, name) for name in self.tags_one]
@@ -302,32 +310,46 @@ def to_yaml():
             # print( zzz)
             # return zzz
 
+        def __repr__(self):
+            return repr([self.ct, self.dct]) + "oo" if self.ct else repr(self.dct) + "oo1"
+
         def __add__(self, other):
             # self.dct = (self.dct + [other]) if isinstance(self.dct, list) else  [self.dct, other]
             # other = DHtml(**other)
             # self.dct = [self.dct, other]  if isinstance(self.dct, list) else  [self, other]
-            self.dct = [self, other]
-            return self.dct
-
+            self.ct = [self, other]
+            return DHtml(self.ct)
 
     from unittest.mock import patch, Mock
+
     @patch('__main__.Html')
     def action(Html):
         Html.return_value = DHtml
         return Action(Mock(), Mock())
+
     z = DATA
     zz = [(z.TEX0, z.MOD0), (z.TEX1, z.MOD1), (z.TEX2, z.MOD2), ]
     dt = {f"lv{lv}": {k: v for k, v in zip("tm", items)} for lv, items in enumerate(zz)}
     print(dt)
     ac = action()
-    v= Level("de","de","de","de")
-    ac.h_one = DHtml(z="z") #Mock())
+    v = Level("de", "de", "de", "de")
+    ac.h_one = DHtml(z="z")  # Mock())
     print(dir(ac.h_one))
     d, f, a, i, s, h, _ = ac.h_one.get_one()
-    xx = f(a(i(src="oo", style="a")+s(Class="n")), Class="image is-4by3 is-clipped")
+    xx = dict(f([a(), i(src="oo", style="a"), s(Class="n")], Class="image is-4by3 is-clipped"))
     # xx = f(a()+i(src="oo", style="a")+s(Class="n"), Class="image is-4by3 is-clipped")
-    xx = f([a(),i("conteudo de i", src="oo", style="a"),s(Class="n")], Class="image is-4by3 is-clipped")
-    # xx = ac.create_card(v)
+    # xx = f([a(), i("conteudo de i", src="oo", style="a"), s(Class="n")], Class="image is-4by3 is-clipped")
+    xx = ac.create_card(v)
+    print("ac.create_card(v)", xx)
+    t = LEVEL["projeto"]
+    m = LEVEL["projeto_modal"]
+    zz = ac.create_modal(t, m)
+    yy = dict(data=dt, card=xx)
     print(xx)
+    import yaml
+    with open("xx.yaml", "w") as oyaml:
+        yaml.safe_dump(yy, oyaml)
+
+
 if __name__ == '__main__':
     to_yaml()
