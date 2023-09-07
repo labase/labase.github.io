@@ -242,9 +242,9 @@ class Action:
         style = style or "opacity:0.5; filter:brightness(200%) blur(1px)"
         card = d(
             hdl := d([d(f(a(i(src=h_tit, style=style)), Class="image is-4by3 is-clipped"), Class="card-image"),
-                     d(s(title), Class="card-content is-overlay is-size-1 has-text-weight-bold has-text-black"),
-                     d(h(name, Class="title is-4"), Class="card-content-header"),
-                     s(descript)],  # , id=m1)
+                      d(s(title), Class="card-content is-overlay is-size-1 has-text-weight-bold has-text-black"),
+                      d(h(name, Class="title is-4"), Class="card-content-header"),
+                      s(descript)],  # , id=m1)
                      Class="card", style="height:100%; overflow:hidden", id=o), Class="column is-4")
         hdl.bind("click", _binder) if _binder else None
         return card
@@ -278,11 +278,14 @@ class Action:
 def to_yaml():
     class DHtml(dict):
 
-        def __init__(self, ct=(), **kwargs):
-            super().__init__(**kwargs)
-            self.ct = ct
-
-            self.dct = dict(**kwargs)  # if not ct else [ct, dict(**kwargs)]
+        def __init__(self, __elm_,  ct=(), **kwargs):
+            # super().__init__(__elm_=__elm_, __ct_=ct, **kwargs)
+            args = dict(__elm_=__elm_, __ct_=[dict(c) for c in ct if isinstance(c, dict)], **kwargs)\
+                if ct else dict(__elm_=__elm_, **kwargs)
+            super().__init__(**args)
+            # self.ct = ct
+            #
+            # self.dct = dict(**kwargs)  # if not ct else [ct, dict(**kwargs)]
             # self.dct = dict(**kwargs) if not ct else [ct, dict(**kwargs)]
             # self.tags = html.DIV, html.FIGURE, html.A, html.IMG, html.SPAN, html.H4, html.H1
             # self.tagr = (html.P, html.BUTTON, html.HEADER, html.SECTION, html.FORM,
@@ -293,32 +296,78 @@ def to_yaml():
             [setattr(self, name, lambda ctn=(), n=name, **kwa: self._to_dict(ctn, n, **kwa)) for name in self.tags_two]
 
         # def _to_dict(self, _d_name, *args, **kwa):
+        def items(self):
+            h_items = self.copy()
+            for nx, v in super().items():
+                if nx == "__elm_":
+                    e, v = h_items.pop("__elm_"), h_items.pop("__ct_") if "__ct_" in h_items else []
+                    e0_v0 = [(iv.pop("__elm_"), iv.pop("__ct_", iv) if "__ct_" in iv else []) for iv in v]
+                    yield e, [[{x: y for x, y in DHtml(iv["__elm_"], **iv).items()} for iv in v], h_items]
+
         def _to_dict(self, ct, n, **kwa):
-            self.ct = ct
+            # self.ct = ct
             # super().__init__(DHtml, **{_d_name: [args[0] if args else [], dict(**kwa)]})
-            self.dct = _items = DHtml(**{n: [ct if ct else [], dict(**kwa)]})
+            # _items = DHtml(**{n: [ct if ct else None, dict(**kwa)]})
+            _items = DHtml(n, ct=ct, **kwa)
             # return DHtml(self.dct)
             # return dict(ct=ct, **self.dct) if ct else dict(self.dct)
-            return DHtml(ct=ct, **self.dct) if ct else DHtml(**self.dct)
+            # return DHtml(ct=ct, **self.dct) if ct else DHtml(**self.dct)
+            return _items
 
         def get_two(self):
             return [getattr(self, name) for name in self.tags_two]
 
         def get_one(self):
             return [getattr(self, name) for name in self.tags_one]
-            # zzz = [lambda *args, **kwa: self._to_dict(*args, **kwa) for name in self.tags_one]
-            # print( zzz)
-            # return zzz
+
+        def toJSON(self):
+            return self.__repr__()
 
         def __repr__(self):
-            return repr([self.ct, self.dct]) + "oo" if self.ct else repr(self.dct) + "oo1"
+            sel = self.copy()
+            sel["__ct_"] = [dict(ct) for ct in sel["__ct_"]] if "__ct_" in sel else {}
+
+            def into(it):
+                # print("into",type(it), it is dict,  end="")
+                # if not it is dict:
+                if not isinstance(it, dict):
+                    return "no"
+                it = dict(it)
+                # print(type(it), end="")
+                sf = it.copy()
+                __el = sf.pop('__elm_') if "__elm_" in sf else None
+                __ct = sf.pop('__ct_') if "__ct_" in sf else []
+                __di = dict(sf)
+                # __ct = ([into(ix) for ix in __ct]) if isinstance(__ct, list) else __ct
+                return str(f"{{'{__el}': {([into(c) for c in __ct])}, {__di}}}" if __el else f"{([into(c) for c in __ct])}"
+                       if __ct else f"{{{__el}: {__di}}}")
+                # return str({f"'{__el}'": [[into(c) for c in __ct], __di]} if __el else [into(c) for c in __ct]
+                #        if __ct else {f"'{__el}'": __di})
+            return into(sel)
+
+        def __repr__1(self):
+            return repr(self.copy())
+
+        def __getstate__2(self):
+            return repr(self.copy())
+
+        def __getstate__1(self):
+            sf = self.copy()
+            __el = sf.pop('__elm_') if "__elm_" in sf else None
+            __ct = sf.pop('__ct_') if "__ct_" in sf else None
+            __di = sf
+            rep = {f"'{__el}'": [[c.__getstate__() for c in __ct], {k: v for k, v in __di.items()}]}
+            return rep
+            # return {k: v.__getstate__() if hasattr(v, '__getstate__') else f"<{v}>" for k, v in self.items()}
 
         def __add__(self, other):
             # self.dct = (self.dct + [other]) if isinstance(self.dct, list) else  [self.dct, other]
             # other = DHtml(**other)
             # self.dct = [self.dct, other]  if isinstance(self.dct, list) else  [self, other]
-            self.ct = [self, other]
-            return DHtml(self.ct)
+            # self.setdefault("__ct_", [self["__ct_"]]+[other] if "__ct_" in self else [other])
+            # ct = self["__ct_"] if isinstance(self["__ct_"], list)  else [self["__ct_"]]
+            # ct.extend(other)
+            return DHtml(None, ct=[self]+[other])
 
     from unittest.mock import patch, Mock
 
@@ -332,23 +381,41 @@ def to_yaml():
     dt = {f"lv{lv}": {k: v for k, v in zip("tm", items)} for lv, items in enumerate(zz)}
     print(dt)
     ac = action()
-    v = Level("de", "de", "de", "de")
-    ac.h_one = DHtml(z="z")  # Mock())
+    v = Level("de", "de1", "de2", "de3")
+    ac.h_one = DHtml("z", "zz")  # Mock())
     print(dir(ac.h_one))
     d, f, a, i, s, h, _ = ac.h_one.get_one()
-    xx = dict(f([a(), i(src="oo", style="a"), s(Class="n")], Class="image is-4by3 is-clipped"))
+    xx = f([a(), i(src="oo", style="a"), s(Class="n")], Class="image is-4by3 is-clipped")
+    # xx = (f(a()+s(Class="n"), Class="image is-4by3 is-clipped"))
     # xx = f(a()+i(src="oo", style="a")+s(Class="n"), Class="image is-4by3 is-clipped")
     # xx = f([a(), i("conteudo de i", src="oo", style="a"), s(Class="n")], Class="image is-4by3 is-clipped")
-    xx = ac.create_card(v)
+    # xx = ac.create_card(v)
+    [print(type(i), type(v), (i,v)) if isinstance(v, str) else [[print(" - ",type(j),j)] for j in v] for i, v in xx.items()]
     print("ac.create_card(v)", xx)
+    # print("ac.create_card(v)", xx.__getstate__())
     t = LEVEL["projeto"]
     m = LEVEL["projeto_modal"]
-    zz = ac.create_modal(t, m)
-    yy = dict(data=dt, card=xx)
-    print(xx)
+    xy = ac.create_modal(t, m)
+    dx = {i: v for i, v in xx.items()}
+    print(dx)
+    yy = dict(data=dt, card=dx)
+    # print("GS", xx.__getstate__())
     import yaml
+
+    def yaml_equivalent_of_default(dumper, data):
+        print("called")
+        dict_representation = data.__repr__()
+        # node = dumper.represent_dict(dict_representation)
+        node = dumper.represent_yaml_object(dict_representation,data, cls=None)
+        return node
+
+    yaml.add_representer(DHtml, yaml_equivalent_of_default)
+
+    # print(yaml.dump(xx))
+
     with open("xx.yaml", "w") as oyaml:
         yaml.safe_dump(yy, oyaml)
+        # yaml.dump(yy, oyaml)
 
 
 if __name__ == '__main__':
