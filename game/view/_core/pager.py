@@ -278,45 +278,51 @@ class Action:
 def to_yaml():
     class DHtml(dict):
 
-        def __init__(self, __elm_="", ct=(), **kwargs):
+        def __init__(self, __elm_="@&@", ct=(), __accumulator=None, **kwargs):
             class ArgHtml(dict):
                 def __init__(self, __contents=None, **kwa):
+                    # [print("ArgHtml", [tt.keys() for tt in __contents],"<<<>>>", x) for x in __contents if  isinstance(x,list)]
                     self.contents = __contents
                     super().__init__(self, **kwa)
+
+                def __add__(self, other):
+                    v = other.get_args()
+                    _ct_ = v
+                    _ct_ = [self] + v
+                    # s.extend(other) if isinstance(other,list) else _ct.append(other)
+                    return ArgHtml(_ct_)
 
                 def items(self):
                     def has_it(_it):
                         return {it_:has_it(xt_) for it_, xt_ in _it.items()} if hasattr(_it, "items") else _it
-                        # return [has_it(it_) for it_ in _it.items()] if hasattr(_it, "items") else _it
 
                     h_items = self.copy()
                     v = self.contents or []
-                    cv = [{k: v for k, v in iv.items()} if hasattr(iv, "items") else iv for iv in v]
-                    # cv = [[x for x in iv.items()] if hasattr(iv, "items") else iv for iv in v]
                     yield "_0", ([has_it(iv) for iv in v])
                     for nx, nv in h_items.items():
                         yield nx + "&", nv
 
+                def get_args(self):
+                    return [self] # if self.keys() else [self.contents]
+
                 def __repr__(self):
                     return repr([{ix: iy} if ix != "_0" else iy for ix, iy in self.items()])
 
-            # super().__init__(__elm_=__elm_, __ct_=ct, **kwargs)
             _ct = ArgHtml(ct, **kwargs) if ct else ArgHtml(**kwargs)
-            args = {f"{__elm_}": _ct}
-            self.field = __elm_+"@" if __elm_ else "@"
+            # [print("got *&*", list(ct))  for c in ct if __elm_ =="@&@"]
+
+            self.field = __elm_ if __elm_ else "@"
             self.value = _ct
+            self.arg_html = ArgHtml
+            # self.accumulator_ = __accumulator or []
             super().__init__(**kwargs)
-            # self.ct = ct
-            #
-            # self.dct = dict(**kwargs)  # if not ct else [ct, dict(**kwargs)]
-            # self.dct = dict(**kwargs) if not ct else [ct, dict(**kwargs)]
-            # self.tags = html.DIV, html.FIGURE, html.A, html.IMG, html.SPAN, html.H4, html.H1
-            # self.tagr = (html.P, html.BUTTON, html.HEADER, html.SECTION, html.FORM,
-            #              html.FIELDSET, html.INPUT, html.LEGEND, html.LABEL, html.FOOTER)
             self.tags_one = "d, f, a, i, s, h, h1".split(", ")
             self.tags_two = "p, b, hd, sc, fm, fs, ip, lg, lb, ft".split(", ")
             [setattr(self, name, lambda ctn=(), n=name, **kwa: self._to_dict(ctn, n, **kwa)) for name in self.tags_one]
             [setattr(self, name, lambda ctn=(), n=name, **kwa: self._to_dict(ctn, n, **kwa)) for name in self.tags_two]
+
+        def get_args(self):
+                    return [self]
 
         # def _to_dict(self, _d_name, *args, **kwa):
         def items(self):
@@ -324,20 +330,12 @@ def to_yaml():
                 # return [has_it(it_) for it_ in _it.items()] if hasattr(_it, "items") else _it
 
                 return {it_: has_it(xt_) for it_, xt_ in _it.items()} if hasattr(_it, "items") else _it
-            v = self.value
-            cv = [{k: v for k, v in iv.items()} if hasattr(iv, "items") else iv for iv in self.value]
-            cv = [has_it(ix) for ix in self.value]
-            # yield self.field+"#", repr(cv)
-            yield self.field+"#",  has_it(self.value)
+            yield self.field,  has_it(self.value)
 
-        def _to_dict(self, ct, n, **kwa):
-            # self.ct = ct
-            # super().__init__(DHtml, **{_d_name: [args[0] if args else [], dict(**kwa)]})
-            # _items = DHtml(**{n: [ct if ct else None, dict(**kwa)]})
+        @staticmethod
+        def _to_dict(ct, n, **kwa):
+            ct = ct if isinstance(ct, list) else [ct]
             _items = DHtml(n, ct=ct, **kwa)
-            # return DHtml(self.dct)
-            # return dict(ct=ct, **self.dct) if ct else dict(self.dct)
-            # return DHtml(ct=ct, **self.dct) if ct else DHtml(**self.dct)
             return _items
 
         def get_two(self):
@@ -346,57 +344,16 @@ def to_yaml():
         def get_one(self):
             return [getattr(self, name) for name in self.tags_one]
 
-        def toJSON(self):
-            return self.__repr__()
-
         def __repr__(self):
-            sel = self.copy()
-            sel["__ct_"] = [dict(ct) for ct in sel["__ct_"]] if "__ct_" in sel else {}
-
-            def into(it):
-                # print("into",type(it), it is dict,  end="")
-                # if not it is dict:
-                if not isinstance(it, dict):
-                    return "no"
-                it = dict(it)
-                # print(type(it), end="")
-                sf = it.copy()
-                __el = sf.pop('__elm_') if "__elm_" in sf else None
-                __ct = sf.pop('__ct_') if "__ct_" in sf else []
-                __di = dict(sf)
-                # __ct = ([into(ix) for ix in __ct]) if isinstance(__ct, list) else __ct
-                return str(
-                    f"{{'{__el}': {([into(c) for c in __ct])}, {__di}}}" if __el else f"{([into(c) for c in __ct])}"
-                    if __ct else f"{{{__el}: {__di}}}")
-                # return str({f"'{__el}'": [[into(c) for c in __ct], __di]} if __el else [into(c) for c in __ct]
-                #        if __ct else {f"'{__el}'": __di})
-
-            # return into(sel)
             return repr({self.field: self.value})
 
-        def __repr__1(self):
-            return repr(self.copy())
-
-        def __getstate__(self):
-            return self.__repr__()
-
-        def __getstate__1(self):
-            sf = self.copy()
-            __el = sf.pop('__elm_') if "__elm_" in sf else None
-            __ct = sf.pop('__ct_') if "__ct_" in sf else None
-            __di = sf
-            rep = {f"'{__el}'": [[c.__getstate__() for c in __ct], {k: v for k, v in __di.items()}]}
-            return rep
-            # return {k: v.__getstate__() if hasattr(v, '__getstate__') else f"<{v}>" for k, v in self.items()}
-
         def __add__(self, other):
-            # self.dct = (self.dct + [other]) if isinstance(self.dct, list) else  [self.dct, other]
-            # other = DHtml(**other)
-            # self.dct = [self.dct, other]  if isinstance(self.dct, list) else  [self, other]
-            # self.setdefault("__ct_", [self["__ct_"]]+[other] if "__ct_" in self else [other])
-            # ct = self["__ct_"] if isinstance(self["__ct_"], list)  else [self["__ct_"]]
-            # ct.extend(other)
-            return DHtml(None, ct=[self] + [other])
+            v = other.get_args()
+            _ct = (v if isinstance(v,list) else [v] if v else [])
+            _ct = [self]+[_ct]
+            # s.extend(other) if isinstance(other,list) else _ct.append(other)
+            # return self.arg_html(_ct)
+            return self.arg_html([self]+v)
 
     from unittest.mock import patch, Mock
 
@@ -414,13 +371,11 @@ def to_yaml():
     ac.h_one = DHtml("z", "zz")  # Mock())
     print(dir(ac.h_one))
     d, f, a, i, s, h, _ = ac.h_one.get_one()
-    xx = f([a(h(zz=00)), i(src="oo", style="a"), s(Class="n")], Class="image is-4by3 is-clipped")
-    # xx = (f(a()+s(Class="n"), Class="image is-4by3 is-clipped"))
-    # xx = f(a()+i(src="oo", style="a")+s(Class="n"), Class="image is-4by3 is-clipped")
-    # xx = f([a(), i("conteudo de i", src="oo", style="a"), s(Class="n")], Class="image is-4by3 is-clipped")
-    # xx = ac.create_card(v)
+    xx = f([a(d(zz=00)+h()+f(), src="111"), i(src="oo", style="a"), s(Class="n")], Class="image is-4by3 is-clipped")
+    xz = ac.create_card(v)
     [print(type(i), type(v), (i, v)) if isinstance(v, str) else [[print(" - ", type(j), j)] for j in v] for i, v in
      xx.items()]
+
     print("ac.create_card(v)", xx)
     # print("ac.create_card(v)", xx.__getstate__())
     t = LEVEL["projeto"]
