@@ -1,0 +1,8 @@
+["c-base"]
+img = "https://i.imgur.com/9M9k6RZ.jpg"
+
+["c-base"."e-ping"]
+img="https://i.imgur.com/9M9k6RZ.jpg"
+x = 10
+y=20
+texto="Me parece um animal distante"

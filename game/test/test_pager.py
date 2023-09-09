@@ -6,6 +6,9 @@
 
 Changelog
 ---------
+.. versionadded::    23.09
+        add testes for Teclemmino (08).
+
 .. versionadded::    23.08
         convert from pager main script (22).
         test card and modal (22a).
@@ -17,6 +20,8 @@ Changelog
 """
 import unittest
 from unittest.mock import MagicMock, Mock, ANY
+
+from view._core.game import Teclemmino
 # noinspection PyProtectedMember
 from view._core.pager import Action, ELEM_ID, LEVEL
 
@@ -103,6 +108,44 @@ class TestCorePager(unittest.TestCase):
     def test_create_modal_module(self):
         _ = self.act.create_modal(LEVEL["modulo"], LEVEL["modulo_modal"])
         self._create_modal()
+
+
+class TestTe(unittest.TestCase):
+    def setUp(self) -> None:
+        class FakeSubClass(Mock):
+            def __init__(self,**kwargs) -> None:
+                # super().__init__(name="FakeSubClass")
+                self.did("did")
+                pass
+
+            def did(self,a):
+                pass
+
+        # print("\nfake init called")
+        self.mc = Mock(name="VitoBuildMet", side_effect=FakeSubClass)
+        self.mv = MagicMock(name="VitoC")
+        self.me = MagicMock(name="VitoE")
+        self.mv.Cena = self.mc
+        self.mv.Elemento = self.me
+        self.te = Teclemmino(self.mv)
+    def test_parse_1(self):
+        self.assertTrue(self.te.parse_({"c-a": dict(img="xxx")}))
+        gt = {'c-base': {
+            'img': 'https://i.imgur.com/9M9k6RZ.jpg',
+            'e-ping': {
+                'img': 'https://i.imgur.com/9M9k6RZ.jpg',
+                'x': 10, 'y': 20, 'texto': 'Me parece um animal distante'}}}
+    def test_parse_2(self):
+        gt = {'c-base': {
+            'img': 'https://i.imgur.com/9M9k6RZ.jpg',
+            'e-ping': {
+                'img': 'https://i.imgur.com/9M9k6RZ.jpg',
+                    'x': 10, 'y': 20, 'texto': 'Me parece um animal distante'}}}
+        self.assertTrue(self.te.parse_(gt))
+        self.assertEqual(2, len(self.te.assets))
+        self.mc.assert_called()
+        self.mc.assert_called_with(nome=ANY, img=ANY)
+        self.me.assert_called_with(nome=ANY, img=ANY, x=10, y=20, texto=ANY)
 
 
 if __name__ == '__main__':

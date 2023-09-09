@@ -29,8 +29,11 @@ Gerador de labirintos e jogos tipo *'novel'*.
 
 Changelog
 ---------
+.. versionadded::    23.09
+	remove property style from Element to 3.11 work (09)
+
 .. versionadded::    20.08
-	Add img, siz and pos properties to Elemento    
+	Add img, siz and pos properties to Elemento
 
 .. versionadded::    20.07
 	Fix Elemento x, y setters; add z function to Jogo
@@ -43,6 +46,11 @@ Gerador de labirintos e jogos tipo *'novel'*.
 .. seealso::
 
 `Vitollino em Github <https://github.com/carlotolla/vitollino>`_
+
+|   **Open Source Notification:** This file is part of open source program **Alite**
+|   **Copyright © 2023  Carlo Oliveira** <carlo@nce.ufrj.br>,
+|   **SPDX-License-Identifier:** `GNU General Public License v3.0 or later <https://is.gd/3Udt>`_.
+|   `Labase <http://labase.selfip.org/>`_ - `NCE <https://portal.nce.ufrj.br>`_ - `UFRJ <https://ufrj.br/>`_.
 
 """
 import json
@@ -715,14 +723,14 @@ class Elemento(Elemento_):
     def tit(self, texto):
         self.elt.title = texto
 
-
-    @property
-    def style(self):
-        return self.elt.style
-
-    @style.setter
-    def style_set(self, texto):
-        self.elt.style = texto
+    #
+    # @property
+    # def style(self):
+    #     return self.elt.style
+    #
+    # @style.setter
+    # def style(self, texto):
+    #     self.elt.style = texto
 
 
     @property
@@ -730,7 +738,7 @@ class Elemento(Elemento_):
         return self.elt.draggable
 
     @drag.setter
-    def drag_set(self, condition):
+    def drag(self, condition):
         self.do_drag(condition)
 
 
@@ -739,7 +747,7 @@ class Elemento(Elemento_):
         return self.dropper
 
     @drop.setter
-    def drop_set(self, texto):
+    def drop(self, texto):
         self.dropper = texto
 
     def img_prevent(self, ev):
@@ -1204,7 +1212,7 @@ class Popup:
         self._vai = vai
         self.optar = {}
         Popup.__setup__()
-        Popup.inicia()
+        # Popup.inicia()
         if isinstance(cena, Cena):
             self.d(cena, tit, txt)
 
@@ -1220,6 +1228,18 @@ class Popup:
 
     @staticmethod
     def __setup__():
+        def singleton(class_):
+            instances = {}
+
+            def getinstance(*args, **kwargs):
+                if class_ not in instances:
+                    instances[class_] = class_(*args, **kwargs)
+                return instances[class_]
+
+            return getinstance
+
+
+        # @singleton
         class Pop:
             def __init__(self, tela=DOC_PYDIV):
                 self.tela = tela
@@ -1284,12 +1304,13 @@ class Popup:
                 self._open()
 
         Popup.POP = Pop()
-        Popup.__setup__ = lambda: None
+        return Pop()
+        # Popup.__setup__ = lambda: None
 
     @staticmethod
     def d(cena, tit="", txt=""):
-        cena.elt <= Popup.POP.popup
-        cena.elt <= Popup.POP.go
+        # cena.elt <= Popup.__setup__().popup
+        # cena.elt <= Popup.POP.go
         act = cena.vai
         cena.vai = lambda *_, **__: Popup.POP.mostra(act, tit, txt)
         return cena
