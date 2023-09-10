@@ -85,7 +85,7 @@ class TestCorePager(unittest.TestCase):
         self.html_one["i"].assert_called_with(**img)
         moc_calls = d.mock_calls
 
-        self.assertEqual(8, len(moc_calls))  # add assertion here
+        self.assertEqual(5, len(moc_calls))  # add assertion here
         d.assert_called_with(ANY, Class=ANY)
     def _create_modal(self):
         d = self.html_two["p"]
@@ -145,6 +145,15 @@ class TestTe(unittest.TestCase):
         self.assertEqual(2, len(self.te.assets))
         self.mc.assert_called()
         self.mc.assert_called_with(nome=ANY, img=ANY)
+        self.me.assert_called_with(nome=ANY, img=ANY, x=10, y=20, texto=ANY)
+    def test_parse_3(self):
+        self.mv.CenaSprite = self.mc
+        self.mv.Sprite = self.me
+
+        self.assertTrue(self.te.load_('../view/_core/avantar.toml'))
+        self.assertEqual(2, len(self.te.assets))
+        self.mc.assert_called()
+        self.mc.assert_called_with(nome=ANY, img=ANY, index=0)
         self.me.assert_called_with(nome=ANY, img=ANY, x=10, y=20, texto=ANY)
 
 

@@ -1,8 +1,30 @@
-["c-base"]
-img = "https://i.imgur.com/9M9k6RZ.jpg"
+[CN]
+    #ANICONS = "https://i.imgur.com/A2pPOED.png"
+    SNOWY = "https://i.imgur.com/KxcqKpJ.gif"
+    SNOW = "https://i.imgur.com/mpOU7Ca.gif"
+    HSNOW = "https://i.imgur.com/i5dLK8G.gif"
+    BSNOW = "https://i.imgur.com/4B1xuMw.gif"
+    SUICONS = "https://i.imgur.com/cM95ybG.jpg"
+    ANICONS = "https://i.imgur.com/bmUoCIb.png"
+    SUPPLY = "https://i.imgur.com/PWreEK2.gif"
+    PARADRP = "https://i.imgur.com/ShQMIoU.png"
+    LAND = "https://i.imgur.com/Cmyq9vd.jpg"
 
-["c-base"."e-ping"]
-img="https://i.imgur.com/9M9k6RZ.jpg"
-x = 10
-y=20
+["r-ROOT"]
+img="https://i.imgur.com/Cmyq9vd.jpg"
+index=0
+
+["r-ROOT"."s-ping"]
+img="https://i.imgur.com/bmUoCIb.png"
+x=700
+y=300
+w=64
+h=64
+o=0.2
+index=1
+sw=320
+sh=256
+cx=5
+b=4
+s=1
 texto="Me parece um animal distante"
