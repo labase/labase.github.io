@@ -18,8 +18,9 @@ Changelog
 """
 import logging
 import unittest
-from _spy.vitollino.main import NoEv
 from collections import namedtuple as ntp
+
+SEP = "_"
 One = ntp("One", "d f a i s h h1")
 Two = ntp("Two", "p b hd sc fm fs ip lg lb ft")
 LD = logging.debug
@@ -29,14 +30,27 @@ IMGSIZE, IMG_HEIGHT = f"{32 * W}px", f"{4 * H}px"
 
 class Teclemmino:
     def __init__(self, vito):
-        STYLE, NADA, NDCT = vito.STYLE, vito.NADA, vito.NDCT
+        STYLE, NADA, NDCT, NoEv = vito.STYLE, vito.NADA, vito.NDCT, vito.NoEv
         STYLE['width'] = 1350
         html = vito.html
         self.tag_one = One(html.DIV, html.FIGURE, html.A, html.IMG, html.SPAN, html.H4, html.H1)
         self.tag_two = Two(html.P, html.BUTTON, html.HEADER, html.SECTION, html.FORM,
                      html.FIELDSET, html.INPUT, html.LEGEND, html.LABEL, html.FOOTER)
         teclemmino = self
-        print("teclemmino.tag_one", list(teclemmino.tag_one))
+
+        class Folha:
+            # def __init__(self, img, nome=None, **kwargs):
+            def __init__(self, img, dimensions:list, nome=None, **kwargs):
+                _ = nome, kwargs
+                print("Folha", dimensions)
+                # dimensions = [4,4]
+                self.dim = d = ntp("Dimensions", "dx dy")(*dimensions)
+                self.img = img
+                self.style = {"max-width": f"{d.dx*100}%", "max-height": f"{d.dy*100}%"}
+            def get_image(self, img, index):
+                position = f"-{index % self.dim.dx * 100}% -{index // self.dim.dx * 100}%"
+                self.style["background-position"] = position
+                return dict(img=self.img, style=self.style)
 
         class Sprite(vito.Elemento):
             def __init__(self, img="", vai=None, style=NDCT, tit="", alt="",
@@ -134,10 +148,11 @@ class Teclemmino:
 
         self.vito = vito
         self.vito.CenaSprite, self.vito.Sprite, self.vito.SpriteSala = CenaSprite, Sprite, SpriteSala
-        self.vito.Textor = Texto
+        self.vito.Textor, self.vito.Folha = Texto, Folha
         self.last ={}
-        builder = [self.cena, self.elemento, self.texto, self.cena_sprite, self.sprite, self.sprite_sala]
-        self.cmd = {k: v for k, v in zip(['c', 'e', 't', 'r', 's', 'l'], builder)}
+        builder = [self.cena, self.elemento, self.texto, self.cena_sprite, self.sprite,
+                   self.sprite_sala, self.folha, self.valor]
+        self.cmd = {k: v for k, v in zip(['c', 'e', 't', 'r', 's', 'l', 'f', 'v'], builder)}
         self.assets = {}
 
     def cena(self, asset, **kwargs):
@@ -164,7 +179,8 @@ class Teclemmino:
         kwargs.update(cena=self.assets[self.last]) if self.last and "cena" not in kwargs else None
         # logging.debug("elemento kwargs", kwargs)
         # logging.debug("elemento kwargs", kwargs)
-        self.assets[asset] = self.vito.Elemento(nome=asset, **kwargs)
+        # self.assets[asset] = self.vito.Elemento(nome=asset, **kwargs)
+        self.assets[asset] = self.vito.Sprite(nome=asset, **kwargs)
         # logging.debug("Vito -> elemento", asset, kwargs)
 
     def texto(self, asset, **kwargs):
@@ -173,15 +189,35 @@ class Teclemmino:
         t.deploy(self.vito.document.body)
         # logging.debug("Vito -> texto", asset, kwargs)
 
+    def valor(self, asset, **value):
+        self.assets[asset] = dict(**value)
+        # logging.debug("Vito -> texto", asset, kwargs)
+    def folha(self, asset, **kwargs):
+        img = self.assets[asset]
+        ast = {at:self.vito.Folha(img[at], fl, nome=at) for at, fl in kwargs.items()}
+        print("def folha(self, asset, **kwargs", asset, ast)
+        # self.assets[asset] = t = self.vito.Folha(asset, nome=asset, **kwargs)
+
     def parse_(self, toml_obj):
-        def go(cmd, name, **value):
-            val = {k:v for k,v in value.items() if "-" not in k}
+        def parse_key(key:str):
+            def get_parts(key_):
+                tag, *parts = key_.split(SEP)
+                # print("parse_key get_parts: ->", key, tag, SEP.join(parts))
+                return tag[0], SEP.join(parts)
+            if key.startswith(SEP):
+                key = key[1:]
+                cmd, name = get_parts(key)
+                return go(cmd, name)
+            else:
+                return list(get_parts(key))
+        def go(cmd, name, **value_):
+            val = {k:v for k,v in value_.items() if SEP not in k}
+            print("cmd, name, value,: ->", cmd, name, value_, val)
             self.cmd[cmd](name, **val)
-            [self.parse_({sub:v}) for sub,v in value.items()if "-" in sub]
-            # self.last=name
+            [self.parse_({sub:v}) for sub,v in value_.items() if SEP in sub]            # self.last=name
             self.last = None
-        toml_it = [key.split("-")+[value] for key, value in toml_obj.items() if "-" in key]
-        logging.debug(toml_it)
+        # toml_it = [key.split(SEP) + [value] for key, value in toml_obj.items() if SEP in key]
+        toml_it = [parse_key(key) + [value] for key, value in toml_obj.items() if SEP in key]
         [go(cmd, name, **value) for cmd, name, value in toml_it]
         return True
     def load_(self, cfile=str('view/_core/avantar.toml')):
@@ -189,7 +225,7 @@ class Teclemmino:
         with open(cfile, "r") as avt:
             tom_obj = dict(toml.loads(avt.read()))
             self.parse_(tom_obj)
-            logging.debug(self.assets)
+            print("self.assets", self.assets)
         self.assets["ROOT"].vai() if "ROOT" in self.assets else None
         return True
 

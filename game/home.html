@@ -29,10 +29,10 @@
         # SPDX-License-Identifier: (GPLv3-or-later AND LGPL-2.0-only) WITH bison-exception
         from browser import document, alert, html, window, ajax, timer, svg
         from browser.template import Template
-        from _spy.vitollino.main import Cena, Elemento, Texto, Salao, STYLE, NADA, NDCT
+        from _spy.vitollino.main import Cena, Elemento, Texto, Salao, STYLE, NADA, NDCT, NoEv
         class MockBrython:
             document, alert, html, window, ajax, timer, svg = document, alert, html, window, ajax, timer, svg
-            template = Template
+            template, NoEv = Template, NoEv
             Cena, Elemento, Texto, Salao, STYLE, NADA, NDCT = Cena, Elemento, Texto, Salao, STYLE, NADA, NDCT
         brython = MockBrython
         from _core.game import main
