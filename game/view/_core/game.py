@@ -151,8 +151,8 @@ class Teclemmino:
         self.vito.Textor, self.vito.Folha = Texto, Folha
         self.last ={}
         builder = [self.cena, self.elemento, self.texto, self.cena_sprite, self.sprite,
-                   self.sprite_sala, self.folha, self.valor]
-        self.cmd = {k: v for k, v in zip(['c', 'e', 't', 'r', 's', 'l', 'f', 'v'], builder)}
+                   self.sprite_sala, self.folha, self.valor, self.icon]
+        self.cmd = {k: v for k, v in zip(['c', 'e', 't', 'r', 's', 'l', 'f', 'v', "i"], builder)}
         self.assets = {}
 
     def cena(self, asset, **kwargs):
@@ -176,8 +176,9 @@ class Teclemmino:
         # logging.debug("Vito -> cena", asset, kwargs)
 
     def elemento(self, asset, **kwargs):
+        # kwargs.update(**asset) if isinstance(asset, dict) else None
         kwargs.update(cena=self.assets[self.last]) if self.last and "cena" not in kwargs else None
-        # logging.debug("elemento kwargs", kwargs)
+        print("elemento kwargs:->", asset, kwargs)
         # logging.debug("elemento kwargs", kwargs)
         # self.assets[asset] = self.vito.Elemento(nome=asset, **kwargs)
         self.assets[asset] = self.vito.Sprite(nome=asset, **kwargs)
@@ -197,20 +198,27 @@ class Teclemmino:
         ast = {at:self.vito.Folha(img[at], fl, nome=at) for at, fl in kwargs.items()}
         print("def folha(self, asset, **kwargs", asset, ast)
         # self.assets[asset] = t = self.vito.Folha(asset, nome=asset, **kwargs)
+    def icon(self, asset, item, index=0, **kwargs):
+        print("icon:->", asset, item, index)
+        return self.assets[asset][item].get_image(index=index)
 
     def parse_(self, toml_obj):
-        def parse_key(key:str):
-            def get_parts(key_):
-                tag, *parts = key_.split(SEP)
+        DOT = "."
+        def parse_key(key:str, dot=DOT):
+            print("parse_key key: ->", key)
+            def get_parts(key_, sep=SEP):
+                tag, *parts = key_.split(sep)
                 # print("parse_key get_parts: ->", key, tag, SEP.join(parts))
-                return tag[0], SEP.join(parts)
-            if key.startswith(SEP):
+                return tag[0], sep.join(parts)
+            if key.startswith(dot):
                 key = key[1:]
-                cmd, name = get_parts(key)
-                return go(cmd, name)
+                cmd, name, index = key.split(dot)
+                print("parse_key get_parts: ->", cmd, name, index)
+                return go(cmd, name, index=index)
             else:
                 return list(get_parts(key))
         def go(cmd, name, **value_):
+            #@@ FIX val = {k:parse_key(v) if isinstance(v, str) else v for k,v in value_.items() if SEP not in k}
             val = {k:v for k,v in value_.items() if SEP not in k}
             print("cmd, name, value,: ->", cmd, name, value_, val)
             self.cmd[cmd](name, **val)
@@ -242,11 +250,6 @@ class Main:
         self.br = br
     def load(self, cfile=str('view/_core/avantar.toml')):
         _ = cfile
-        # import toml
-        # pp = str('view/_core/avantar.toml')
-        # with open(pp, "r") as avt:
-        #     tom_obj = dict(toml.loads(avt.read()))
-        #     self.teclemmino.parse_(tom_obj)
         self.teclemmino.load_()
 
 

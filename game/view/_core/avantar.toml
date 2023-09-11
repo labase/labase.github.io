@@ -9,9 +9,9 @@ ANICONS = "https://i.imgur.com/bmUoCIb.png"
 SUPPLY = "https://i.imgur.com/PWreEK2.gif"
 PARADRP = "https://i.imgur.com/ShQMIoU.png"
 LAND = "https://i.imgur.com/Cmyq9vd.jpg"
-#[folha_GI]
-f_CN.ANICONS = [4, 4]
-f_CN.SUICONS = [8, 4]
+[folha_CN]
+ANICONS = [4, 4]
+SUICONS = [8, 4]
 
 [r_ROOT]
 img="https://i.imgur.com/Cmyq9vd.jpg"
@@ -19,11 +19,12 @@ index=0
 
 [r_ROOT.e_ping]
 img="https://i.imgur.com/bmUoCIb.png"
+#img=".i.ANICONS.1"
 x=700
 y=300
 w=64
 h=64
 o=0.2
 index=1
-b=4
+b=1
 texto="Me parece um animal distante"
