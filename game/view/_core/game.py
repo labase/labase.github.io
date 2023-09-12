@@ -47,7 +47,7 @@ class Teclemmino:
                 self.dim = d = ntp("Dimensions", "dx dy")(*dimensions)
                 self.img = img
                 self.style = {"max-width": f"{d.dx*100}%", "max-height": f"{d.dy*100}%"}
-            def get_image(self, img, index):
+            def get_image(self, index):
                 position = f"-{index % self.dim.dx * 100}% -{index // self.dim.dx * 100}%"
                 self.style["background-position"] = position
                 return dict(img=self.img, style=self.style)
@@ -147,13 +147,16 @@ class Teclemmino:
                 return False
 
         self.vito = vito
-        self.vito.CenaSprite, self.vito.Sprite, self.vito.SpriteSala = CenaSprite, Sprite, SpriteSala
-        self.vito.Textor, self.vito.Folha = Texto, Folha
+        self.assets = {}
         self.last ={}
+        classes = (CenaSprite, Sprite, SpriteSala, Texto, Folha)
+        self.cmd = self.vito_element_builder(vito, classes)
+
+    def vito_element_builder(self, v, classes):
+        v.CenaSprite, v.Sprite, v.SpriteSala, v.Textor, self.vito.Folha = classes
         builder = [self.cena, self.elemento, self.texto, self.cena_sprite, self.sprite,
                    self.sprite_sala, self.folha, self.valor, self.icon]
-        self.cmd = {k: v for k, v in zip(['c', 'e', 't', 'r', 's', 'l', 'f', 'v', "i"], builder)}
-        self.assets = {}
+        return {k: v for k, v in zip(['c', 'e', 't', 'r', 's', 'l', 'f', 'v', "i"], builder)}
 
     def cena(self, asset, **kwargs):
         self.assets[asset] = self.vito.Cena(nome=asset, **kwargs)
@@ -178,7 +181,7 @@ class Teclemmino:
     def elemento(self, asset, **kwargs):
         # kwargs.update(**asset) if isinstance(asset, dict) else None
         kwargs.update(cena=self.assets[self.last]) if self.last and "cena" not in kwargs else None
-        print("elemento kwargs:->", asset, kwargs)
+        # print("elemento kwargs:->", asset, kwargs)
         # logging.debug("elemento kwargs", kwargs)
         # self.assets[asset] = self.vito.Elemento(nome=asset, **kwargs)
         self.assets[asset] = self.vito.Sprite(nome=asset, **kwargs)
@@ -192,15 +195,19 @@ class Teclemmino:
 
     def valor(self, asset, **value):
         self.assets[asset] = dict(**value)
-        # logging.debug("Vito -> texto", asset, kwargs)
+        print("Vito asset, value, self.assets[asset] -> valor: ", asset, value, self.assets[asset])
     def folha(self, asset, **kwargs):
         img = self.assets[asset]
-        ast = {at:self.vito.Folha(img[at], fl, nome=at) for at, fl in kwargs.items()}
-        print("def folha(self, asset, **kwargs", asset, ast)
+        for at, fl in kwargs.items():
+            img[at]=(self.vito.Folha(img[at], fl, nome=at))
+        # _ = [img[at].put(self.vito.Folha(img[at], fl, nome=at)) for at, fl in kwargs.items()]
+        print("def folha(self, asset, **kwargs->", asset, img)
         # self.assets[asset] = t = self.vito.Folha(asset, nome=asset, **kwargs)
-    def icon(self, asset, item, index=0, **kwargs):
-        print("icon:->", asset, item, index)
-        return self.assets[asset][item].get_image(index=index)
+    def icon(self, asset, item, index=None):
+        print("icon:->", asset, item, index, self.assets)
+        element = self.assets[asset][item]
+        value = element.get_image(index=index) if hasattr("get_image", element) else element
+        return value
 
     def parse_(self, toml_obj):
         DOT = "."
@@ -212,14 +219,18 @@ class Teclemmino:
                 return tag[0], sep.join(parts)
             if key.startswith(dot):
                 key = key[1:]
-                cmd, name, index = key.split(dot)
-                print("parse_key get_parts: ->", cmd, name, index)
-                return go(cmd, name, index=index)
+                cmd, name, tag, *index = key.split(dot)
+                index = dict(index=index[0]) if index else {}
+                result = self.cmd[cmd](name, item=tag, **index)
+                print("parse_key get_parts: ->", cmd, name, index, f">{result}<")
+
+                return result
             else:
-                return list(get_parts(key))
+                return list(get_parts(key)) if SEP in key else key
         def go(cmd, name, **value_):
-            #@@ FIX val = {k:parse_key(v) if isinstance(v, str) else v for k,v in value_.items() if SEP not in k}
-            val = {k:v for k,v in value_.items() if SEP not in k}
+            #@@ FIX
+            val = {k:parse_key(v) if isinstance(v, str) else v for k,v in value_.items() if SEP not in k}
+            # val = {k:v for k,v in value_.items() if SEP not in k}
             print("cmd, name, value,: ->", cmd, name, value_, val)
             self.cmd[cmd](name, **val)
             [self.parse_({sub:v}) for sub,v in value_.items() if SEP in sub]            # self.last=name
@@ -233,9 +244,12 @@ class Teclemmino:
         with open(cfile, "r") as avt:
             tom_obj = dict(toml.loads(avt.read()))
             self.parse_(tom_obj)
-            print("self.assets", self.assets)
-        self.assets["ROOT"].vai() if "ROOT" in self.assets else None
+            # print("self.assets", self.assets)
+        self.start_game_from_root_element()
         return True
+
+    def start_game_from_root_element(self):
+        self.assets["ROOT"].vai() if "ROOT" in self.assets else None
 
 
 class Main:

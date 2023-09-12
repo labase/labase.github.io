@@ -129,37 +129,55 @@ class TestTe(unittest.TestCase):
         self.mv.Cena = self.mc
         self.mv.Sprite = self.me
         self.te = Teclemmino(self.mv)
-    def test_parse_1(self):
+    def test_parse_only(self):
         self.assertTrue(self.te.parse_({"c-a": dict(img="xxx")}))
-        gt = {'c_base': {
-            'img': 'https://i.imgur.com/9M9k6RZ.jpg',
-            'e_ping': {
-                'img': 'https://i.imgur.com/9M9k6RZ.jpg',
-                'x': 10, 'y': 20, 'texto': 'Me parece um animal distante'}}}
-    def test_parse_2(self):
-        gt = {'c_base': {
+    def test_parse_cena_element(self):
+        toml = {'c_base': {
             'img': 'https://i.imgur.com/9M9k6RZ.jpg',
             'e_ping': {
                 'img': 'https://i.imgur.com/9M9k6RZ.jpg',
                     'x': 10, 'y': 20, 'texto': 'Me parece um animal distante'}}}
-        self.assertTrue(self.te.parse_(gt))
-        self.assertEqual(2, len(self.te.assets))
-        self.mc.assert_called()
+        self.do_parse(toml, 2)
         self.mc.assert_called_with(nome=ANY, img=ANY)
-        # XXX@@@@>>> fix it
-        # self.me.assert_called() #()nome=ANY, img=ANY, x=10, y=20, texto=ANY)
-        # print([x for x in self.me.call_args_list])
-        # assert self.me.call_args_list == [], "flop"
-    def test_parse_3(self):
+        self.assertEqual([], self.me.call_args_list)
+    def do_parse(self, toml, elements_parsed):
+        self.assertTrue(self.te.parse_(toml))
+        self.assertEqual(elements_parsed, len(self.te.assets))
+        self.mc.assert_called()
+
+    def test_parse_cena_reference_d(self):
+        toml = dict(
+            v_CN = dict(CENA="lets snow"),
+            cena_BASE = dict(
+            img= ".i.CN.CENA"))
+        self.do_parse(toml, 2)
+        self.assertIn("CN", self.te.assets)
+        self.assertIn("CENA", self.te.assets["CN"])
+        self.mc.assert_called_with(nome=ANY, img="lets snow")
+        self.assertEqual([], self.me.call_args_list)
+
+    def test_parse_cena_elm_sprite_d(self):
+        toml = dict(
+            v_CN = dict(CENA="h://cena.sprite"),
+            # f_CN = dict(CENA=[4, 4]),
+            cena_BASE = dict(
+            img= ".i.CN.CENA.1"))
+        self.do_parse(toml, 3)
+        self.assertIn("CN", self.te.assets)
+        self.assertIn("CENA", self.te.assets["CN"])
+        self.mc.assert_called_with(nome=ANY, img="lets snow")
+        self.assertEqual([], self.me.call_args_list)
+    def test_parse_toml(self):
         self.mv.CenaSprite = self.mc
         self.mv.Sprite = self.me
+        self.te.start_game_from_root_element = Mock(name="start_game")
 
         self.assertTrue(self.te.load_('../view/_core/avantar.toml'))
-        self.assertEqual(2, len(self.te.assets))
-        # self.mc.assert_called()
-        # self.mc.assert_called_with(nome=ANY, img=ANY, index=0)
-        # # self.me.assert_called_with(nome=ANY, img=ANY, x=10, y=20, texto=ANY)
-        # self.me.assert_called()
+        self.assertEqual(3, len(self.te.assets))
+        self.mc.assert_called()
+        self.mc.assert_called_with(nome=ANY, img=ANY, index=0)
+        # self.me.assert_called_with(nome=ANY, img=ANY, x=10, y=20, texto=ANY)
+        self.me.assert_called()
 
 
 if __name__ == '__main__':
