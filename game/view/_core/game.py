@@ -40,15 +40,6 @@ class Teclemmino:
                            html.FIELDSET, html.INPUT, html.LEGEND, html.LABEL, html.FOOTER)
         teclemmino = self
 
-        class Icon:
-            def __init__(self, img, nome=None, **kwargs):
-                _ = nome, kwargs
-                print("Icon", img)
-                self.icon = teclemmino.I(Class=img, style={"position": "relative", "color": "grey"})
-
-            def get_image(self, index):
-                return self.icon
-
         class Folha:
             # def __init__(self, img, nome=None, **kwargs):
             def __init__(self, img, dimensions: list, nome=None, **kwargs):
@@ -69,7 +60,7 @@ class Teclemmino:
 
         class Sprite(vito.Elemento):
             def __init__(self, img="", vai=None, style=NDCT, tit="", alt="",
-                         x=0, y=0, w=100, h=100, o=1, texto='', foi=None, index=0, sw=100, sh=100, cx=1, b=0, s=1,
+                         x=0, y=0, w=100, h=100, o=1, texto='', foi=None, sw=100, sh=100, b=0, s=1,
                          cena="", score=NDCT, drag=False, drop=NDCT, tipo="100% 100%", **kwargs):
                 _style = {}
 
@@ -80,7 +71,6 @@ class Teclemmino:
                 img, _style = recover_sprite_info(**img) if isinstance(img, dict) else (img, _style)
                 recover_sprite_info(**img) if isinstance(img, dict) else None
                 style = dict(width=f"{w}px", height=f"{h}px", overflow="hidden", filter=f"blur({b}px)", scale=s)
-                position = f"-{index % cx * w}px -{index // cx * w}px"
                 style.update(**_style)
                 print("recover_sprite_info", style)
 
@@ -89,6 +79,9 @@ class Teclemmino:
                                  style=style, cena=cena, tipo=f"{sw}px {sh}px",
                                  **kwargs)
 
+                if img.startswith("*"):
+                    icon = teclemmino.I(Class=img[1:], style={"position": "relative", "color": "grey"})
+                    _ = self.elt <= icon
                 self._texto = Texto(texto, foi=self._foi) if texto else None
                 self.vai = self._texto.vai if texto else self.vai
                 self.o = o
@@ -100,6 +93,10 @@ class Teclemmino:
 
         class CenaSprite(vito.Cena):
             def __init__(self, img, index=0, **kwargs):
+                img, _style = [v for v in img.values()] if isinstance(img, dict) else (img, {})
+                style = dict(width=f"{W}px", height=f"{H}px", overflow="hidden", minWidth=IMGSIZE, minHeight=IMG_HEIGHT)
+                style.update(**_style)
+
                 super().__init__(img, **kwargs)
                 # style=dict(left=x, top=x, width="80px", height="80px", overflow="hidden")
                 style = dict(position="relative", left=f"-{index % 8 * W}px", top=f"-{(index % 16) // 4 * H}px",
@@ -107,6 +104,7 @@ class Teclemmino:
                              height=f"{H}px", overflow="hidden", minWidth=IMGSIZE, minHeight=IMG_HEIGHT)
                 div_sty = dict(STYLE)
                 div_sty.update({"max-width": f"{W}px", "max-height": f"{H}px", "overflow": "hidden"})
+                div_sty.update(_style)
                 self.elt = html.DIV(style=div_sty)
                 self.img = html.IMG(src=img, width=W, height=H, style=style)
                 _ = self.elt <= self.img
@@ -183,7 +181,7 @@ class Teclemmino:
         return {k: v for k, v in zip(['c', 'e', 't', 'r', 's', 'l', 'f', 'v', "i"], builder)}
 
     def cena(self, asset, **kwargs):
-        self.assets[asset] = self.vito.Cena(nome=asset, **kwargs)
+        self.assets[asset] = self.vito.CenaSprite(nome=asset, **kwargs)
         self.last = asset
         # logging.debug("Vito -> cena", asset, kwargs)
 
@@ -230,8 +228,8 @@ class Teclemmino:
         print("def folha(self, asset, **kwargs->", asset, img)
         # self.assets[asset] = t = self.vito.Folha(asset, nome=asset, **kwargs)
 
-    def icon(self, asset, item, index=None):
-        # print("icon:->", asset, item, index, self.assets)
+    def icon(self, asset, item="nono", index=None):
+        print("icon:->", asset, item, index)
         element = self.assets[asset][item]
         value = element.get_image(index=index) if hasattr(element, "get_image") else element
         return value
@@ -266,7 +264,7 @@ class Teclemmino:
             # print("cmd, name, value,: ->", cmd, name, value_, val)
             self.cmd[cmd](name, **val)
             [self.parse_({sub: v}) for sub, v in value_.items() if SEP in sub]  # self.last=name
-            self.last = None
+            # self.last = None
 
         # toml_it = [key.split(SEP) + [value] for key, value in toml_obj.items() if SEP in key]
         toml_it = [parse_key(key) + [value] for key, value in toml_obj.items() if SEP in key]

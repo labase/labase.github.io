@@ -12,12 +12,29 @@ LAND = "https://i.imgur.com/Cmyq9vd.jpg"
 [folha_CN]
 ANICONS = [5, 4]
 SUICONS = [8, 4]
+LAND = [4,8]
+#CROW = [1,1]
 
-[r_ROOT]
-img="https://i.imgur.com/Cmyq9vd.jpg"
+[c_ROOT]
+#img="https://i.imgur.com/Cmyq9vd.jpg"
+img=".i.CN.LAND.1"
 index=0
 
-[r_ROOT.e_ping]
+[c_ROOT.e_gem]
+img="*fa fa-gem fa-5x"
+x=900
+y=300
+w=100
+h=100
+
+[c_ROOT.e_crow]
+img="*fa fa-crow fa-5x"
+x=800
+y=300
+w=100
+h=100
+
+[c_ROOT.e_ping]
 #img="https://i.imgur.com/bmUoCIb.png"
 img=".i.CN._ANICONS.1"
 x=700
