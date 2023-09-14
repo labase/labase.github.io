@@ -140,7 +140,7 @@ class TestTe(unittest.TestCase):
         self.mv = MagicMock(name="VitoC")
         self.me = MagicMock(name="VitoE")
         self.mv.Cena = self.mc
-        self.mv.Sprite = self.me
+        # self.mv.Sprite = self.me
         self.te = Teclemmino(self.mv)
 
     def test_parse_only(self):
@@ -209,10 +209,10 @@ class TestTe(unittest.TestCase):
 
     def test_parse_elemento_cena_vai(self):
         toml = dict(
-            v_CN=dict(CENA="h://cena.sprite",FOI="h://cena.destino"),
+            v_CN=dict(FOI="h://cena.destino",CENA="h://cena.sprite"),
             f_CN=dict(CENA=[4, 4]),
             cena_BASE=dict(
-                img=".i.CN._CENA.1"),
+                img=".i.CN._CENA.1",
             elemento_PIGU=dict(
                 img="*fa fa-gem fa-5x",
                 x=700,
@@ -222,7 +222,7 @@ class TestTe(unittest.TestCase):
                 foi=".i.CN.FOI.1"
 
             )
-        )
+        ))
         self.do_parse(toml, 3, cena="_CENA")
         self.assertIn("_CENA", self.te.assets["CN"])
         self.assertTrue(hasattr(self.te.assets["CN"]["_CENA"], "get_image"))
@@ -236,9 +236,9 @@ class TestTe(unittest.TestCase):
         self.te.start_game_from_root_element = Mock(name="start_game")
 
         self.assertTrue(self.te.load_('../view/_core/avantar.toml'))
-        self.assertEqual(5, len(self.te.assets))
+        self.assertEqual(6, len(self.te.assets))
         self.mc.assert_called()
-        self.mc.assert_called_with(nome=ANY, img=ANY, index=0)
+        self.mc.assert_called_with(nome=ANY, img=ANY)
         # self.me.assert_called_with(nome=ANY, img=ANY, x=10, y=20, texto=ANY)
         self.me.assert_called()
 

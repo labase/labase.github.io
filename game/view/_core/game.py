@@ -7,6 +7,7 @@
 Changelog
 ---------
 .. versionadded::    23.09
+        Sprite foi working, need access to next scene (14a).
         Cena as Background (14).
         Declaration and retrieve for sprite element (13).
         Fix Texto popup with new class (10).
@@ -68,6 +69,7 @@ class Teclemmino:
                          x=0, y=0, w=100, h=100, o=1, texto='', foi=None, sw=100, sh=100, b=0, s=1,
                          cena="", score=NDCT, drag=False, drop=NDCT, tipo="100% 100%", **kwargs):
                 _style = {}
+                foi = foi() if  callable(foi) else foi
 
                 def recover_sprite_info(img_='', style_=None):
                     return img_, style_
@@ -201,7 +203,7 @@ class Teclemmino:
     def cena(self, asset, **kwargs):
         self.assets[asset] = self.vito.CenaSprite(nome=asset, **kwargs)
         self.last = asset
-        # logging.debug("Vito -> cena", asset, kwargs)
+        LG.log(3,"Vito -> cena", asset, kwargs)
 
     def sprite_sala(self, asset, **kwargs):
         self.assets[asset] = self.vito.SpriteSala(nome=asset, **kwargs)
@@ -231,10 +233,11 @@ class Teclemmino:
         #print("def folha(self, asset, **kwargs->", asset, img)
         # self.assets[asset] = t = self.vito.Folha(asset, nome=asset, **kwargs)
 
-    def icon(self, asset, item="nono", index=None):
-        #print("icon:->", asset, item, index)
-        element = self.assets[asset][item]
+    def icon(self, asset, item="", index=None):
+        self.assets[asset] = self.vito.CenaSprite("") if asset not in self.assets else self.assets[asset]
+        element = self.assets[asset][item] if isinstance(self.assets[asset], dict) else lambda at=asset: self.assets[at]
         value = element.get_image(index=index) if hasattr(element, "get_image") else element
+        LG.log(4,"icon:->", asset, item, index, value)
         return value
 
     def parse_(self, toml_obj):
@@ -254,7 +257,7 @@ class Teclemmino:
                 cmd, name, tag, *index = key.split(dot)
                 index = dict(index=index[0]) if index else {}
                 result = self.cmd[cmd](name, item=tag, **index)
-                #print("parse_key é uma referência: ->", cmd, name, index, f">{result}<")
+                # LG.log(4,"parse_key é uma referência: ->", cmd, name, index, f">{result}<")
 
                 return result
             else:

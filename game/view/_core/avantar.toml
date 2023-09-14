@@ -12,13 +12,27 @@ LAND = "https://i.imgur.com/Cmyq9vd.jpg"
 [folha_CN]
 ANICONS = [5, 4]
 SUICONS = [8, 4]
-LAND = [4,12]
+LAND = [4,8]
 #CROW = [1,1]
+
+[c_GEM]
+img=".i.CN._LAND.3"
+
+[c_CROW]
+img=".i.CN._LAND.2"
+
+[c_CROW.e_tent]
+img="*fa fa-campground fa-5x"
+x=900
+y=300
+w=100
+h=100
+texto="Voltaremos ao campo base"
+foi=".i.ROOT.0.0"
 
 [c_ROOT]
 #img="https://i.imgur.com/Cmyq9vd.jpg"
 img=".i.CN._LAND.1"
-index=0
 
 [c_ROOT.e_gem]
 img="*fa fa-gem fa-5x"
@@ -26,6 +40,8 @@ x=900
 y=300
 w=100
 h=100
+texto="Talvez tenha um tesouro"
+foi=".i.GEM.0.0"
 
 [c_ROOT.e_crow]
 img="*fa fa-crow fa-5x"
@@ -33,7 +49,8 @@ x=800
 y=300
 w=100
 h=100
-
+foi=".i.CROW.0.0"
+texto="Me parece um pássaro distante"
 [c_ROOT.e_ping]
 #img="https://i.imgur.com/bmUoCIb.png"
 img=".i.CN._ANICONS.1"
