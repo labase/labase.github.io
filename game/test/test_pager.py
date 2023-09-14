@@ -187,13 +187,12 @@ class TestTe(unittest.TestCase):
 
     def test_parse_cena_awesome_icon(self):
         toml = dict(
-            v_CN=dict(CENA="h://cena.sprite", CROW="fa fa-crow fa-5x"),
-            f_CN=dict(CENA=[4, 4], CROW=[1, 1]),
-            i_CN=dict(),
+            v_CN=dict(CENA="h://cena.sprite"),
+            f_CN=dict(CENA=[4, 4]),
             cena_BASE=dict(
                 img=".i.CN._CENA.1"),
             elemento_PIGU=dict(
-                img=".i.CN._CROW.0",
+                img="*fa fa-gem fa-5x",
                 x=700,
                 y=300,
                 w=64,
@@ -201,11 +200,34 @@ class TestTe(unittest.TestCase):
 
             )
         )
-        self.do_parse(toml, 3, cena="_CROW")
+        self.do_parse(toml, 3, cena="_CENA")
         self.assertIn("_CENA", self.te.assets["CN"])
         self.assertTrue(hasattr(self.te.assets["CN"]["_CENA"], "get_image"))
         # self.mc.assert_called_with(nome=ANY, img='h://cena.sprite')
-        self.mc.assert_called_with(nome=ANY, img=dict(img_='h://cena.sprite', style_=ANY))
+        # self.mc.assert_called_with(nome=ANY, img=dict(img_='h://cena.sprite', style_=ANY))
+        self.assertEqual([], self.me.call_args_list)
+
+    def test_parse_elemento_cena_vai(self):
+        toml = dict(
+            v_CN=dict(CENA="h://cena.sprite",FOI="h://cena.destino"),
+            f_CN=dict(CENA=[4, 4]),
+            cena_BASE=dict(
+                img=".i.CN._CENA.1"),
+            elemento_PIGU=dict(
+                img="*fa fa-gem fa-5x",
+                x=700,
+                y=300,
+                w=64,
+                h=64,
+                foi=".i.CN.FOI.1"
+
+            )
+        )
+        self.do_parse(toml, 3, cena="_CENA")
+        self.assertIn("_CENA", self.te.assets["CN"])
+        self.assertTrue(hasattr(self.te.assets["CN"]["_CENA"], "get_image"))
+        # self.mc.assert_called_with(nome=ANY, img='h://cena.sprite')
+        # self.mc.assert_called_with(nome=ANY, img=dict(img_='h://cena.sprite', style_=ANY))
         self.assertEqual([], self.me.call_args_list)
 
     def test_parse_toml(self):

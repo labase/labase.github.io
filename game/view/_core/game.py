@@ -7,6 +7,7 @@
 Changelog
 ---------
 .. versionadded::    23.09
+        Cena as Background (14).
         Declaration and retrieve for sprite element (13).
         Fix Texto popup with new class (10).
         Spike for Teclemmino (09).
@@ -17,17 +18,21 @@ Changelog
 |   **SPDX-License-Identifier:** `GNU General Public License v3.0 or later <https://is.gd/3Udt>`_.
 |   `Labase <http://labase.selfip.org/>`_ - `NCE <https://portal.nce.ufrj.br>`_ - `UFRJ <https://ufrj.br/>`_.
 """
-import logging
 import unittest
 from collections import namedtuple as ntp
 
 SEP = "_"
 One = ntp("One", "d f a i s h h1")
 Two = ntp("Two", "p b hd sc fm fs ip lg lb ft")
-LD = logging.debug
 W, H = 1350, 650
+LOG_LEVEL = 1
 IMGSIZE, IMG_HEIGHT = f"{32 * W}px", f"{4 * H}px"
-
+class Log:
+    def __init__(self, min_level=LOG_LEVEL, *args):
+        self.min_level =  min_level
+    def log(self, level, *args):
+        print(*args) if level > self.min_level else None
+LG = Log(3)
 
 class Teclemmino:
     def __init__(self, vito):
@@ -44,7 +49,7 @@ class Teclemmino:
             # def __init__(self, img, nome=None, **kwargs):
             def __init__(self, img, dimensions: list, nome=None, **kwargs):
                 _ = nome, kwargs
-                print("Folha", dimensions)
+                LG.log(2,"Folha", dimensions)
                 # dimensions = [4,4]
                 self.dim = d = ntp("Dimensions", "dx dy")(*dimensions)
                 self.img = img
@@ -67,12 +72,12 @@ class Teclemmino:
                 def recover_sprite_info(img_='', style_=None):
                     return img_, style_
                 _ = style, score, tipo, drag, drop
-                print("Sprite(vito.Elemento)", img)
+                print("Sprite(vito.Elemento)", img, foi)
                 img, _style = recover_sprite_info(**img) if isinstance(img, dict) else (img, _style)
                 recover_sprite_info(**img) if isinstance(img, dict) else None
                 style = dict(width=f"{w}px", height=f"{h}px", overflow="hidden", filter=f"blur({b}px)", scale=s)
                 style.update(**_style)
-                print("recover_sprite_info", style)
+                #print("recover_sprite_info", style)
 
                 super().__init__(img=img, vai=vai, tit=tit, alt=alt,
                                  x=x, y=y, w=w, h=h, o=o, texto=texto, foi=foi,
@@ -89,9 +94,22 @@ class Teclemmino:
             def _do_foi(self):
                 _texto = self.texto if self.tit else self.title  # else CORRECT.format(self.tit)
                 self.vai = Texto(_texto, self.cena).vai
-                LD(_texto, self.vai)
+                LG.log(3,_texto, self.vai)
 
         class CenaSprite(vito.Cena):
+            def __init__(self, img, index=0, **kwargs):
+                img_, _style = [v for v in img.values()] if isinstance(img, dict) else (img, {})
+                style = dict(width=f"{W}px", height=f"{H}px", overflow="hidden", backgroundImage=f"url({img_})")
+                style.update(**_style)
+                # style.update({"background-image": f"url({img_})"})
+                # print("recover_sprite_info", style, img)
+
+                super().__init__("", **kwargs)
+
+                self.elt.html =""
+                self.elt.style = style
+
+        class CenaSpriteOld(vito.Cena):
             def __init__(self, img, index=0, **kwargs):
                 img, _style = [v for v in img.values()] if isinstance(img, dict) else (img, {})
                 style = dict(width=f"{W}px", height=f"{H}px", overflow="hidden", minWidth=IMGSIZE, minHeight=IMG_HEIGHT)
@@ -143,7 +161,7 @@ class Teclemmino:
                 self.deploy()
 
             def deploy(self, document=None):
-                print("deploy", document)
+                #print("deploy", document)
                 document = document or teclemmino.vito.document
                 _ = document <= self.modal
                 # noinspection PyAttributeOutsideInit
@@ -176,9 +194,9 @@ class Teclemmino:
 
     def vito_element_builder(self, v, classes):
         v.CenaSprite, v.Sprite, v.SpriteSala, v.Textor, self.vito.Folha = classes
-        builder = [self.cena, self.elemento, self.texto, self.cena_sprite, self.sprite,
+        builder = [self.cena, self.elemento, self.texto,
                    self.sprite_sala, self.folha, self.valor, self.icon]
-        return {k: v for k, v in zip(['c', 'e', 't', 'r', 's', 'l', 'f', 'v', "i"], builder)}
+        return {k: v for k, v in zip(['c', 'e', 't', 's', 'f', 'v', "i"], builder)}
 
     def cena(self, asset, **kwargs):
         self.assets[asset] = self.vito.CenaSprite(nome=asset, **kwargs)
@@ -189,25 +207,10 @@ class Teclemmino:
         self.assets[asset] = self.vito.SpriteSala(nome=asset, **kwargs)
         # logging.debug("Vito -> cena", asset, kwargs)
 
-    def cena_sprite(self, asset, **kwargs):
-        self.assets[asset] = self.vito.CenaSprite(nome=asset, **kwargs)
-        self.last = asset
-        # logging.debug("Vito -> cena_sprite", asset, kwargs, self.last)
-
-    def sprite(self, asset, **kwargs):
-        kwargs.update(cena=self.assets[self.last]) if self.last and "cena" not in kwargs else None
-        # logging.debug("elemento kwargs", kwargs, self.last)
-        self.assets[asset] = self.vito.Sprite(nome=asset, **kwargs)
-        # logging.debug("Vito -> cena", asset, kwargs)
-
     def elemento(self, asset, **kwargs):
         # kwargs.update(**asset) if isinstance(asset, dict) else None
         kwargs.update(cena=self.assets[self.last]) if self.last and "cena" not in kwargs else None
-        # print("elemento kwargs:->", asset, kwargs)
-        # logging.debug("elemento kwargs", kwargs)
-        # self.assets[asset] = self.vito.Elemento(nome=asset, **kwargs)
         self.assets[asset] = self.vito.Sprite(nome=asset, **kwargs)
-        # logging.debug("Vito -> elemento", asset, kwargs)
 
     def texto(self, asset, **kwargs):
         kwargs.update(cena=self.assets[self.last]) if self.last and "cena" not in kwargs else None
@@ -218,18 +221,18 @@ class Teclemmino:
     def valor(self, asset, **value):
         self.assets[asset] = dict(**value)
         self.folha(asset, **value) if "*" in str(value) else None
-        print("Vito asset, value, self.assets[asset] -> valor: ", asset, value, self.assets[asset])
+        # print("Vito asset, value, self.assets[asset] -> valor: ", asset, value, self.assets[asset])
 
     def folha(self, asset, **kwargs):
         img = self.assets[asset]
         for at, fl in kwargs.items():
             img[f"_{at}"] = (self.vito.Folha(img[at], fl, nome=at) if at in img else self.vito.Icon(at))
         # _ = [img[at].put(self.vito.Folha(img[at], fl, nome=at)) for at, fl in kwargs.items()]
-        print("def folha(self, asset, **kwargs->", asset, img)
+        #print("def folha(self, asset, **kwargs->", asset, img)
         # self.assets[asset] = t = self.vito.Folha(asset, nome=asset, **kwargs)
 
     def icon(self, asset, item="nono", index=None):
-        print("icon:->", asset, item, index)
+        #print("icon:->", asset, item, index)
         element = self.assets[asset][item]
         value = element.get_image(index=index) if hasattr(element, "get_image") else element
         return value
@@ -251,7 +254,7 @@ class Teclemmino:
                 cmd, name, tag, *index = key.split(dot)
                 index = dict(index=index[0]) if index else {}
                 result = self.cmd[cmd](name, item=tag, **index)
-                print("parse_key é uma referência: ->", cmd, name, index, f">{result}<")
+                #print("parse_key é uma referência: ->", cmd, name, index, f">{result}<")
 
                 return result
             else:
@@ -261,7 +264,7 @@ class Teclemmino:
             # @@ FIX
             val = {k: parse_key(v) if isinstance(v, str) else v for k, v in value_.items() if SEP not in k}
             # val = {k:v for k,v in value_.items() if SEP not in k}
-            # print("cmd, name, value,: ->", cmd, name, value_, val)
+            LG.log(2, "cmd, name, value,: ->", cmd, name, value_, val)
             self.cmd[cmd](name, **val)
             [self.parse_({sub: v}) for sub, v in value_.items() if SEP in sub]  # self.last=name
             # self.last = None
