@@ -7,7 +7,7 @@
 Changelog
 ---------
 .. versionadded::    23.09
-        Sprite foi working, need access to next scene (14a).
+        Sprite foi working, SpriteSala & Elemento.cena (16).
         Cena as Background (14).
         Declaration and retrieve for sprite element (13).
         Fix Texto popup with new class (10).
@@ -21,7 +21,7 @@ Changelog
 """
 import unittest
 from collections import namedtuple as ntp
-
+D11 = ntp("Dimensions", "dx dy")(1, 1)
 SEP = "_"
 One = ntp("One", "d f a i s h h1")
 Two = ntp("Two", "p b hd sc fm fs ip lg lb ft")
@@ -29,7 +29,7 @@ W, H = 1350, 650
 LOG_LEVEL = 1
 IMGSIZE, IMG_HEIGHT = f"{32 * W}px", f"{4 * H}px"
 class Log:
-    def __init__(self, min_level=LOG_LEVEL, *args):
+    def __init__(self, min_level=LOG_LEVEL):
         self.min_level =  min_level
     def log(self, level, *args):
         print(*args) if level > self.min_level else None
@@ -61,32 +61,29 @@ class Teclemmino:
                 index = int(index)
                 position = f"{index % self.dim.dx * 100}% {index // self.dim.dx * 100}%"
                 # self.style["background-position"] = position
-                self.style.update(**{"background-position": position})
-                return dict(img_=self.img, style_=self.style)
+                self.style.update(**{"backgroundPosition": position})
+                return dict(img_=self.img, style_=self.style, dim_=self.dim)
 
         class Sprite(vito.Elemento):
             def __init__(self, img="", vai=None, style=NDCT, tit="", alt="",
                          x=0, y=0, w=100, h=100, o=1, texto='', foi=None, sw=100, sh=100, b=0, s=1,
                          cena="", score=NDCT, drag=False, drop=NDCT, tipo="100% 100%", **kwargs):
-                _style = {}
+                _style = style
                 foi = foi() if  callable(foi) else foi
-
-                def recover_sprite_info(img_='', style_=None):
-                    return img_, style_
-                _ = style, score, tipo, drag, drop
-                print("Sprite(vito.Elemento)", img, foi)
-                img, _style = recover_sprite_info(**img) if isinstance(img, dict) else (img, _style)
-                recover_sprite_info(**img) if isinstance(img, dict) else None
+                _ = score, drag, drop, tipo
+                img_, _style, _dim = [v for v in img.values()] if isinstance(img, dict) else (img, {}, D11)
                 style = dict(width=f"{w}px", height=f"{h}px", overflow="hidden", filter=f"blur({b}px)", scale=s)
                 style.update(**_style)
-                #print("recover_sprite_info", style)
+                # noinspection PyCallingNonCallable
+                cena = cena() if callable(cena) else cena
+                LG.log(3,"Sprite(vito.Elemento) ⇒", img, foi, cena)
 
                 super().__init__(img=img, vai=vai, tit=tit, alt=alt,
                                  x=x, y=y, w=w, h=h, o=o, texto=texto, foi=foi,
                                  style=style, cena=cena, tipo=f"{sw}px {sh}px",
                                  **kwargs)
 
-                if img.startswith("*"):
+                if img_.startswith("*"):
                     icon = teclemmino.I(Class=img[1:], style={"position": "relative", "color": "grey"})
                     _ = self.elt <= icon
                 self._texto = Texto(texto, foi=self._foi) if texto else None
@@ -99,43 +96,34 @@ class Teclemmino:
                 LG.log(3,_texto, self.vai)
 
         class CenaSprite(vito.Cena):
-            def __init__(self, img, index=0, **kwargs):
-                img_, _style = [v for v in img.values()] if isinstance(img, dict) else (img, {})
+            def __init__(self, img, index=-1, **kwargs):
+                img_, _style, _dim = [v for v in img.values()] if isinstance(img, dict) else (img, {}, D11)
                 style = dict(width=f"{W}px", height=f"{H}px", overflow="hidden", backgroundImage=f"url({img_})")
+                position = f"{index % _dim.dx * 100}% {index // _dim.dx * 100}%"
+                _style.update(backgroundPosition=position) if index > 0 else None
                 style.update(**_style)
-                # style.update({"background-image": f"url({img_})"})
-                # print("recover_sprite_info", style, img)
 
                 super().__init__("", **kwargs)
+                self.nome = kwargs["nome"] if "nome" in kwargs else img_
 
                 self.elt.html =""
                 self.elt.style = style
 
-        class CenaSpriteOld(vito.Cena):
-            def __init__(self, img, index=0, **kwargs):
-                img, _style = [v for v in img.values()] if isinstance(img, dict) else (img, {})
-                style = dict(width=f"{W}px", height=f"{H}px", overflow="hidden", minWidth=IMGSIZE, minHeight=IMG_HEIGHT)
-                style.update(**_style)
-
-                super().__init__(img, **kwargs)
-                # style=dict(left=x, top=x, width="80px", height="80px", overflow="hidden")
-                style = dict(position="relative", left=f"-{index % 8 * W}px", top=f"-{(index % 16) // 4 * H}px",
-                             width=f"{W}px",
-                             height=f"{H}px", overflow="hidden", minWidth=IMGSIZE, minHeight=IMG_HEIGHT)
-                div_sty = dict(STYLE)
-                div_sty.update({"max-width": f"{W}px", "max-height": f"{H}px", "overflow": "hidden"})
-                div_sty.update(_style)
-                self.elt = html.DIV(style=div_sty)
-                self.img = html.IMG(src=img, width=W, height=H, style=style)
-                _ = self.elt <= self.img
-                self._cria_divs(W)
-
         class SpriteSala(vito.Salao):
-            def __init__(self, n=NADA, l=NADA, s=NADA, o=NADA, nome='', **kwargs):
-                self.cenas = [n, l, s, o]
-                self.nome = nome
+            def __init__(self, n=NADA, l=NADA, s=NADA, o=NADA, img=None, index=(), sid=None, **kwargs):
+                # _salas = [vito.CenaSprite(img, ix) for ix in index]
+                _name = kwargs["nome"]
+                _salas = [teclemmino.cena(f"{_name}zz{ix}",img=img, index=ix) for ix in index]
+
+
+                self.cenas = _salas if _salas else [n, l, s, o]
+                self.nome = sid
                 _ = kwargs
                 self.p()
+
+                LG.log(4, sid, kwargs, _salas, self.norte, teclemmino.assets)
+            def vai(self, *_):
+                self.norte.vai()
 
         class Texto:
             DOIT = True
@@ -201,9 +189,10 @@ class Teclemmino:
         return {k: v for k, v in zip(['c', 'e', 't', 's', 'f', 'v', "i"], builder)}
 
     def cena(self, asset, **kwargs):
-        self.assets[asset] = self.vito.CenaSprite(nome=asset, **kwargs)
+        self.assets[asset] = result = self.vito.CenaSprite(nome=asset, **kwargs)
         self.last = asset
-        LG.log(3,"Vito -> cena", asset, kwargs)
+        LG.log(3,"Vito ⇒ cena", asset, kwargs)
+        return result
 
     def sprite_sala(self, asset, **kwargs):
         self.assets[asset] = self.vito.SpriteSala(nome=asset, **kwargs)
@@ -229,9 +218,6 @@ class Teclemmino:
         img = self.assets[asset]
         for at, fl in kwargs.items():
             img[f"_{at}"] = (self.vito.Folha(img[at], fl, nome=at) if at in img else self.vito.Icon(at))
-        # _ = [img[at].put(self.vito.Folha(img[at], fl, nome=at)) for at, fl in kwargs.items()]
-        #print("def folha(self, asset, **kwargs->", asset, img)
-        # self.assets[asset] = t = self.vito.Folha(asset, nome=asset, **kwargs)
 
     def icon(self, asset, item="", index=None):
         self.assets[asset] = self.vito.CenaSprite("") if asset not in self.assets else self.assets[asset]
@@ -257,7 +243,7 @@ class Teclemmino:
                 cmd, name, tag, *index = key.split(dot)
                 index = dict(index=index[0]) if index else {}
                 result = self.cmd[cmd](name, item=tag, **index)
-                # LG.log(4,"parse_key é uma referência: ->", cmd, name, index, f">{result}<")
+                # LG.log(4,"parse_key é uma referência: ⇒", cmd, name, index, f">{result}<")
 
                 return result
             else:
@@ -267,7 +253,7 @@ class Teclemmino:
             # @@ FIX
             val = {k: parse_key(v) if isinstance(v, str) else v for k, v in value_.items() if SEP not in k}
             # val = {k:v for k,v in value_.items() if SEP not in k}
-            LG.log(2, "cmd, name, value,: ->", cmd, name, value_, val)
+            LG.log(2, "cmd, name, value,: ⇒", cmd, name, value_, val)
             self.cmd[cmd](name, **val)
             [self.parse_({sub: v}) for sub, v in value_.items() if SEP in sub]  # self.last=name
             # self.last = None
@@ -296,8 +282,6 @@ class Main:
         # y = [[l for l in k] for k in x]
         # y= dict(x)
         br.template("_tt_").render(titulo="A V A N T A R 🐧")
-        # br.Cena("https://i.imgur.com/9M9k6RZ.jpg").vai()
-        # br.Elemento(img="")
         self.teclemmino = Teclemmino(br)
         self.br = br
 

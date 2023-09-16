@@ -127,8 +127,8 @@ class TestTe(unittest.TestCase):
     def setUp(self) -> None:
         # noinspection PyMissingConstructor
         class FakeSubClass(Mock):
-            def __init__(self, **kwargs) -> None:
-                _ = kwargs
+            def __init__(self, *args, **kwargs) -> None:
+                _ = kwargs, args
                 self.did("did")
                 pass
 
@@ -207,6 +207,42 @@ class TestTe(unittest.TestCase):
         # self.mc.assert_called_with(nome=ANY, img=dict(img_='h://cena.sprite', style_=ANY))
         self.assertEqual([], self.me.call_args_list)
 
+    def test_parse_sprite_cena(self):
+        toml = dict(
+            v_CN=dict(CENA="h://cena.sprite"),
+            f_CN=dict(CENA=[4, 4]),
+            s_ROOT0=dict(img =".i.CN._CENA.0",
+                            index = [0,1,2,3],
+                            sid = "ROOT"
+                            ),
+            elemento_PIGU=dict(
+                img="*fa fa-gem fa-5x",
+                x=700,
+                y=300,
+                w=64,
+                h=64
+
+            )
+        )
+        mv = MagicMock(name="VitoC")
+        mv.Elemento = mv
+        class Tc(Teclemmino):
+            Folha = mv
+            STYLE, NADA, NDCT, NoEv = [mv]*4
+            html = mv
+            Elemento, Cena, Salao = [mv]*3
+            def __init__(self, vit):
+                super().__init__(vit)
+        tc = Tc(mv)
+
+        self.te = Teclemmino(tc)
+        self.do_parse(toml, 3, cena="_CENA")
+        self.assertIn("ROOT0", self.te.assets)
+        self.assertTrue(hasattr(self.te.assets["CN"]["_CENA"], "get_image"))
+        # self.mc.assert_called_with(nome=ANY, img='h://cena.sprite')
+        # self.mc.assert_called_with(nome=ANY, img=dict(img_='h://cena.sprite', style_=ANY))
+        self.assertEqual([], self.me.call_args_list)
+
     def test_parse_elemento_cena_vai(self):
         toml = dict(
             v_CN=dict(FOI="h://cena.destino",CENA="h://cena.sprite"),
@@ -236,9 +272,9 @@ class TestTe(unittest.TestCase):
         self.te.start_game_from_root_element = Mock(name="start_game")
 
         self.assertTrue(self.te.load_('../view/_core/avantar.toml'))
-        self.assertEqual(6, len(self.te.assets))
+        self.assertEqual(11, len(self.te.assets))
         self.mc.assert_called()
-        self.mc.assert_called_with(nome=ANY, img=ANY)
+        # self.mc.assert_called_with(nome=ANY, img=ANY)
         # self.me.assert_called_with(nome=ANY, img=ANY, x=10, y=20, texto=ANY)
         self.me.assert_called()
 

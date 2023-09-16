@@ -9,17 +9,21 @@ ANICONS = "https://i.imgur.com/bmUoCIb.png"
 SUPPLY = "https://i.imgur.com/PWreEK2.gif"
 PARADRP = "https://i.imgur.com/ShQMIoU.png"
 LAND = "https://i.imgur.com/Cmyq9vd.jpg"
+LANDER = "https://i.imgur.com/lc5s0OJ.jpg"
 [folha_CN]
 ANICONS = [5, 4]
 SUICONS = [8, 4]
 LAND = [4,8]
+LANDER = [8,8]
 #CROW = [1,1]
 
 [c_GEM]
-img=".i.CN._LAND.3"
+img=".i.CN._LANDER.5"
 
 [c_CROW]
-img=".i.CN._LAND.2"
+img=".i.CN._LANDER.7"
+
+c_RISCO.img=".i.CN._LANDER.9"
 
 [c_CROW.e_tent]
 img="*fa fa-campground fa-5x"
@@ -32,7 +36,7 @@ foi=".i.ROOT.0.0"
 
 [c_ROOT]
 #img="https://i.imgur.com/Cmyq9vd.jpg"
-img=".i.CN._LAND.1"
+img=".i.CN._LANDER.1"
 
 [c_ROOT.e_gem]
 img="*fa fa-gem fa-5x"
@@ -62,3 +66,17 @@ o=0.5
 index=1
 b=4
 texto="Me parece um animal distante"
+
+[s_ROOT]
+img =".i.CN._LANDER.0"
+index = [0,1,2,3]
+sid = "ROOT"
+[e_gems]
+img="*fa fa-box fa-5x"
+x=900
+y=300
+#w=100
+#h=100
+texto="Talvez tenha um tesouro"
+cena=".i.ROOTzz0.0.0"
+foi=".i.GEM.0.0"
