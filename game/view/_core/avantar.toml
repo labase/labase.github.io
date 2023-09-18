@@ -70,13 +70,45 @@ texto="Me parece um animal distante"
 [s_ROOT]
 img =".i.CN._LANDER.0"
 index = [0,1,2,3]
-sid = "ROOT"
+[l_BIO]
+img =".i.CN._LANDER.0"
+index = [3,3]
+
+[s_Bioma]
+img =".i.CN._LANDER.0"
+index = [4,5,6,7]
+[e_ave]
+img="*fa fa-crow fa-5x"
+x=700
+y=300
+texto="Parece um pássaro"
+cena=".i.Biomazz5.0.0"
+foi=".i.Biomazz7.0.0"
 [e_gems]
 img="*fa fa-box fa-5x"
 x=900
 y=300
-#w=100
-#h=100
 texto="Talvez tenha um tesouro"
 cena=".i.ROOTzz0.0.0"
 foi=".i.GEM.0.0"
+[e_supri]
+img="*fa fa-parachute-box fa-5x"
+x=900
+y=300
+texto="Os suprimentos cairam nesta direção"
+cena=".i.ROOTzz1.0.0"
+foi=".i.Biomazz4.0.0"
+[e_base]
+img="*fa fa-campground fa-5x"
+x=900
+y=300
+texto="Voltaremos ao campo base"
+cena=".i.Biomazz5.0.0"
+foi=".i.ROOTzz0.0.0"
+[e_lab]
+img="*fa fa-arrows-to-circle fa-5x"
+x=700
+y=300
+texto="A missão inicia aqui"
+cena=".i.ROOTzz0.0.0"
+foi=".i.BIOzz0zz0.0.0"

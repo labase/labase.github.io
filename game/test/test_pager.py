@@ -207,6 +207,31 @@ class TestTe(unittest.TestCase):
         # self.mc.assert_called_with(nome=ANY, img=dict(img_='h://cena.sprite', style_=ANY))
         self.assertEqual([], self.me.call_args_list)
 
+    def test_parse_sprite_labirinto(self):
+        toml = dict(
+            v_CN=dict(CENA="h://cena.sprite"),
+            f_CN=dict(CENA=[4, 4]),
+            l_ROOT0=dict(img =".i.CN._CENA.0",
+                            index = (1,1),
+                            sid = "ROOT"
+                            ),
+            elemento_PIGU=dict(
+                img="*fa fa-gem fa-5x",
+                x=700,
+                y=300,
+                w=64,
+                h=64
+
+            )
+        )
+        print("elf.mc.SpriteLabirinto",self.te.classes[-1], self.te.classes[2])
+        self.mv.SpriteLabirinto = self.te.classes[-1]
+        self.mv.SpriteSala = self.te.classes[2]
+        self.do_parse(toml, 4, cena="_CENA")
+        self.assertTrue(hasattr(self.te.assets["CN"]["_CENA"], "get_image"))
+        self.assertTrue(hasattr(self.te.assets["ROOT00"], "index"))
+        self.assertIn("ROOT0zz0",self.te.assets)
+
     def test_parse_sprite_cena(self):
         toml = dict(
             v_CN=dict(CENA="h://cena.sprite"),

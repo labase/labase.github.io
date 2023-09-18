@@ -7,6 +7,7 @@
 Changelog
 ---------
 .. versionadded::    23.09
+        Sprite Labirinto working (18).
         Sprite foi working, SpriteSala & Elemento.cena (16).
         Cena as Background (14).
         Declaration and retrieve for sprite element (13).
@@ -21,6 +22,9 @@ Changelog
 """
 import unittest
 from collections import namedtuple as ntp
+from typing import List
+
+Dim = ntp("Dimensions", "dx dy")
 D11 = ntp("Dimensions", "dx dy")(1, 1)
 SEP = "_"
 One = ntp("One", "d f a i s h h1")
@@ -37,6 +41,7 @@ LG = Log(3)
 
 class Teclemmino:
     def __init__(self, vito):
+        # noinspection SpellCheckingInspection
         STYLE, NADA, NDCT, NoEv = vito.STYLE, vito.NADA, vito.NDCT, vito.NoEv
         STYLE['width'] = 1350
         html = vito.html
@@ -97,7 +102,9 @@ class Teclemmino:
 
         class CenaSprite(vito.Cena):
             def __init__(self, img, index=-1, **kwargs):
-                img_, _style, _dim = [v for v in img.values()] if isinstance(img, dict) else (img, {}, D11)
+                style_ = {"background-size": f"{8 * 100}% {8 * 100}%"}
+
+                img_, _style, _dim = [v for v in img.values()] if isinstance(img, dict) else (img, style_, D11)
                 style = dict(width=f"{W}px", height=f"{H}px", overflow="hidden", backgroundImage=f"url({img_})")
                 position = f"{index % _dim.dx * 100}% {index // _dim.dx * 100}%"
                 _style.update(backgroundPosition=position) if index > 0 else None
@@ -109,11 +116,45 @@ class Teclemmino:
                 self.elt.html =""
                 self.elt.style = style
 
+        class SpriteLabirinto:
+            def __init__(self, img, index=(), **kwargs):
+                # from random import sample
+                img = img["img_"] if isinstance(img, dict) else img
+                dx, dy = self.index= Dim(*index)
+                xdx = dx+2
+                all_images = list(range(32))
+                all_images = all_images*8
+                # _index = enumerate([sample(all_images, 4)  for _ in range(dx*dy)])
+                _index = enumerate([all_images[ix*4:ix*4+4]  for ix in range(dx*dy)])
+                # self.salas = salas if salas else self.build_rooms
+                _name = kwargs["nome"]
+                _salas = [teclemmino.sprite_sala(f"{_name}zz{ii}",img=img, index=ix) for ii, ix in _index]
+                self.matrix : List[SpriteSala]
+                self.matrix = [None]* xdx
+                _matrix = [[None]+ _salas[ix:ix+self.index.dx]+[None] for ix in range(0,dx*dy,dx)]+[[None]*xdx]
+                _ = [self.matrix.extend(row) for row in _matrix]
+                LG.log(4, "SpriteLabirinto", img, self.matrix)
+                self.lb()
+
+            # noinspection PyUnresolvedReferences
+            def lb(self):
+                dx, dy = self.index
+                xdx = dx+2
+                winds = [-xdx,1,xdx,-1]
+                for index_sala in range(xdx+1,xdx+xdx*dy-1):
+                    for wind, winder in enumerate(winds):
+                        print("for wind, winder ", index_sala+winder, len(self.matrix))
+                        origin , destination = self.matrix[index_sala], self.matrix[index_sala+winder]
+                        if origin and destination:
+                            origin.cenas[wind].portal(N=destination.cenas[wind])
+                            counter_wind = (wind + 2) % 4
+                            destination.cenas[counter_wind].portal(N=origin.cenas[counter_wind])
+
         class SpriteSala(vito.Salao):
             def __init__(self, n=NADA, l=NADA, s=NADA, o=NADA, img=None, index=(), sid=None, **kwargs):
                 # _salas = [vito.CenaSprite(img, ix) for ix in index]
                 _name = kwargs["nome"]
-                _salas = [teclemmino.cena(f"{_name}zz{ix}",img=img, index=ix) for ix in index]
+                _salas = [teclemmino.cena(f"{_name}zz{ii}",img=img, index=ix) for ii, ix in enumerate(index)]
 
 
                 self.cenas = _salas if _salas else [n, l, s, o]
@@ -179,14 +220,14 @@ class Teclemmino:
         self.vito = vito
         self.assets = {}
         self.last = {}
-        classes = (CenaSprite, Sprite, SpriteSala, Texto, Folha)
-        self.cmd = self.vito_element_builder(vito, classes)
+        self.classes = (CenaSprite, Sprite, SpriteSala, Texto, Folha, SpriteLabirinto)
+        self.cmd = self.vito_element_builder(vito, self.classes)
 
     def vito_element_builder(self, v, classes):
-        v.CenaSprite, v.Sprite, v.SpriteSala, v.Textor, self.vito.Folha = classes
+        v.CenaSprite, v.Sprite, v.SpriteSala, v.Textor, self.vito.Folha, v.SpriteLabirinto = classes
         builder = [self.cena, self.elemento, self.texto,
-                   self.sprite_sala, self.folha, self.valor, self.icon]
-        return {k: v for k, v in zip(['c', 'e', 't', 's', 'f', 'v', "i"], builder)}
+                   self.sprite_sala, self.folha, self.valor, self.icon, self.sprite_labirinto]
+        return {k: v for k, v in zip(['c', 'e', 't', 's', 'f', 'v', "i", "l"], builder)}
 
     def cena(self, asset, **kwargs):
         self.assets[asset] = result = self.vito.CenaSprite(nome=asset, **kwargs)
@@ -194,9 +235,13 @@ class Teclemmino:
         LG.log(3,"Vito ⇒ cena", asset, kwargs)
         return result
 
+    def sprite_labirinto(self, asset, **kwargs):
+        self.assets[asset] = self.vito.SpriteLabirinto(nome=asset, **kwargs)
+
     def sprite_sala(self, asset, **kwargs):
-        self.assets[asset] = self.vito.SpriteSala(nome=asset, **kwargs)
+        self.assets[asset] = sala = self.vito.SpriteSala(nome=asset, **kwargs)
         # logging.debug("Vito -> cena", asset, kwargs)
+        return sala
 
     def elemento(self, asset, **kwargs):
         # kwargs.update(**asset) if isinstance(asset, dict) else None
