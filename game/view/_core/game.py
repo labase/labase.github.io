@@ -79,6 +79,7 @@ class Teclemmino:
                 img_, _style, _dim = [v for v in img.values()] if isinstance(img, dict) else (img, {}, D11)
                 style = dict(width=f"{w}px", height=f"{h}px", overflow="hidden", filter=f"blur({b}px)", scale=s)
                 style.update(**_style)
+                style.update(**{"background-image": f"url({img_})"})
                 # noinspection PyCallingNonCallable
                 cena = cena() if callable(cena) else cena
                 LG.log(3,"Sprite(vito.Elemento) ⇒", img, foi, cena)
@@ -105,10 +106,12 @@ class Teclemmino:
                 style_ = {"background-size": f"{8 * 100}% {8 * 100}%"}
 
                 img_, _style, _dim = [v for v in img.values()] if isinstance(img, dict) else (img, style_, D11)
-                style = dict(width=f"{W}px", height=f"{H}px", overflow="hidden", backgroundImage=f"url({img_})")
+                # style = dict(width=f"{W}px", height=f"{H}px", overflow="hidden", backgroundImage=f"url({img_})")
+                style = dict(width=f"{W}px", height=f"{H}px", overflow="hidden")
                 position = f"{index % _dim.dx * 100}% {index // _dim.dx * 100}%"
                 _style.update(backgroundPosition=position) if index > 0 else None
                 style.update(**_style)
+                style.update(**{"background-image": f"url({img_})"})
 
                 super().__init__("", **kwargs)
                 self.nome = kwargs["nome"] if "nome" in kwargs else img_

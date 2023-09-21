@@ -16,7 +16,12 @@ SUICONS = [8, 4]
 LAND = [4,8]
 LANDER = [8,8]
 #CROW = [1,1]
-
+[valores_Missao]
+ANIMAL = "https://i.imgur.com/BivOv8y.jpg"
+AVENTURA = "https://imgur.com/CqlwpCh.jpg"
+[folha_Missao]
+ANIMAL = [3,1]
+AVENTURA = [2,1]
 [c_GEM]
 img=".i.CN._LANDER.5"
 
@@ -112,3 +117,25 @@ y=300
 texto="A missão inicia aqui"
 cena=".i.ROOTzz0.0.0"
 foi=".i.BIOzz0zz0.0.0"
+[e_ani]
+img=".i.Missao._ANIMAL.0"
+x=200
+y=100
+w=300
+h=500
+o=0.5
+b=1
+cena=".i.ROOTzz0.0.0"
+vai=".i.BIOzz2zz2.0.0"
+[e_adv]
+img=".i.Missao._AVENTURA.0"
+x=600
+y=100
+w=300
+h=500
+o=0.5
+b=1
+cena=".i.ROOTzz0.0.0"
+texto="A missão inicia aqui"
+tit="A missão inicia aqui"
+foi=".i.BIOzz0zz1.0.0"
