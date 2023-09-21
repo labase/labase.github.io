@@ -11,6 +11,8 @@ PARADRP = "https://i.imgur.com/ShQMIoU.png"
 LAND = "https://i.imgur.com/Cmyq9vd.jpg"
 LANDER = "https://i.imgur.com/lc5s0OJ.jpg"
 YELLOW = "https://imgur.com/dzM9NtT.jpg"
+WHITE = "https://imgur.com/khohhCw.jpg"
+RED = "https://imgur.com/IMcwSAq.jpg"
 [folha_CN]
 ANICONS = [5, 4]
 SUICONS = [8, 4]
@@ -21,11 +23,21 @@ YELLOW = [8,16]
 [valores_Missao]
 ANIMAL = "https://i.imgur.com/BivOv8y.jpg"
 AVENTURA = "https://imgur.com/CqlwpCh.jpg"
+MISSAO = "https://imgur.com/aFuEYkS.jpg"
+EVENTO = "https://imgur.com/qa5FFq3.jpg"
 [folha_Missao]
 ANIMAL = [3,1]
 AVENTURA = [2,1]
+MISSAO = [6,3]
+EVENTO = [6,3]
 [c_GEM]
 img=".i.CN._LANDER.5"
+[c_POOL]
+img=".i.CN._LANDER.5"
+e_mani.img=".i.Missao._MISSAO.1"
+e_mani.x=100
+e_mgeo.img=".i.Missao._MISSAO.2"
+e_mgeo.x=200
 
 [c_CROW]
 img=".i.CN._LANDER.7"
@@ -131,7 +143,9 @@ h=500
 o=0.5
 b=1
 cena=".i.ROOTzz0.0.0"
-vai=".i.BIOzz2zz2.0.0"
+texto="Lista de missões"
+tit="Lista de missões"
+foi=".i.POOL.0.0"
 [e_adv]
 img=".i.Missao._AVENTURA.0"
 x=500

@@ -70,6 +70,7 @@ class Teclemmino:
 
             def get_image(self, index):
                 index = int(index)
+                # position = f"{index % self.dim.dx * (100/ self.dim.dx)}% {index // self.dim.dx * (100/self.dim.dy)}%"
                 position = f"{index % self.dim.dx * 100}% {index // self.dim.dx * 100}%"
                 # self.style["background-position"] = position
                 self.style.update(**{"backgroundPosition": position})
@@ -88,7 +89,7 @@ class Teclemmino:
                 style.update(**{"background-image": f"url({img_})"})
                 # noinspection PyCallingNonCallable
                 cena = cena() if callable(cena) else cena
-                LG.log(3, "Sprite(vito.Elemento) ⇒", img, foi, cena)
+                LG.log(3, "Sprite(vito.Elemento) ⇒", img, foi, cena, style)
 
                 super().__init__(img=img, vai=vai, tit=tit, alt=alt,
                                  x=x, y=y, w=w, h=h, o=o, texto=texto, foi=foi,
