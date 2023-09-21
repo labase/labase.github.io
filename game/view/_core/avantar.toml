@@ -10,11 +10,13 @@ SUPPLY = "https://i.imgur.com/PWreEK2.gif"
 PARADRP = "https://i.imgur.com/ShQMIoU.png"
 LAND = "https://i.imgur.com/Cmyq9vd.jpg"
 LANDER = "https://i.imgur.com/lc5s0OJ.jpg"
+YELLOW = "https://imgur.com/dzM9NtT.jpg"
 [folha_CN]
 ANICONS = [5, 4]
 SUICONS = [8, 4]
 LAND = [4,8]
 LANDER = [8,8]
+YELLOW = [8,16]
 #CROW = [1,1]
 [valores_Missao]
 ANIMAL = "https://i.imgur.com/BivOv8y.jpg"
@@ -78,6 +80,9 @@ index = [0,1,2,3]
 [l_BIO]
 img =".i.CN._LANDER.0"
 index = [3,3]
+[l_YEL]
+img =".i.CN._YELLOW.0"
+index = [6,5]
 
 [s_Bioma]
 img =".i.CN._LANDER.0"
@@ -119,7 +124,7 @@ cena=".i.ROOTzz0.0.0"
 foi=".i.BIOzz0zz0.0.0"
 [e_ani]
 img=".i.Missao._ANIMAL.0"
-x=200
+x=100
 y=100
 w=300
 h=500
@@ -129,7 +134,7 @@ cena=".i.ROOTzz0.0.0"
 vai=".i.BIOzz2zz2.0.0"
 [e_adv]
 img=".i.Missao._AVENTURA.0"
-x=600
+x=500
 y=100
 w=300
 h=500
@@ -139,3 +144,15 @@ cena=".i.ROOTzz0.0.0"
 texto="A missão inicia aqui"
 tit="A missão inicia aqui"
 foi=".i.BIOzz0zz1.0.0"
+[e_adt]
+img=".i.Missao._AVENTURA.1"
+x=900
+y=100
+w=300
+h=500
+o=0.5
+b=1
+cena=".i.ROOTzz0.0.0"
+texto="Outra missão inicia aqui"
+tit="Outra missão inicia aqui"
+foi=".i.YELzz0zz1.0.0"

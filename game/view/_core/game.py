@@ -32,12 +32,18 @@ Two = ntp("Two", "p b hd sc fm fs ip lg lb ft")
 W, H = 1350, 650
 LOG_LEVEL = 1
 IMGSIZE, IMG_HEIGHT = f"{32 * W}px", f"{4 * H}px"
+
+
 class Log:
     def __init__(self, min_level=LOG_LEVEL):
-        self.min_level =  min_level
+        self.min_level = min_level
+
     def log(self, level, *args):
         print(*args) if level > self.min_level else None
+
+
 LG = Log(3)
+
 
 class Teclemmino:
     def __init__(self, vito):
@@ -55,7 +61,7 @@ class Teclemmino:
             # def __init__(self, img, nome=None, **kwargs):
             def __init__(self, img, dimensions: list, nome=None, **kwargs):
                 _ = nome, kwargs
-                LG.log(2,"Folha", dimensions)
+                LG.log(2, "Folha", dimensions)
                 # dimensions = [4,4]
                 self.dim = d = ntp("Dimensions", "dx dy")(*dimensions)
                 self.img = img
@@ -74,7 +80,7 @@ class Teclemmino:
                          x=0, y=0, w=100, h=100, o=1, texto='', foi=None, sw=100, sh=100, b=0, s=1,
                          cena="", score=NDCT, drag=False, drop=NDCT, tipo="100% 100%", **kwargs):
                 _style = style
-                foi = foi() if  callable(foi) else foi
+                foi = foi() if callable(foi) else foi
                 _ = score, drag, drop, tipo
                 img_, _style, _dim = [v for v in img.values()] if isinstance(img, dict) else (img, {}, D11)
                 style = dict(width=f"{w}px", height=f"{h}px", overflow="hidden", filter=f"blur({b}px)", scale=s)
@@ -82,7 +88,7 @@ class Teclemmino:
                 style.update(**{"background-image": f"url({img_})"})
                 # noinspection PyCallingNonCallable
                 cena = cena() if callable(cena) else cena
-                LG.log(3,"Sprite(vito.Elemento) ⇒", img, foi, cena)
+                LG.log(3, "Sprite(vito.Elemento) ⇒", img, foi, cena)
 
                 super().__init__(img=img, vai=vai, tit=tit, alt=alt,
                                  x=x, y=y, w=w, h=h, o=o, texto=texto, foi=foi,
@@ -99,7 +105,7 @@ class Teclemmino:
             def _do_foi(self):
                 _texto = self.texto if self.tit else self.title  # else CORRECT.format(self.tit)
                 self.vai = Texto(_texto, self.cena).vai
-                LG.log(3,_texto, self.vai)
+                LG.log(3, _texto, self.vai)
 
         class CenaSprite(vito.Cena):
             def __init__(self, img, index=-1, **kwargs):
@@ -116,25 +122,26 @@ class Teclemmino:
                 super().__init__("", **kwargs)
                 self.nome = kwargs["nome"] if "nome" in kwargs else img_
 
-                self.elt.html =""
+                self.elt.html = ""
                 self.elt.style = style
 
         class SpriteLabirinto:
             def __init__(self, img, index=(), **kwargs):
                 # from random import sample
                 img = img["img_"] if isinstance(img, dict) else img
-                dx, dy = self.index= Dim(*index)
-                xdx = dx+2
+                dx, dy = self.index = Dim(*index)
+                xdx = dx + 2
                 all_images = list(range(32))
-                all_images = all_images*8
+                all_images = all_images * 8
                 # _index = enumerate([sample(all_images, 4)  for _ in range(dx*dy)])
-                _index = enumerate([all_images[ix*4:ix*4+4]  for ix in range(dx*dy)])
+                _index = enumerate([all_images[ix * 4:ix * 4 + 4] for ix in range(dx * dy)])
                 # self.salas = salas if salas else self.build_rooms
                 _name = kwargs["nome"]
-                _salas = [teclemmino.sprite_sala(f"{_name}zz{ii}",img=img, index=ix) for ii, ix in _index]
-                self.matrix : List[SpriteSala]
-                self.matrix = [None]* xdx
-                _matrix = [[None]+ _salas[ix:ix+self.index.dx]+[None] for ix in range(0,dx*dy,dx)]+[[None]*xdx]
+                _salas = [teclemmino.sprite_sala(f"{_name}zz{ii}", img=img, index=ix) for ii, ix in _index]
+                self.matrix: List[SpriteSala]
+                self.matrix = [None] * xdx
+                _matrix = [[None] + _salas[ix:ix + self.index.dx] + [None] for ix in range(0, dx * dy, dx)] + [
+                    [None] * xdx]
                 _ = [self.matrix.extend(row) for row in _matrix]
                 LG.log(4, "SpriteLabirinto", img, self.matrix)
                 self.lb()
@@ -142,12 +149,12 @@ class Teclemmino:
             # noinspection PyUnresolvedReferences
             def lb(self):
                 dx, dy = self.index
-                xdx = dx+2
-                winds = [-xdx,1,xdx,-1]
-                for index_sala in range(xdx+1,xdx+xdx*dy-1):
+                xdx = dx + 2
+                winds = [-xdx, 1, xdx, -1]
+                for index_sala in range(xdx + 1, xdx + xdx * dy - 1):
                     for wind, winder in enumerate(winds):
-                        print("for wind, winder ", index_sala+winder, len(self.matrix))
-                        origin , destination = self.matrix[index_sala], self.matrix[index_sala+winder]
+                        print("for wind, winder ", index_sala + winder, len(self.matrix))
+                        origin, destination = self.matrix[index_sala], self.matrix[index_sala + winder]
                         if origin and destination:
                             origin.cenas[wind].portal(N=destination.cenas[wind])
                             counter_wind = (wind + 2) % 4
@@ -157,8 +164,7 @@ class Teclemmino:
             def __init__(self, n=NADA, l=NADA, s=NADA, o=NADA, img=None, index=(), sid=None, **kwargs):
                 # _salas = [vito.CenaSprite(img, ix) for ix in index]
                 _name = kwargs["nome"]
-                _salas = [teclemmino.cena(f"{_name}zz{ii}",img=img, index=ix) for ii, ix in enumerate(index)]
-
+                _salas = [teclemmino.cena(f"{_name}zz{ii}", img=img, index=ix) for ii, ix in enumerate(index)]
 
                 self.cenas = _salas if _salas else [n, l, s, o]
                 self.nome = sid
@@ -166,53 +172,90 @@ class Teclemmino:
                 self.p()
 
                 LG.log(4, sid, kwargs, _salas, self.norte, teclemmino.assets)
+
             def vai(self, *_):
                 self.norte.vai()
 
         class Texto:
             DOIT = True
+            modal = None
 
             def __init__(self, tit="", txt="", cena=NADA, foi=None, nome=None, **kwargs):
-                def dom(exi=None, mod=None):
-                    d, f, a, i, s, h, h1 = list(teclemmino.tag_one)
-                    p, b, hd, sc, fm, fs, ip, lg, lb, ft = list(teclemmino.tag_two)
-                    card = d(
-                        d(hd(p(tit, Class="modal-card-title") +
-                             (closer := b(Class="delete", id=exi, ariaLabel="close")), Class="modal-card-head") +
-                          sc(d(fm(
-                              fs(lg(txt)),
-                              Class="form-horizontal"), Class="content"), Class="modal-card-body"),
-                          Class="modal-card"),
-                        Class="modal", id=mod)
-                    closer.bind("click", self.close_modal)
-                    return card
+                class TextModal:
+                    def __init__(self):
+                        self.textual = tit
+                        self.engage = self.dismiss = self.close = lambda *_: None
+                        self.modal, self.texter = self.dom("aaa", "bbb")
+
+                        _ = teclemmino.vito.document <= self.modal
+
+                    def bind(self, e, d, c, t):
+                        self.engage, self.dismiss, self.close = e, d, c
+                        self.textual = t
+
+                    def unbind(self):
+                        self.engage = self.dismiss = self.close = lambda *_: None
+
+                    def dom(self, exi=None, mod=None):
+                        d, f, a, i, s, h, h1 = list(teclemmino.tag_one)
+                        p, b, hd, sc, fm, fs, ip, lg, lb, ft = list(teclemmino.tag_two)
+                        ii, iw, ig = "button is-info", "button is-warning", "button mr-0 is-danger"
+                        eng, dis, clo = "modal_eng modal_dis modal_clo".split()
+                        card = d(
+                            d(hd(p("A V A N T A R 🐧", Class="modal-card-title") +
+                                 (closer := b(Class="delete", id=exi, ariaLabel="close")), Class="modal-card-head") +
+                              sc(d(fm(
+                                  fs(texter := lg(self.get_text())),
+                                  Class="form-horizontal"), Class="content"), Class="modal-card-body") +
+                              ft((eng := b("Entrar Aqui", Class=ii, id=eng)), Class="modal-card-foot"), Class="modal-card"),
+                            Class="modal", id=mod)
+                        closer.bind("click", self.close_modal)
+                        # dmi.bind("click", self.close_modal)
+                        eng.bind("click", self.engage_modal)
+                        # cancel.bind("click", self.cancel_modal)
+                        return card, texter
+
+                    def template_modal(self, ev, template=None):
+                        ev.stopPropagation()
+                        ev.preventDefault()
+                        template()
+                        self.unbind()
+                        self.modal.classList.remove('is-active')
+
+                    def get_text(self):
+                        return self.textual
+
+                    def close_modal(self, ev):
+                        self.template_modal(ev, template=self.close)
+
+                    def engage_modal(self, ev):
+                        self.template_modal(ev, template=self.engage)
+
+                    def cancel_modal(self, ev):
+                        self.template_modal(ev, template=self.dismiss)
+
+                    def mostra(self):  # , tit="", txt="", act=None, **kwargs):
+                        self.modal.classList.add('is-active')
+                        self.texter.text = self.textual
 
                 self.cena = cena
                 self.kwargs = kwargs
                 self.esconde = foi if foi else self.esconde
                 self.tit, self.txt, self.nome = tit, txt, nome
-                self.modal = dom("modal_closer_", "modal_popup_")
-                self.deploy()
+                self.modal = Texto.modal if Texto.modal else TextModal()
+                Texto.modal = self.modal  # dom("modal_closer_", "modal_popup_")
+                # self.deploy()
 
-            def deploy(self, document=None):
-                #print("deploy", document)
-                document = document or teclemmino.vito.document
-                _ = document <= self.modal
-                # noinspection PyAttributeOutsideInit
-                self.deploy = lambda *_: None
-
-            def close_modal(self, ev):
-                ev.stopPropagation()
-                ev.preventDefault()
-                self.esconde()
-                self.modal.classList.remove('is-active')
+            def nop(self):
+                pass
 
             def esconde(self):
                 ...
 
             def mostra(self):  # , tit="", txt="", act=None, **kwargs):
-                self.deploy()
-                self.modal.classList.add('is-active')
+                self.modal.bind(self.esconde, self.nop, self.nop, self.tit)
+                self.modal.mostra()  # classList.add('is-active')
+                LG.log(4, "mostra")
 
             def vai(self, ev=NoEv()):
                 ev.stopPropagation()
@@ -235,7 +278,7 @@ class Teclemmino:
     def cena(self, asset, **kwargs):
         self.assets[asset] = result = self.vito.CenaSprite(nome=asset, **kwargs)
         self.last = asset
-        LG.log(3,"Vito ⇒ cena", asset, kwargs)
+        LG.log(3, "Vito ⇒ cena", asset, kwargs)
         return result
 
     def sprite_labirinto(self, asset, **kwargs):
@@ -271,7 +314,7 @@ class Teclemmino:
         self.assets[asset] = self.vito.CenaSprite("") if asset not in self.assets else self.assets[asset]
         element = self.assets[asset][item] if isinstance(self.assets[asset], dict) else lambda at=asset: self.assets[at]
         value = element.get_image(index=index) if hasattr(element, "get_image") else element
-        LG.log(4,"icon:->", asset, item, index, value)
+        LG.log(4, "icon:->", asset, item, index, value)
         return value
 
     def parse_(self, toml_obj):
