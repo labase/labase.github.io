@@ -7,6 +7,7 @@
 Changelog
 ---------
 .. versionadded::    23.09
+        🎱 Pool central de missões (23).
         Sprite Labirinto working (18).
         Sprite foi working, SpriteSala & Elemento.cena (16).
         Cena as Background (14).
@@ -30,7 +31,7 @@ SEP = "_"
 One = ntp("One", "d f a i s h h1")
 Two = ntp("Two", "p b hd sc fm fs ip lg lb ft")
 W, H = 1350, 650
-LOG_LEVEL = 1
+LOG_LEVEL = 4
 IMGSIZE, IMG_HEIGHT = f"{32 * W}px", f"{4 * H}px"
 
 
@@ -42,7 +43,7 @@ class Log:
         print(*args) if level > self.min_level else None
 
 
-LG = Log(3)
+LG = Log(4)
 
 
 class Teclemmino:
@@ -81,9 +82,11 @@ class Teclemmino:
                          x=0, y=0, w=100, h=100, o=1, texto='', foi=None, sw=100, sh=100, b=0, s=1,
                          cena="", score=NDCT, drag=False, drop=NDCT, tipo="100% 100%", **kwargs):
                 _style = style
+                from copy import deepcopy
+                self.img_ = deepcopy(img)if isinstance(img, dict) else img
                 style_ = {}
                 def to_int(key):
-                    print(_style)
+                    LG.log (4,_style)
                     return [int(cdd[:-1]) for cdd in _style[key].split()]
                 foi = foi() if callable(foi) else foi
                 _ = score, drag, drop, tipo
@@ -94,7 +97,7 @@ class Teclemmino:
                     style_["background-size"] = f"{dx/100*w}px {dy/100*h}px"
 
                 style = dict(width=f"{w}px", height=f"{h}px", overflow="hidden", filter=f"blur({b}px)", scale=s)
-                print (style)
+                LG.log (4,style)
                 style.update(**style_)
                 style.update(**{"background-image": f"url({img_})"})
                 # noinspection PyCallingNonCallable
@@ -111,7 +114,13 @@ class Teclemmino:
                     _ = self.elt <= icon
                 self._texto = Texto(texto, foi=self._foi) if texto else None
                 self.vai = self._texto.vai if texto else self.vai
-                self.o = o
+                self.o = self.o_ = o
+
+            def copy(self):
+                s = self
+                attr = "img vai tit alt texto foi x y w h o".split()
+                mtd = [s.img_, s.vai, s.tit, s.alt, s.texto, s.foi, s.x, s.y, s.w, s.h, s.o_]
+                return {atn: atv for atn, atv in zip(attr, mtd)}
 
             def _do_foi(self):
                 _texto = self.texto if self.tit else self.title  # else CORRECT.format(self.tit)
@@ -147,7 +156,7 @@ class Teclemmino:
                 # _index = enumerate([sample(all_images, 4)  for _ in range(dx*dy)])
                 _index = enumerate([all_images[ix * 4:ix * 4 + 4] for ix in range(dx * dy)])
                 # self.salas = salas if salas else self.build_rooms
-                _name = kwargs["nome"]
+                self.nome = _name = kwargs["nome"]
                 _salas = [teclemmino.sprite_sala(f"{_name}zz{ii}", img=img, index=ix) for ii, ix in _index]
                 self.matrix: List[SpriteSala]
                 self.matrix = [None] * xdx
@@ -157,6 +166,10 @@ class Teclemmino:
                 LG.log(4, "SpriteLabirinto", img, self.matrix)
                 self.lb()
 
+            def get(self, jj, kk=-1):
+                result = f"{self.nome}zz{jj}" if kk < 0 else f"{self.nome}zz{jj}zz{kk}"
+                return teclemmino.assets[result]
+
             # noinspection PyUnresolvedReferences
             def lb(self):
                 dx, dy = self.index
@@ -164,7 +177,7 @@ class Teclemmino:
                 winds = [-xdx, 1, xdx, -1]
                 for index_sala in range(xdx + 1, xdx + xdx * dy - 1):
                     for wind, winder in enumerate(winds):
-                        print("for wind, winder ", index_sala + winder, len(self.matrix))
+                        LG.log(3,"for wind, winder ", index_sala + winder, len(self.matrix))
                         origin, destination = self.matrix[index_sala], self.matrix[index_sala + winder]
                         if origin and destination:
                             origin.cenas[wind].portal(N=destination.cenas[wind])
@@ -274,17 +287,106 @@ class Teclemmino:
                 self.mostra()  # self.tit, self.txt, act=self.esconde)
                 return False
 
+
+        class Puzzle(Sprite):
+            def __init__(self, img="", x=0, y=0, w=100, h=100, **kwargs):
+                swap = self
+                cena = kwargs["cena"]
+                LG.log(6, "Puzzle(Sprite):", cena, cena())
+                img_, _style, _dim = [v for v in img.values()] if isinstance(img, dict) else (img, {}, D11)
+                dw, dh = _dim.dx, _dim.dy
+                super().__init__(img="", x=x, y=y, w=w, h=h, **kwargs)
+                class Peca(vito.Elemento):
+                    def __init__(self, local, index):
+                        self.local, self.index = local, index,
+
+                        pw, ph = w // dw, h // dh
+                        """largura e altura da peça"""
+                        lx, ly = x + local % dw * pw, y + local // dw * ph
+                        """posição horizontal e vertical em pixels onde a peça será desenhada"""
+                        px, py = index % dw * pw, index // dw * ph
+                        """posição horizontal e vertical em pixels onde o desenho da peça está na imagem"""
+                        super().__init__(img_, x=lx, y=ly, w=pw, h=ph, drag=True, cena=cena()) #, **kwargs)
+                        """chama o construtor do Elemento Vitollino passando as informações necessárias"""
+                        self.siz = (w, h)
+                        """redimensiona a figura da imagem para o tamanho fornecido"""
+                        self.elt.id = f"_swap_{local}"
+                        """rotula o elemento da peça com a posição onde foi alocada"""
+                        self.pos = (-px, -py)
+                        """reposiciona a figura da imagem para o pedaço que vai aparecer na peça"""
+                        self.elt.ondrop = lambda ev: self.drop(ev)
+                        """captura o evento drop da peça para ser tratado pelo método self.drop"""
+
+                    def drop(self, ev):
+                        ev.preventDefault()
+                        ev.stopPropagation()
+                        src_id = ev.data['text']
+                        local = int(src_id.split('_')[-1])
+                        print(f"local -> {local}: {src_id}| índice -> {self.index}")
+                        self.dropped(local)
+
+                    def dropped(self, local):
+                        # o_outro = swap.pecas[local].pra_la(self, self.x, self.y, local)
+                        # o_local = swap.pecas[local].local
+                        m, u = self, swap.pecas[local]
+                        u.x, u.y, u.local, m.x, m.y, m.local = m.x, m.y, m.local, u.x, u.y, u.local
+                        print(f"índice, o outro -> {self.index} @ {self.local} <-> {u} @ {u.local}")
+                        swap.montou()
+
+                    def certo(self):
+                        return self.index == self.local
+
+                    def __repr__(self):
+                        return str(self.index)
+
+                from random import shuffle
+                pecas = list(range(_dim.dx * _dim.dy))
+                shuffle(pecas)
+                # Peca(0, 0)
+                self.pecas = [Peca(local, index) for local, index in enumerate(pecas)]
+                # self.venceu = venceu or j.n(cena, "Voce venceu!")
+
+            def limpa(self):
+                [peca.elt.remove() for peca in self.pecas]
+
+            def montou(self):
+                resultado = [peca.certo() for peca in self.pecas]
+                print(resultado)
+                self.vai() if all(resultado) else None
+                return all(resultado)
+
+        class Mapa:
+            def __init__(self,nome=None, **kwargs):
+                def deploy(actor, local=(0,0), **kwa):
+                    _kwa = actor.copy()
+                    local_ = mapa.get(*local)
+                    _kwa.update(kwa)
+                    kwa_ = dict(x=100, y=100)
+                    _kwa.update(**kwa_)
+
+                    LG.log(4, "Vito ⇒ Mapa deploy⇒", actor.img_, local, local_, _kwa)
+                    sprite = Sprite(cena=local_,**_kwa)
+                    # sprite.o = 0.5
+                    return sprite
+                mapa = teclemmino.assets[nome]
+                pool='bio atm xpr cli fri geo per enc sup des sal cai'.split()
+                act_pool = {k[0]: teclemmino.assets[f"m{k}"] for k in pool}
+                act_pool["w"] = teclemmino.assets["mcli"]
+                self.acts = [deploy(act_pool[key.lower()[0]], **ka) for key,ka in kwargs.items()]
+                LG.log(4, "Vito ⇒ Mapa ⇒", nome, mapa.get(1,0))
+
+                ...
         self.vito = vito
         self.assets = {}
         self.last = {}
-        self.classes = (CenaSprite, Sprite, SpriteSala, Texto, Folha, SpriteLabirinto)
+        self.classes = (CenaSprite, Sprite, SpriteSala, Texto, Folha, SpriteLabirinto, Mapa, Puzzle)
         self.cmd = self.vito_element_builder(vito, self.classes)
 
     def vito_element_builder(self, v, classes):
-        v.CenaSprite, v.Sprite, v.SpriteSala, v.Textor, self.vito.Folha, v.SpriteLabirinto = classes
-        builder = [self.cena, self.elemento, self.texto,
-                   self.sprite_sala, self.folha, self.valor, self.icon, self.sprite_labirinto]
-        return {k: v for k, v in zip(['c', 'e', 't', 's', 'f', 'v', "i", "l"], builder)}
+        v.CenaSprite, v.Sprite, v.SpriteSala, v.Textor, v.Folha, v.SpriteLabirinto, v.Mapa, v.Puzzle = classes
+        builder = [self.cena, self.elemento, self.texto, self.sprite_sala, self.folha, self.valor,
+                   self.icon, self.sprite_labirinto, self.mapa, self.puzzle]
+        return {k: v for k, v in zip(['c', 'e', 't', 's', 'f', 'v', "i", "l", "m", "p"], builder)}
 
     def cena(self, asset, **kwargs):
         self.assets[asset] = result = self.vito.CenaSprite(nome=asset, **kwargs)
@@ -292,8 +394,18 @@ class Teclemmino:
         LG.log(3, "Vito ⇒ cena", asset, kwargs)
         return result
 
+    def puzzle(self, asset, **kwargs):
+        kwargs.update(cena=self.assets[self.last]) if self.last and "cena" not in kwargs else None
+        self.assets[asset] = result = self.vito.Puzzle(nome=asset, **kwargs)
+        return result
+
+    def mapa(self, asset, **kwargs):
+        self.assets[asset] = result = self.vito.Mapa(nome=asset, **kwargs)
+        return result
+
     def sprite_labirinto(self, asset, **kwargs):
         self.assets[asset] = self.vito.SpriteLabirinto(nome=asset, **kwargs)
+        LG.log(5, "Vito ⇒ sprite_labirinto", asset, kwargs)
 
     def sprite_sala(self, asset, **kwargs):
         self.assets[asset] = sala = self.vito.SpriteSala(nome=asset, **kwargs)

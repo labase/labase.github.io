@@ -1,5 +1,3 @@
-[EXEMPLO]
-We = {local=[1,1], vai="PUZZLE._Weather.0", foi="CN._SUPPLY.2"}
 point = { x = [1,3], y = 2 }
 [valores_CN]
 #ANICONS = "https://i.imgur.com/A2pPOED.png"
@@ -33,37 +31,37 @@ ANIMAL = [3,1]
 AVENTURA = [2,1]
 MISSAO = [6,3]
 EVENTO = [6,3]
-[valores_PUZZLE]
-Wheather = "https://i.imgur.com/kYFntfo.gif"
-[c_GEM]
-img=".i.CN._LANDER.5"
 [c_POOL]
 img=".i.CN._LANDER.5"
-e_mbio.img=".i.Missao._MISSAO.1"
-e_mbio.x=100
-e_matm.img=".i.Missao._MISSAO.3"
-e_matm.x=200
-e_mexp.img=".i.Missao._MISSAO.6"
-e_mexp.x=300
-e_mcli.img=".i.Missao._MISSAO.9"
-e_mcli.x=400
-e_mfri.img=".i.Missao._MISSAO.12"
-e_mfri.x=500
-e_mgeo.img=".i.Missao._MISSAO.15"
-e_mgeo.x=600
+e_mbio = {img=".i.Missao._MISSAO.0", x=100, y=100, w=300, h=500, o=0.4}
+e_matm = {img=".i.Missao._MISSAO.3", x=200, y=100, w=300, h=500, o=0.4}
+e_mxpr = {img=".i.Missao._MISSAO.6", x=200, y=100, w=300, h=500, o=0.4}
+e_mcli = {img=".i.Missao._MISSAO.9", x=400, y=100, w=300, h=500, o=0.4}
+e_mfri = {img=".i.Missao._MISSAO.12", x=500, y=100, w=300, h=500, o=0.4}
+e_mgeo = {img=".i.Missao._MISSAO.15", x=600, y=100, w=300, h=500, o=0.4}
 
-e_mper.img=".i.Missao._EVENTO.1"
-e_mper.x=700
-e_mres.img=".i.Missao._EVENTO.3"
-e_mres.x=800
-e_msup.img=".i.Missao._EVENTO.6"
-e_msup.x=900
-e_mdes.img=".i.Missao._EVENTO.9"
-e_mdes.x=1000
-e_msal.img=".i.Missao._EVENTO.12"
-e_msal.x=1100
-e_mcai.img=".i.Missao._EVENTO.15"
-e_mcai.x=1200
+e_mper = {img=".i.Missao._EVENTO.0", x=700, y=100, w=300, h=500, o=0.4}
+e_menc = {img=".i.Missao._EVENTO.3", x=700, y=100, w=300, h=500, o=0.4}
+e_msup = {img=".i.Missao._EVENTO.6", x=900, y=100, w=300, h=500, o=0.4}
+e_mdes = {img=".i.Missao._EVENTO.9", x=1000, y=100, w=300, h=500, o=0.4}
+e_msal = {img=".i.Missao._EVENTO.12", x=1100, y=100, w=300, h=500, o=0.4}
+e_mcai = {img=".i.Missao._EVENTO.15", x=1200, y=100, w=300, h=500, o=0.4}
+[valores_PUZZLE]
+Weather = "https://i.imgur.com/kYFntfo.gif"
+[folha_PUZZLE]
+Weather = [4,3]
+[l_BIO]
+img =".i.CN._LANDER.0"
+index = [3,3]
+[l_YEL]
+img =".i.CN._YELLOW.0"
+index = [6,5]
+[mapa_YEL]
+We = {local=[1,1], vai="PUZZLE._Weather.0", foi="CN._SUPPLY.2"}
+Be = {local=[1,2], vai="PUZZLE._Weather.0", foi="CN._SUPPLY.2"}
+
+[c_GEM]
+img=".i.CN._LANDER.5"
 
 [c_CROW]
 img=".i.CN._LANDER.7"
@@ -115,16 +113,19 @@ texto="Me parece um animal distante"
 [s_ROOT]
 img =".i.CN._LANDER.0"
 index = [0,1,2,3]
-[l_BIO]
-img =".i.CN._LANDER.0"
-index = [3,3]
-[l_YEL]
-img =".i.CN._YELLOW.0"
-index = [6,5]
 
 [s_Bioma]
 img =".i.CN._LANDER.0"
 index = [4,5,6,7]
+[p_bal]
+img = ".i.PUZZLE._Weather.0"
+cena = ".i.ROOTzz3.0.0"
+x=100
+y=100
+w=900
+h=500
+texto = "Missão meteorológica completada!"
+foi = ".i.ROOTzz0.0.0"
 [e_ave]
 img="*fa fa-crow fa-5x"
 x=700
