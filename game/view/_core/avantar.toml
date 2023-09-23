@@ -1,3 +1,6 @@
+[EXEMPLO]
+We = {local=[1,1], vai="PUZZLE._Weather.0", foi="CN._SUPPLY.2"}
+point = { x = [1,3], y = 2 }
 [valores_CN]
 #ANICONS = "https://i.imgur.com/A2pPOED.png"
 SNOWY = "https://i.imgur.com/KxcqKpJ.gif"
@@ -30,14 +33,37 @@ ANIMAL = [3,1]
 AVENTURA = [2,1]
 MISSAO = [6,3]
 EVENTO = [6,3]
+[valores_PUZZLE]
+Wheather = "https://i.imgur.com/kYFntfo.gif"
 [c_GEM]
 img=".i.CN._LANDER.5"
 [c_POOL]
 img=".i.CN._LANDER.5"
-e_mani.img=".i.Missao._MISSAO.1"
-e_mani.x=100
-e_mgeo.img=".i.Missao._MISSAO.2"
-e_mgeo.x=200
+e_mbio.img=".i.Missao._MISSAO.1"
+e_mbio.x=100
+e_matm.img=".i.Missao._MISSAO.3"
+e_matm.x=200
+e_mexp.img=".i.Missao._MISSAO.6"
+e_mexp.x=300
+e_mcli.img=".i.Missao._MISSAO.9"
+e_mcli.x=400
+e_mfri.img=".i.Missao._MISSAO.12"
+e_mfri.x=500
+e_mgeo.img=".i.Missao._MISSAO.15"
+e_mgeo.x=600
+
+e_mper.img=".i.Missao._EVENTO.1"
+e_mper.x=700
+e_mres.img=".i.Missao._EVENTO.3"
+e_mres.x=800
+e_msup.img=".i.Missao._EVENTO.6"
+e_msup.x=900
+e_mdes.img=".i.Missao._EVENTO.9"
+e_mdes.x=1000
+e_msal.img=".i.Missao._EVENTO.12"
+e_msal.x=1100
+e_mcai.img=".i.Missao._EVENTO.15"
+e_mcai.x=1200
 
 [c_CROW]
 img=".i.CN._LANDER.7"

@@ -81,11 +81,21 @@ class Teclemmino:
                          x=0, y=0, w=100, h=100, o=1, texto='', foi=None, sw=100, sh=100, b=0, s=1,
                          cena="", score=NDCT, drag=False, drop=NDCT, tipo="100% 100%", **kwargs):
                 _style = style
+                style_ = {}
+                def to_int(key):
+                    print(_style)
+                    return [int(cdd[:-1]) for cdd in _style[key].split()]
                 foi = foi() if callable(foi) else foi
                 _ = score, drag, drop, tipo
                 img_, _style, _dim = [v for v in img.values()] if isinstance(img, dict) else (img, {}, D11)
+                if _style:
+                    (ox, oy), (dx, dy) = to_int("backgroundPosition"), to_int("background-size")
+                    style_["backgroundPosition"] = f"{-ox / 100 * w}px {-oy / 100 * h}px"
+                    style_["background-size"] = f"{dx/100*w}px {dy/100*h}px"
+
                 style = dict(width=f"{w}px", height=f"{h}px", overflow="hidden", filter=f"blur({b}px)", scale=s)
-                style.update(**_style)
+                print (style)
+                style.update(**style_)
                 style.update(**{"background-image": f"url({img_})"})
                 # noinspection PyCallingNonCallable
                 cena = cena() if callable(cena) else cena
@@ -129,7 +139,7 @@ class Teclemmino:
         class SpriteLabirinto:
             def __init__(self, img, index=(), **kwargs):
                 # from random import sample
-                img = img["img_"] if isinstance(img, dict) else img
+                # img_ = img["img_"] if isinstance(img, dict) else img
                 dx, dy = self.index = Dim(*index)
                 xdx = dx + 2
                 all_images = list(range(32))
