@@ -24,10 +24,10 @@ from random import shuffle
 
 from browser import timer
 
-from _spy.tesouro.tesouro import Jogo
-from _spy.vitollino.main import Elemento, Cena, Codigo, STYLE
+from spy.tesouro.tesouro import Jogo
+from spy.vitollino.main import Elemento, Cena, Codigo, STYLE
 
-# from _spy.vitollino.main import Elemento, Cena, Codigo, STYLE
+# from spy.vitollino.main import Elemento, Cena, Codigo, STYLE
 
 STYLE["width"] = 800
 

@@ -64,7 +64,7 @@ _ = application
 
 # Mount a new instance of bottle for each controller and URL prefix.
 # appbottle.mount("/external/brython/Lib/site-packages", project_controller.bottle)
-# application.mount("/<:re:.*>/_spy", code_controller.bottle)
+# application.mount("/<:re:.*>/spy", code_controller.bottle)
 # application.mount("/<:path>/stlib", static_controller.appbottle)
 # application.mount("/<:path>/image", static_controller.appbottle)
 # application.mount("/<:path>/css", static_controller.appbottle)
