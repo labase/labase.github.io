@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title id="_tt_">{titulo}</title>
+    <!-- stylesheets -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+    <!-- fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+          integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+          crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="shortcut icon" href="/image/favico.ico" type="image/x-icon"/>
+    <link rel="stylesheet" href="../css/bulma.css" type='text/css' >
+    <link rel="stylesheet" href="../css/style.css" type='text/css' >
+    <script type =" text/javascript " src =" https://cdn.jsdelivr.net/npm/brython@3.11/brython.min.js " >
+    </script>
+    <script type =" text/javascript " src =" https://cdn.jsdelivr.net/npm/brython@3.11/brython_stdlib.js " >
+    </script>
+    <script type="text/javascript">
+        var GONE = '1';
+    </script>
+</head>
+<body bgcolor="#003333" background-image="https://i.imgur.com/U3HUCIL.jpg" onload="brython(
+    {debug: 1, pythonpath : ['view/', '../', '../game']})">
+<script type="text/python">
+        """Página de entrada do game Avantar.
+
+        .. codeauthor:: Carlo Oliveira <carlo@nce.ufrj.br>
+
+        Changelog
+        ---------
+        .. versionadded::    23.09
+                Add ../game to brython python path (24).
+
+        |   **Open Source Notification:** This file is part of open source program **LABASE**
+        |   **Copyright © 2023  Carlo Oliveira** <carlo@nce.ufrj.br>,
+        |   **SPDX-License-Identifier:** `GNU General Public License v3.0 or later <http://is.gd/3Udt>`_.
+        |   `Labase <http://labase.selfip.org/>`_ - `NCE <https://portal.nce.ufrj.br>`_ - `UFRJ <https://ufrj.br/>`_.
+        """
+        from browser import document, alert, html, window, ajax, timer, svg
+        from browser.template import Template
+        from _spy.vitollino.main import Cena, Elemento, Texto, Salao, STYLE, NADA, NDCT, NoEv
+        class MockBrython:
+            document, alert, html, window, ajax, timer, svg = document, alert, html, window, ajax, timer, svg
+            template, NoEv = Template, NoEv
+            Cena, Elemento, Texto, Salao, STYLE, NADA, NDCT = Cena, Elemento, Texto, Salao, STYLE, NADA, NDCT
+        brython = MockBrython
+        from _core.game import main
+        main(brython)
+        print("ok ag")
+</script>
+<div id="_main_" style="position:relative; width:100%; height:100%;">
+    <div id="pydiv" style="margin: 0 auto; position:relative; top:0px;">
+        <img src="/image/supygirls_ide.png" alt="SUPYGIRLS"
+             style="width:100vw; height:100vh; object-fit: cover;"/>
+        <div style="position: absolute; top: 50%; left: 50%; opacity:0.3;
+            margin-top: -100px; margin-left: -100px; width: 200px; height: 200px;">
+            <img src="https://imgur.com/uc56UAq.gif" width="200px" alt="LOADING" style=""/>
+        </div>
+    </div>
+</div>
+<div style="position:absolute; top:700px; left:2px; height: 10px;">
+    <p>
+            <span id="_version_" style="color:#FFFFEE;font-size:8px;font-family:courier new,courier,monospace;">
+                {version}</span>
+    </p>
+</div>
+
+</body>
+</html>

@@ -8,6 +8,12 @@ body, input, textarea, .button {
     font-family: 'Roboto Condensed', sans-serif;
 }
 
+body {
+    font-family: 'Roboto Condensed', sans-serif;
+    color: #003333;
+    background-image: url("https://i.imgur.com/U3HUCIL.jpg");
+}
+
 .fa small {
     font-family: 'Roboto Condensed', sans-serif;
     color: #7a7a7a;

@@ -29,8 +29,11 @@ Gerador de labirintos e jogos tipo *'novel'*.
 
 Changelog
 ---------
+.. versionadded::    23.09
+	remove property style from Element to 3.11 work (09)
+
 .. versionadded::    20.08
-	Add img, siz and pos properties to Elemento    
+	Add img, siz and pos properties to Elemento
 
 .. versionadded::    20.07
 	Fix Elemento x, y setters; add z function to Jogo
@@ -44,6 +47,11 @@ Gerador de labirintos e jogos tipo *'novel'*.
 
 `Vitollino em Github <https://github.com/carlotolla/vitollino>`_
 
+|   **Open Source Notification:** This file is part of open source program **Alite**
+|   **Copyright © 2023  Carlo Oliveira** <carlo@nce.ufrj.br>,
+|   **SPDX-License-Identifier:** `GNU General Public License v3.0 or later <https://is.gd/3Udt>`_.
+|   `Labase <http://labase.selfip.org/>`_ - `NCE <https://portal.nce.ufrj.br>`_ - `UFRJ <https://ufrj.br/>`_.
+
 """
 import json
 from browser import document, html, timer
@@ -52,9 +60,9 @@ from browser import ajax
 import uuid
 
 try:
-   SUPERPYTHON = win.__SUPERPYTHON__
+    SUPERPYTHON = win.__SUPERPYTHON__
 except Exception as _:
-   SUPERPYTHON = None
+    SUPERPYTHON = None
 
 CURSOR_STYLE = 'width: {}px, height: {}px, min-height: {}px, border-radius: 30px,' \
                ' left:{}px, top: {}px, position: absolute'
@@ -86,7 +94,8 @@ ZSTYLE = {'position': "absolute", 'width': "10%", 'margin': "0%",
           "min-height": "10%", "cursor": "zoom-in"}
 PKEYS = ['False', 'None', 'True', ' and ', ' as ', 'assert', 'break', 'class ', 'continue', 'def ',
          'del', 'elif', 'else', 'except', 'finally', 'for ', 'from ', 'global ', 'if ', 'import ',
-         ' in ', ' is ', 'lambda', 'nonlocal', ' not ', ' or ', 'pass', 'raise', 'return', 'try', 'while', 'with', 'yield']
+         ' in ', ' is ', 'lambda', 'nonlocal', ' not ', ' or ', 'pass', 'raise', 'return', 'try', 'while', 'with',
+         'yield']
 NDCT = {}
 FIX_COUNT = {}
 
@@ -174,12 +183,14 @@ def wraps_class_to_mimic_wrapped(original_cls):
     :param original_cls: A Classe a ser empacotada
     :return: O empacotador da classe
     """
+
     def wrapper(wrapper_cls):
         """Atualiza wrapper_cls para se assemelhar à classe original_cls.
         """
         _ = [setattr(wrapper_cls, attr, getattr(original_cls, attr))
              for attr in WRAPPER_ASSIGNMENTS if hasattr(original_cls, attr)]
         return wrapper_cls
+
     return wrapper
 
 
@@ -200,6 +211,7 @@ def singleton(cls_to_decorate):
     :return: O decorador de singleton
     """
     instance = cls_to_decorate()
+
     @wraps_class_to_mimic_wrapped(cls_to_decorate)
     class Singletoner(cls_to_decorate):
         def __init__(self):
@@ -216,6 +228,7 @@ def singleton(cls_to_decorate):
 
         def __repr__(self):
             return repr(cls_to_decorate)
+
     return Singletoner
 
 
@@ -258,6 +271,7 @@ class SalaCenaNula:
 
     Deve ser usado quando um parâmetro requer uma cena mas não deve ter uma cena válida ali.
     """
+
     def __init__(self):
         self.esquerda, self.direita = [None] * 2
         self.salas = [None] * 5
@@ -364,7 +378,7 @@ class Inventario:
         :param acao: ação associada com o item nomeado quando ele é clicado
         """
         if isinstance(nome_item, str):
-            #item_img = html.IMG(Id=nome_item, src=item, width=30, height="30px", style=ESTYLE)
+            # item_img = html.IMG(Id=nome_item, src=item, width=30, height="30px", style=ESTYLE)
             nome_item = Elemento(item, tit=nome_item, w=30, height=30, drag=drag, style=ESTYLE)
 
         nome_item.entra(self)
@@ -415,8 +429,6 @@ class Inventario:
 INVENTARIO = Inventario()
 
 
-
-
 class Elemento_:
     """
     Um objeto de interação que é representado por uma imagem em uma cena.
@@ -437,7 +449,8 @@ class Elemento_:
     """
     limbo = html.DIV(style=LSTYLE)
 
-    def __init__(self, img="", vai=None, style=NS, tit="", alt="", cena=INVENTARIO, score=NOSC, drag=False, drop='', **kwargs):
+    def __init__(self, img="", vai=None, style=NS, tit="", alt="", cena=INVENTARIO, score=NOSC, drag=False, drop='',
+                 **kwargs):
         self._auto_score = self.score if score else self._auto_score
         self._img = img
         self.vai = vai if vai else lambda _=0: None
@@ -494,7 +507,6 @@ class Elemento_:
                 for nome, img in kwargs.items()]
 
 
-
 class Elemento(Elemento_):
     """
     Um objeto de interação que é representado por uma imagem em uma cena.
@@ -530,12 +542,12 @@ class Elemento(Elemento_):
         self._auto_score = self.score if score else self._auto_score
         self._img, self.title, self.dropper, self.alt = img, tit, drop, alt
         self._drag = self._over = self._drop = self._dover = self.vai = lambda *_: None
-	self._foi = foi or lambda *_: None
+        self._foi = foi if foi else lambda *_: None
         self.cena = cena
         self.nome = tit
         self.opacity = 0
         self._texto = Texto(self.cena, texto, foi=self._foi) if texto else None
-        self.vai =  self._texto.vai if texto else vai if vai else self.vai
+        self.vai = self._texto.vai if texto else vai if vai else self.vai
         # height = style["height"] if "height" in style else style["maxHeight"] if "maxHeigth" in style else 100
         # height = height[:-2] if isinstance(height, str) and "px" in height else height
         self.style = dict(**PSTYLE)
@@ -543,13 +555,15 @@ class Elemento(Elemento_):
                              'left': x, 'top': y, 'width': '{}px'.format(w), 'height': '{}px'.format(h),
                              'background-image': 'url({})'.format(img),
                              'background-position': '{} {}'.format(0, 0),
-                             #'background-size': '{}px {}px'.format(w, h)
+                             # 'background-size': '{}px {}px'.format(w, h)
                              'background-size': tipo,
                              'background-repeat': 'no-repeat'
                              })
         # self.style["min-width"], self.style["min-height"] = w, h
         self.style.update(**style)
+        # print(">>>>>", self.style)
         self.elt = html.DIV(Id=tit, title=tit, style=self.style)
+        # self.elt.style = self.style
         self.xy = (-111, -111)
         self.scorer = dict(ponto=1, valor=cena.nome, carta=tit or img, casa=self.xy, move=None)
         self.scorer.update(score)
@@ -569,19 +583,21 @@ class Elemento(Elemento_):
         # self._img.onmousedown = self._img_prevent
         self.do_drag(drag)
         self.do_drop(drop)
-        #Elemento._scorer_()
+        # Elemento._scorer_()
+
     def do_score(self, tit):
         if tit not in FIX_SCORE:
             FIX_SCORE[tit] = int(Elemento._score.score_.html) + 1
             Elemento._score.score_.html = FIX_SCORE[tit]
+
     @classmethod
     def _scorer_(cls):
-        Elemento._scorer_ = lambda *_ : None
+        Elemento._scorer_ = lambda *_: None
         Elemento._score = scr = Elemento(SCORE)
         scr.score_ = html.H2("0")
         scr.elt <= scr.score_
         scr.entra(INVENTARIO)
- 
+
     def ocupa(self, ocupante):
         if hasattr(ocupante, 'elt'):
             self.elt <= ocupante.elt
@@ -606,12 +622,12 @@ class Elemento(Elemento_):
         clone_mic = Elemento(self._img, tit=self.title, drag=True, style=style, cena=INVENTARIO)
         clone_mic.entra(INVENTARIO)
         self._do_foi = lambda *_: None
-                         
+
     @property
     def texto(self):
         """Recupera o objeto texto falado pelo objeto"""
         return self._texto
-                         
+
     @texto.setter
     def texto(self, tex):
         """Recebe o texto que o elemento deve falar
@@ -619,15 +635,15 @@ class Elemento(Elemento_):
             :param tex: texto que o elemento deve falar
         """
         self._texto = self._texto or Texto(self.cena, tex, foi=self._foi)
-	self.vai = self._texto.vai
-                         
+        self.vai = self._texto.vai
+
     @property
     def siz(self):
         """Recupera uma tupla de inteiros reportando o tamanho da imagem do elemento"""
         siz = self.elt.style.backgroundSize
         siz = [int("".join(i for i in c if i.isdigit())) for c in siz.split()]
         return siz
-                         
+
     @siz.setter
     def siz(self, wh):
         """Recebe uma tupla de inteiros definindo o tamanho da imagem do elemento
@@ -636,14 +652,14 @@ class Elemento(Elemento_):
             :param hh: h - tamanho da imagem na vertical a partir do topo
         """
         self.elt.style.backgroundSize = "{}px {}px".format(*wh)
-                         
+
     @property
     def pos(self):
         """Recupera uma tupla de inteiros reportando a posição da imagem do elemento"""
         pos = self.elt.style.backgroundPosition
         pos = [int("".join(i for i in c if i.isdigit())) for c in pos.split()]
         return pos
-                         
+
     @pos.setter
     def pos(self, xy):
         """Recebe uma tupla de inteiros definindo a posição da imagem do elemento
@@ -652,57 +668,57 @@ class Elemento(Elemento_):
             :param xy: y - posição da imagem na vertical a partir do topo
         """
         self.elt.style.backgroundPosition = '{}px {}px'.format(*xy)
-                         
+
     @property
     def img(self):
         """Recupera a URI da imagem do elemento"""
         img = self.elt.style.backgroundImage
         img = img.split('"')[1] if '"' in img else ""
         return img
-                         
+
     @img.setter
     def img(self, value):
         """Atribui a imagem do elemento para este novo valor
             :param value: URI da imagem
         """
         self.elt.style.backgroundImage = "url({})".format(value)
-                         
+
     @property
     def o(self):
         return int(self.elt.style.opacity)
-                         
+
     @o.setter
     def o(self, value):
         self.elt.style.opacity = value
-                         
+
     @property
     def x(self):
         return int(self.elt.style.left[:-2])
-                         
+
     @x.setter
     def x(self, value):
         self.elt.style.left = "{}px".format(value)
-                         
+
     @property
     def y(self):
         return int(self.elt.style.top[:-2])
-                         
+
     @y.setter
     def y(self, value):
         self.elt.style.top = "{}px".format(value)
-                         
+
     @property
     def w(self):
         return int(self.elt.style.width[:-2])
-                         
+
     @w.setter
     def w(self, value):
         self.elt.style.width = "{}px".format(value)
-                         
+
     @property
     def h(self):
         return int(self.elt.style.height[:-2])
-                         
+
     @h.setter
     def h(self, value):
         self.elt.style.height = "{}px".format(value)
@@ -715,31 +731,29 @@ class Elemento(Elemento_):
     def tit(self, texto):
         self.elt.title = texto
 
-
-    @property
-    def style(self):
-        return self.elt.style
-
-    @style.setter
-    def style_set(self, texto):
-        self.elt.style = texto
-
+    #
+    # @property
+    # def style(self):
+    #     return self.elt.style
+    #
+    # @style.setter
+    # def style(self, texto):
+    #     self.elt.style = texto
 
     @property
     def drag(self):
         return self.elt.draggable
 
     @drag.setter
-    def drag_set(self, condition):
+    def drag(self, condition):
         self.do_drag(condition)
-
 
     @property
     def drop(self):
         return self.dropper
 
     @drop.setter
-    def drop_set(self, texto):
+    def drop(self, texto):
         self.dropper = texto
 
     def img_prevent(self, ev):
@@ -791,6 +805,7 @@ class Elemento(Elemento_):
         tit = document[src_id].title
         self.dropper.setdefault(tit, lambda *_: None)(ev, tit)
 
+
 class Codigo(Elemento):
     """
     Um objeto de interação que é representado por uma trecho de código em uma cena.
@@ -803,6 +818,7 @@ class Codigo(Elemento):
     :param topo: Texto que aparece no topo do bloco
     :param cena: cena onde o objeto vai ser colocado
     """
+
     def __init__(self, codigo="", topo="", cena=INVENTARIO, img="", vai=None, style=NS):
         self._img = img
         self.vai = vai if vai else lambda _=0: None
@@ -834,11 +850,12 @@ class Codigo(Elemento):
             key = keys.pop()
             cod = cod.replace(key, mark.format(key))
             return rp(cod, keys, mark) if keys else cod
+
         # codigo = rp(codigo)
         self._code.html = codigo.value
         _ = self.entra(cena) if cena and (cena != INVENTARIO) else None
 
-      
+
 class Portal:
     N = NSTYLE
     L = LSTYLE
@@ -983,7 +1000,6 @@ class Labirinto:
                         centro.cenas[k].meio = sala.cenas[k]
                         indice_oposto = (k + 2) % 4
                         sala.cenas[indice_oposto].meio = centro.cenas[indice_oposto]
-
 
     @staticmethod
     def n(cenas):
@@ -1194,6 +1210,81 @@ class Cena:
         score = {key: kwargs[key] if key in kwargs else value for key, value in self.scorer.items()}
         INVENTARIO.score(**score)
 
+def singleton(class_):
+    instances = {}
+
+    def getinstance(*args, **kwargs):
+        if class_ not in instances:
+            instances[class_] = class_(*args, **kwargs)
+        return instances[class_]
+
+    return getinstance
+
+@singleton
+class Pop:
+    def __init__(self, tela=DOC_PYDIV):
+        self.tela = tela
+        self.optou = ""
+        self.foi = None
+        self.popup = html.DIV(Id="__popup__", Class="overlay")
+        self.div = div = html.DIV(Id="__baloon__", Class="popup")
+        self.tit = html.H2()
+        self.a = html.A("×", Class="close", href="#")
+        self.go = html.A(Id="txt_button", Class="button", href="#__popup__")
+        self.go.onclick = self._open
+        self.a.onclick = self._close
+        self.alt = html.DIV(Class="content")
+        self.popup <= div
+        self.popup.style = {"visibility": "hidden", "opacity": 0}
+        self.inicia()
+
+    def inicia(self):
+        self.foi = lambda *_: None
+        self.div.html = ""
+        self.div <= self.tit
+        self.div <= self.a
+        self.div <= self.alt
+
+    def __repr__(self):
+        return "<Popup>"
+
+    def _close(self, *_):
+        self.popup.style = {"visibility": "hidden", "opacity": 0}
+        self.esconde()
+
+    def _open(self, *_):
+        self.popup.style = {"visibility": "visible", "opacity": 0.7}
+
+    def esconde(self, *_):
+        ...
+
+    def monta_optar(self, **kwargs):
+        def opcao(letra):
+            self.foi(letra)
+
+        def _close():
+            self.popup.style = {"visibility": "hidden", "opacity": 0}
+
+        def opta(letra, texto):
+            div = html.DIV(Class="content")
+            optou = html.A(chr(ABOXED + ord(letra) - ord("A")), Class="option", href="#")
+            optou.onclick = lambda *_: _close() or opcao(letra)
+            texto_opcao = html.SPAN(texto)
+            div <= optou
+            div <= texto_opcao
+            return div
+
+        optar = [[optou, texto] for optou, texto in kwargs.items() if optou in "ABCDEFGHIJK"]
+        for op in optar:
+            self.div <= opta(*op)
+
+    def mostra(self, act, tit="", txt="", **kwargs):
+        self.foi = act if act else self.foi
+        if tit or txt:
+            self.tit.text, self.alt.text = tit, txt
+        self.monta_optar(**kwargs)
+        self._open()
+
 
 class Popup:
     POP = None
@@ -1204,7 +1295,7 @@ class Popup:
         self._vai = vai
         self.optar = {}
         Popup.__setup__()
-        Popup.inicia()
+        # Popup.inicia()
         if isinstance(cena, Cena):
             self.d(cena, tit, txt)
 
@@ -1220,83 +1311,21 @@ class Popup:
 
     @staticmethod
     def __setup__():
-        class Pop:
-            def __init__(self, tela=DOC_PYDIV):
-                self.tela = tela
-                self.optou = ""
-                self.foi = None
-                self.popup = html.DIV(Id="__popup__", Class="overlay")
-                self.div = div = html.DIV(Id="__baloon__", Class="popup")
-                self.tit = html.H2()
-                self.a = html.A("×", Class="close", href="#")
-                self.go = html.A(Id="txt_button", Class="button", href="#__popup__")
-                self.go.onclick = self._open
-                self.a.onclick = self._close
-                self.alt = html.DIV(Class="content")
-                self.popup <= div
-                self.popup.style = {"visibility": "hidden", "opacity": 0}
-                self.inicia()
-            def inicia(self):
-                self.foi = lambda *_: None
-                self.div.html = ""
-                self.div <= self.tit
-                self.div <= self.a
-                self.div <= self.alt
-
-            def __repr__(self):
-                return "<Popup>"
-
-            def _close(self, *_):
-                self.popup.style = {"visibility": "hidden", "opacity": 0}
-                self.esconde()
-
-            def _open(self, *_):
-                self.popup.style = {"visibility": "visible", "opacity": 0.7}
-
-            def esconde(self, *_):
-                ...
-
-            def monta_optar(self, **kwargs):
-                def opcao(letra):
-                    self.foi(letra)
-
-                def _close():
-                    self.popup.style = {"visibility": "hidden", "opacity": 0}
-
-                def opta(letra, texto):
-                    div = html.DIV(Class="content")
-                    optou = html.A(chr(ABOXED + ord(letra) - ord("A")), Class="option", href="#")
-                    optou.onclick = lambda *_: _close() or opcao(letra)
-                    texto_opcao = html.SPAN(texto)
-                    div <= optou
-                    div <= texto_opcao
-                    return div
-
-                optar = [[optou, texto] for optou, texto in kwargs.items() if optou in "ABCDEFGHIJK"]
-                for op in optar:
-                    self.div <= opta(*op)
-
-            def mostra(self, act, tit="", txt="", **kwargs):
-                self.foi = act if act else self.foi
-                if tit or txt:
-                    self.tit.text, self.alt.text = tit, txt
-                self.monta_optar(**kwargs)
-                self._open()
-
-        Popup.POP = Pop()
-        Popup.__setup__ = lambda: None
+        # Pop() = Pop()
+        return Pop()
+        # Popup.__setup__ = lambda: None
 
     @staticmethod
     def d(cena, tit="", txt=""):
-        cena.elt <= Popup.POP.popup
-        cena.elt <= Popup.POP.go
+        _ = cena.elt <= Pop().popup
+        _ = cena.elt <= Pop().go
         act = cena.vai
-        cena.vai = lambda *_, **__: Popup.POP.mostra(act, tit, txt)
+        cena.vai = lambda *_, **__: Pop().mostra(act, tit, txt)
         return cena
 
     @staticmethod
     def inicia():
-        Popup.POP.inicia()
+        Pop().inicia()
 
 
 class Texto(Popup):
@@ -1306,11 +1335,11 @@ class Texto(Popup):
         self.kwargs = kwargs
         self.esconde = foi if foi else self.esconde
 
-    @property  
+    @property
     def foi(self):
         return self.esconde
 
-    @foi.setter  
+    @foi.setter
     def foi(self, value):
         self.esconde = value
 
@@ -1320,15 +1349,16 @@ class Texto(Popup):
     def mostra(self, tit="", txt="", act=None, **kwargs):
         kwargs = kwargs if kwargs else self.kwargs
         act = act if act else lambda *_: None
-        self.elt = Popup.POP.popup
+        self.elt = Pop().popup
         self.cena.elt <= self.elt
-        
-        Popup.POP.esconde = self.esconde
-        Popup.POP.mostra(act, tit=tit, txt=txt, **kwargs)
+
+        Pop().esconde = self.esconde
+        Pop().mostra(act, tit=tit, txt=txt, **kwargs)
 
     def vai(self, ev=NoEv()):
         ev.stopPropagation()
-        self.cena.elt <= Popup.POP.popup
+        # self.cena.elt <= Popup.__setup__().popup
+        _ = self.cena.elt <= Pop().popup
         self.mostra(self.tit, self.txt, act=self.esconde)
         return False
 
@@ -1730,12 +1760,13 @@ class Bloco:
         self.monta()
         self.monta = self.nao_monta
         # self.centro.norte.vai()
-	
-	
+
+
 from collections import namedtuple
-Ator = namedtuple('Elenco','ator nome mini alinha')
-Fala = namedtuple('Fala','ator fala prox age')  # , defaults=(None,)*4)
-A = namedtuple('Ali','e m d')(-1, 0, 1)
+
+Ator = namedtuple('Elenco', 'ator nome mini alinha')
+Fala = namedtuple('Fala', 'ator fala prox age')  # , defaults=(None,)*4)
+A = namedtuple('Ali', 'e m d')(-1, 0, 1)
 
 
 class Roteiro:
@@ -1837,8 +1868,7 @@ class Jogo:
         self.window = win
         self.timer = timer
         # from _spy.vitollino.jogos import Roteiro
-	self.rt = self.roteiro = Roteiro
-
+        self.rt = self.roteiro = Roteiro
 
     def z(self):
         """ Zera, limpa a área de desenho"""
@@ -1885,9 +1915,9 @@ if "__main__" in __name__:
 
     doctest.testmod(globs=dict(
         inv=Inventario(),
-        ev= NoEv(),
-        Cena= Cena,
-        SalaCenaNula= SalaCenaNula,
+        ev=NoEv(),
+        Cena=Cena,
+        SalaCenaNula=SalaCenaNula,
         INVENTARIO=INVENTARIO,
         wraps_class_to_mimic_wrapped=wraps_class_to_mimic_wrapped,
         singleton=singleton

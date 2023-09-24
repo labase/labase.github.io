@@ -1,27 +1,13 @@
-#! /usr/bin/env python
-# -*- coding: UTF8 -*-
-# Este arquivo é parte do programa SupyPlay
-# Copyright 2010–2022 Carlo Oliveira <carlo@nce.ufrj.br>,
-# `Labase <http://labase.activufrj.nce.ufrj.br>`__; `GPL <http://j.mp/GNU_GPL3>`__.
-#
-# SupyPlay é um software livre; você pode redistribuí-lo e/ou
-# modificá-lo dentro dos termos da Licença Pública Geral GNU como
-# publicada pela Fundação do Software Livre (FSF); na versão 2 da
-# Licença.
-#
-# Este programa é distribuído na esperança de que possa ser útil,
-# mas SEM NENHUMA GARANTIA; sem uma garantia implícita de ADEQUAÇÃO
-# a qualquer MERCADO ou APLICAÇÃO EM PARTICULAR. Veja a
-# Licença Pública Geral GNU para maiores detalhes.
-#
-# Você deve ter recebido uma cópia da Licença Pública Geral GNU
-# junto com este programa, se não, veja em <http://www.gnu.org/licenses/>
 """Retrieves static files.
 
 .. codeauthor:: Carlo Oliveira <carlo@nce.ufrj.br>
 
 Changelog
 ---------
+.. versionadded::    23.08
+        revise for wsgi (16).
+        add game controller (16).
+
 .. versionadded::    20.07
         add version file.
 
@@ -31,11 +17,16 @@ Changelog
 .. versionadded::    22.09
         Support import from other files.
 
+|   **Open Source Notification:** This file is part of open source program **Alite**
+|   **Copyright © 2023  Carlo Oliveira** <carlo@nce.ufrj.br>,
+|   **SPDX-License-Identifier:** `GNU General Public License v3.0 or later <http://is.gd/3Udt>`_.
+|   `Labase <http://labase.selfip.org/>`_ - `NCE <http://portal.nce.ufrj.br>`_ - `UFRJ <https://ufrj.br/>`_.
+
 """
 import bottle
 from bottle import Bottle, redirect, request, get, static_file
 # name and list your controllers here so their routes become accessible.
-from . import img_dir, js_dir, css_dir, tpl_dir
+from . import img_dir, js_dir, css_dir, tpl_dir, gam_dir, py_dir
 # Enable debugging, which gives us tracebacks
 bottle.DEBUG = True
 
@@ -73,7 +64,20 @@ def ajs(filepath):
 # Static Routes
 @get("/css/<filepath:re:.*\.(js|css|map)>")
 def ajs(filepath):
+    print("/css/<filepath:re:.*\.(js|css|map)>", css_dir)
     return static_file(filepath, root=css_dir)
+
+
+@get("/view/<filepath:re:.*\.py>")
+def ajs(filepath):
+    print("/view/<filepath:re:.*\.(js|css|map)>", py_dir)
+    return static_file(filepath, root=py_dir)
+
+
+@get("/game/<filepath:re:.*\.html>")
+def ajs(filepath):
+    print("/css/<filepath:re:.*\.(js|css|map)>", css_dir)
+    return static_file(filepath, root=gam_dir)
 
 
 # Static Routes
