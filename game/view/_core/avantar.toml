@@ -48,71 +48,35 @@ e_msal = {img=".i.Missao._EVENTO.12", x=1100, y=100, w=300, h=500, o=0.4}
 e_mcai = {img=".i.Missao._EVENTO.15", x=1200, y=100, w=300, h=500, o=0.4}
 [valores_PUZZLE]
 Weather = "https://i.imgur.com/kYFntfo.gif"
+Baloon = "https://i.imgur.com/kYFntfo.gif"
 [folha_PUZZLE]
 Weather = [4,3]
+Baloon = [5,5]
 [l_BIO]
 img =".i.CN._LANDER.0"
 index = [3,3]
 [l_YEL]
 img =".i.CN._YELLOW.0"
 index = [6,5]
-[mapa_YEL]
-We = {local=[1,1], vai="PUZZLE._Weather.0", foi="CN._SUPPLY.2"}
-Be = {local=[1,2], vai="PUZZLE._Weather.0", foi="CN._SUPPLY.2"}
 
-[c_GEM]
-img=".i.CN._LANDER.5"
-
-[c_CROW]
-img=".i.CN._LANDER.7"
-
-c_RISCO.img=".i.CN._LANDER.9"
-
-[c_CROW.e_tent]
-img="*fa fa-campground fa-5x"
-x=900
-y=300
-w=100
-h=100
-texto="Voltaremos ao campo base"
-foi=".i.ROOT.0.0"
-
-[c_ROOT]
-#img="https://i.imgur.com/Cmyq9vd.jpg"
+[c_BALOON]
 img=".i.CN._LANDER.1"
-
-[c_ROOT.e_gem]
-img="*fa fa-gem fa-5x"
-x=900
-y=300
-w=100
-h=100
-texto="Talvez tenha um tesouro"
-foi=".i.GEM.0.0"
-
-[c_ROOT.e_crow]
-img="*fa fa-crow fa-5x"
-x=800
-y=300
-w=100
-h=100
-foi=".i.CROW.0.0"
-texto="Me parece um pássaro distante"
-[c_ROOT.e_ping]
-#img="https://i.imgur.com/bmUoCIb.png"
-img=".i.CN._ANICONS.1"
-x=700
-y=300
-w=64
-h=64
-o=0.5
-index=1
-b=4
-texto="Me parece um animal distante"
 
 [s_ROOT]
 img =".i.CN._LANDER.0"
 index = [0,1,2,3]
+[p_balo]
+img = ".i.PUZZLE._Baloon.0"
+cena = ".i.BALOON.0.0"
+x=100
+y=100
+w=900
+h=500
+texto = "Missão meteorológica completada!"
+foi = ".i.ROOTzz0.0.0"
+[mapa_YEL]
+We = {local=[1,1], tit="Aqui teremos o lançamento de um balão", texto="lançar um balão!", foi=".i.ROOT.3.0.0"}
+Be = {local=[1,2], tit="Aqui teremos o lançamento de um balão", texto="lançar um balão!", foi=".i.BALOON"}
 
 [s_Bioma]
 img =".i.CN._LANDER.0"
@@ -126,20 +90,6 @@ w=900
 h=500
 texto = "Missão meteorológica completada!"
 foi = ".i.ROOTzz0.0.0"
-[e_ave]
-img="*fa fa-crow fa-5x"
-x=700
-y=300
-texto="Parece um pássaro"
-cena=".i.Biomazz5.0.0"
-foi=".i.Biomazz7.0.0"
-[e_gems]
-img="*fa fa-box fa-5x"
-x=900
-y=300
-texto="Talvez tenha um tesouro"
-cena=".i.ROOTzz0.0.0"
-foi=".i.GEM.0.0"
 [e_supri]
 img="*fa fa-parachute-box fa-5x"
 x=900
@@ -154,13 +104,6 @@ y=300
 texto="Voltaremos ao campo base"
 cena=".i.Biomazz5.0.0"
 foi=".i.ROOTzz0.0.0"
-[e_lab]
-img="*fa fa-arrows-to-circle fa-5x"
-x=700
-y=300
-texto="A missão inicia aqui"
-cena=".i.ROOTzz0.0.0"
-foi=".i.BIOzz0zz0.0.0"
 [e_ani]
 img=".i.Missao._ANIMAL.0"
 x=100

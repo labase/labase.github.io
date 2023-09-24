@@ -7,6 +7,7 @@
 Changelog
 ---------
 .. versionadded::    23.09
+        🧩 Incluir side games Puzzle de troca (24).
         🎱 Pool central de missões (23).
         Sprite Labirinto working (18).
         Sprite foi working, SpriteSala & Elemento.cena (16).
@@ -88,7 +89,7 @@ class Teclemmino:
                 def to_int(key):
                     LG.log (4,_style)
                     return [int(cdd[:-1]) for cdd in _style[key].split()]
-                foi = foi() if callable(foi) else foi
+                gone = foi() if callable(foi) else foi
                 _ = score, drag, drop, tipo
                 img_, _style, _dim = [v for v in img.values()] if isinstance(img, dict) else (img, {}, D11)
                 if _style:
@@ -112,7 +113,8 @@ class Teclemmino:
                 if img_.startswith("*"):
                     icon = teclemmino.I(Class=img[1:], style={"position": "relative", "color": "grey"})
                     _ = self.elt <= icon
-                self._texto = Texto(texto, foi=self._foi) if texto else None
+                # self._texto = Texto(texto, foi=self._foi) if texto else None
+                self._texto = Texto(texto, foi=gone) if texto else None
                 self.vai = self._texto.vai if texto else self.vai
                 self.o = self.o_ = o
 
@@ -144,6 +146,9 @@ class Teclemmino:
 
                 self.elt.html = ""
                 self.elt.style = style
+
+            def parse(self, ref, *_):
+               return teclemmino.assets[f"{ref}"]
 
         class SpriteLabirinto:
             def __init__(self, img, index=(), **kwargs):
@@ -200,6 +205,9 @@ class Teclemmino:
             def vai(self, *_):
                 self.norte.vai()
 
+            def parse(self, ref, ix, *_):
+               return teclemmino.assets[f"{ref}zz{ix}"]
+
         class Texto:
             DOIT = True
             modal = None
@@ -242,6 +250,8 @@ class Teclemmino:
                     def template_modal(self, ev, template=None):
                         ev.stopPropagation()
                         ev.preventDefault()
+                        template = teclemmino.parser(template)
+                        LG.log(6,"template_modal", template)
                         template()
                         self.unbind()
                         self.modal.classList.remove('is-active')
@@ -289,13 +299,15 @@ class Teclemmino:
 
 
         class Puzzle(Sprite):
-            def __init__(self, img="", x=0, y=0, w=100, h=100, **kwargs):
+            def __init__(self, img="", x=0, y=0, w=100, h=100, foi="", **kwargs):
                 swap = self
                 cena = kwargs["cena"]
-                LG.log(6, "Puzzle(Sprite):", cena, cena())
+                was = foi
+                foi = teclemmino.parser(foi)
+                LG.log(6, "Puzzle(Sprite):", cena, cena(), was, foi)
                 img_, _style, _dim = [v for v in img.values()] if isinstance(img, dict) else (img, {}, D11)
                 dw, dh = _dim.dx, _dim.dy
-                super().__init__(img="", x=x, y=y, w=w, h=h, **kwargs)
+                super().__init__(img="", x=x, y=y, w=w, h=h, foi=foi, **kwargs)
                 class Peca(vito.Elemento):
                     def __init__(self, local, index):
                         self.local, self.index = local, index,
@@ -381,6 +393,13 @@ class Teclemmino:
         self.last = {}
         self.classes = (CenaSprite, Sprite, SpriteSala, Texto, Folha, SpriteLabirinto, Mapa, Puzzle)
         self.cmd = self.vito_element_builder(vito, self.classes)
+
+    def parser(self, ref: str):
+        if isinstance(ref, str) and ref.startswith("."):
+            _, _, cls, *ix = ref.split(".")
+            return self.assets[cls].parse(cls, *ix)
+        else:
+            return ref
 
     def vito_element_builder(self, v, classes):
         v.CenaSprite, v.Sprite, v.SpriteSala, v.Textor, v.Folha, v.SpriteLabirinto, v.Mapa, v.Puzzle = classes
