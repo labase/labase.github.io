@@ -55,10 +55,10 @@ def init_py(rota="nono"):
 
 
 # Static Routes
-@get("/<:path>/__code/_core/<filepath:re:.*[.]py>")
+@get("/<:path>/__code/core/<filepath:re:.*[.]py>")
 def core_py(filepath):
     print("core_py", filepath)
-    return static_file(filepath, root=py_dir+"/_core")
+    return static_file(filepath, root=py_dir+"/core")
 
 
 # Static Routes
@@ -75,11 +75,11 @@ def model_py(filepath):
 
 
 # Static Routes
-@get("/<:path>/__code/_spy/<module_name>/<filepath:re:.*[.]py>")
+@get("/<:path>/__code/spy/<module_name>/<filepath:re:.*[.]py>")
 def spy(module_name, filepath):
     # print("spy", module_name, filepath)
     try:
-        code_file = DS.get_file_contents("_spy", module_name, filepath)
+        code_file = DS.get_file_contents("spy", module_name, filepath)
         code_str = dcd(str.encode(code_file.content)).decode("utf-8")
     except UnknownObjectException as _:
         # code_str = "# File not found"
@@ -121,7 +121,7 @@ def local_spy(project_name, module_name, filepath):
 
 
 # Static Routes
-@get("/__code/_core/__init__.py")
+@get("/__code/core/__init__.py")
 def init_py(rota=""):
     print(f"initview_py/{rota}/__init__.py")
     return ""

@@ -22,9 +22,9 @@ Changelog
 import unittest
 from unittest.mock import MagicMock, Mock, ANY
 
-from view._core.game import Teclemmino
+from view.core.game import Teclemmino
 # noinspection PyProtectedMember
-from view._core.pager import Action, ELEM_ID, LEVEL
+from view.core.pager import Action, ELEM_ID, LEVEL
 
 
 class TestCorePager(unittest.TestCase):
@@ -296,7 +296,7 @@ class TestTe(unittest.TestCase):
         self.mv.Sprite = self.me
         self.te.start_game_from_root_element = Mock(name="start_game")
 
-        self.assertTrue(self.te.load_('../view/_core/avantar.toml'))
+        self.assertTrue(self.te.load_('../view/core/avantar.toml'))
         self.assertEqual(11, len(self.te.assets))
         self.mc.assert_called()
         # self.mc.assert_called_with(nome=ANY, img=ANY)

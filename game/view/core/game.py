@@ -496,7 +496,7 @@ class Teclemmino:
         [go(cmd, name, **value) for cmd, name, value in toml_it]
         return True
 
-    def load_(self, cfile=str('view/_core/avantar.toml')):
+    def load_(self, cfile=str('view/core/avantar.toml')):
         import toml
         with open(cfile, "r") as avt:
             tom_obj = dict(toml.loads(avt.read()))
@@ -518,7 +518,7 @@ class Main:
         self.teclemmino = Teclemmino(br)
         self.br = br
 
-    def load(self, cfile=str('view/_core/avantar.toml')):
+    def load(self, cfile=str('view/core/avantar.toml')):
         _ = cfile
         self.teclemmino.load_()
 
