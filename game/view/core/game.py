@@ -518,7 +518,7 @@ class Main:
         self.teclemmino = Teclemmino(br)
         self.br = br
 
-    def load(self, cfile=str('view/core/avantar.toml')):
+    def load(self, cfile=str('avantar.toml')):
         _ = cfile
         self.teclemmino.load_()
 
