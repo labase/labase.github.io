@@ -497,9 +497,9 @@ class Teclemmino:
         return True
 
     def load_(self, cfile=str('view/core/avantar.toml')):
-        import toml
+        import tomlib
         with open(cfile, "r") as avt:
-            tom_obj = dict(toml.loads(avt.read()))
+            tom_obj = dict(tomlib.loads(avt.read()))
             self.parse_(tom_obj)
             # print("self.assets", self.assets)
         self.start_game_from_root_element()
