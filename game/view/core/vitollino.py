@@ -2021,7 +2021,7 @@ h1 {
 
 
 def __setup__():
-    document.head <= html.STYLE(CSS, type="text/css", media="screen")
+    #document.head <= html.STYLE(CSS, type="text/css", media="screen")
     Popup(Cena())
 
 
