@@ -1,6 +1,8 @@
 point = { x = [1,3], y = 2 }
 [valores_CN]
 #ANICONS = "https://i.imgur.com/A2pPOED.png"
+BADGER = "https://i.imgur.com/Sxif9mN.jpg"
+BADGES = "https://i.imgur.com/9iaKE6b.png"
 SNOWY = "https://i.imgur.com/KxcqKpJ.gif"
 SNOW = "https://i.imgur.com/mpOU7Ca.gif"
 HSNOW = "https://i.imgur.com/i5dLK8G.gif"
@@ -20,6 +22,7 @@ SUICONS = [8, 4]
 LAND = [4,8]
 LANDER = [8,8]
 YELLOW = [8,16]
+BADGES = [6, 8]
 #CROW = [1,1]
 [valores_Missao]
 ANIMAL = "https://i.imgur.com/BivOv8y.jpg"
@@ -49,18 +52,32 @@ e_mcai = {img=".i.Missao._EVENTO.15", x=1200, y=100, w=300, h=500, o=0.4}
 [valores_PUZZLE]
 Weather = "https://i.imgur.com/kYFntfo.gif"
 Baloon = "https://i.imgur.com/kYFntfo.gif"
+Seals ="https://i.imgur.com/09geayY.gif"
+Seal ="https://i.imgur.com/09geayY.gif"
 [folha_PUZZLE]
 Weather = [4,3]
 Baloon = [5,5]
+Seals = [5, 5]
+Seal = [4, 4]
 [l_BIO]
 img =".i.CN._LANDER.0"
 index = [3,3]
 [l_YEL]
 img =".i.CN._YELLOW.0"
 index = [6,5]
+[c_SEAL]
+img = ".i.CN._YELLOW.0"
+direita=".i.ROOTzz0.0.0"
 
+p_seal = {img=".i.PUZZLE._Seal.0", pr=1, foi=".i.ROOTzz0.0.0" , texto = "Observação da foca completada!"}
+[c_SEALS]
+img = ".i.CN._YELLOW.1"
+direita=".i.ROOTzz0.0.0"
+
+p_seals = {img=".i.PUZZLE._Seals.0", pr=2, foi=".i.ROOTzz0.0.0" , texto = "Observação da foca completada!"}
 [c_BALOON]
 img=".i.CN._LANDER.1"
+direita=".i.ROOTzz0.0.0"
 
 [s_ROOT]
 img =".i.CN._LANDER.0"
@@ -74,9 +91,22 @@ w=900
 h=500
 texto = "Missão meteorológica completada!"
 foi = ".i.ROOTzz0.0.0"
+[c_ROOT0]
+img=".i.CN._LANDER.0"
+[e_WLC]
+tit = "ola"
+txt = "todos"
+pr = 3
+A = "nuvem"
+B = "nuv"
+C = "nu"
+Z ="B"
+foi = ".i.ROOTzz3.0.0"
 [mapa_YEL]
 We = {local=[1,1], tit="Aqui teremos o lançamento de um balão", texto="lançar um balão!", foi=".i.ROOT.3.0.0"}
-Be = {local=[1,2], tit="Aqui teremos o lançamento de um balão", texto="lançar um balão!", foi=".i.BALOON"}
+Ae = {local=[2,2], tit="Aqui teremos o lançamento de um balão", texto="lançar um balão!", foi=".i.BALOON"}
+Be = {local=[3,3], tit="Aqui acompanharemos o crescimento de uma foca", texto="Observar uma foca bebê!", foi=".i.SEAL"}
+Bs = {local=[4,0], tit="Aqui acompanharemos o crescimento de uma foca", texto="Observar uma foca bebê!", foi=".i.SEALS"}
 
 [s_Bioma]
 img =".i.CN._LANDER.0"
@@ -84,10 +114,7 @@ index = [4,5,6,7]
 [p_bal]
 img = ".i.PUZZLE._Weather.0"
 cena = ".i.ROOTzz3.0.0"
-x=100
-y=100
-w=900
-h=500
+pr = 4
 texto = "Missão meteorológica completada!"
 foi = ".i.ROOTzz0.0.0"
 [e_supri]

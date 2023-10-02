@@ -75,11 +75,11 @@ def model_py(filepath):
 
 
 # Static Routes
-@get("/<:path>/__code/spy/<module_name>/<filepath:re:.*[.]py>")
+@get("/<:path>/__code/_spy/<module_name>/<filepath:re:.*[.]py>")
 def spy(module_name, filepath):
-    # print("spy", module_name, filepath)
+    # print("_spy", module_name, filepath)
     try:
-        code_file = DS.get_file_contents("spy", module_name, filepath)
+        code_file = DS.get_file_contents("_spy", module_name, filepath)
         code_str = dcd(str.encode(code_file.content)).decode("utf-8")
     except UnknownObjectException as _:
         # code_str = "# File not found"

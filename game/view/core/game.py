@@ -6,6 +6,10 @@
 
 Changelog
 ---------
+.. versionadded::    23.10
+        🏅 Inclui medalhas no inventário (02).
+        ⁉️ Incluir Questões de texto (01).
+
 .. versionadded::    23.09
         🧩 Incluir side games Puzzle de troca (24).
         🎱 Pool central de missões (23).
@@ -34,6 +38,8 @@ Two = ntp("Two", "p b hd sc fm fs ip lg lb ft")
 W, H = 1350, 650
 LOG_LEVEL = 4
 IMGSIZE, IMG_HEIGHT = f"{32 * W}px", f"{4 * H}px"
+# noinspection SpellCheckingInspection
+A2J = "abcdefghij".upper()
 
 
 class Log:
@@ -130,7 +136,7 @@ class Teclemmino:
                 LG.log(3, _texto, self.vai)
 
         class CenaSprite(vito.Cena):
-            def __init__(self, img, index=-1, **kwargs):
+            def __init__(self, img, index=-1, direita="", **kwargs):
                 style_ = {"background-size": f"{8 * 100}% {8 * 100}%"}
 
                 img_, _style, _dim = [v for v in img.values()] if isinstance(img, dict) else (img, style_, D11)
@@ -143,17 +149,18 @@ class Teclemmino:
 
                 super().__init__("", **kwargs)
                 self.nome = kwargs["nome"] if "nome" in kwargs else img_
+                self.portal(L=teclemmino.parser(direita)) if direita else None
 
                 self.elt.html = ""
                 self.elt.style = style
 
             def parse(self, ref, *_):
-               return teclemmino.assets[f"{ref}"]
+                _ = self
+                return teclemmino.assets[f"{ref}"]
 
         class SpriteLabirinto:
             def __init__(self, img, index=(), **kwargs):
                 # from random import sample
-                # img_ = img["img_"] if isinstance(img, dict) else img
                 dx, dy = self.index = Dim(*index)
                 xdx = dx + 2
                 all_images = list(range(32))
@@ -206,29 +213,50 @@ class Teclemmino:
                 self.norte.vai()
 
             def parse(self, ref, ix, *_):
-               return teclemmino.assets[f"{ref}zz{ix}"]
+                _ = self
+                return teclemmino.assets[f"{ref}zz{ix}"]
 
         class Texto:
             DOIT = True
             modal = None
 
-            def __init__(self, tit="", txt="", cena=NADA, foi=None, nome=None, **kwargs):
+            def __init__(self, tit="", txt="", cena=NADA, foi=None, nome=None, pr=-1, **kwargs):
+
                 class TextModal:
                     def __init__(self):
-                        self.textual = tit
+                        self.answer = None
+                        self.radios = []
+                        self.textual, self.questions = tit, kwargs
                         self.engage = self.dismiss = self.close = lambda *_: None
                         self.modal, self.texter = self.dom("aaa", "bbb")
+                        LG.log(4, "Teclemmino ⇒ TextModal__init__ ", super_text.kwargs, super_text.question)
 
                         _ = teclemmino.vito.document <= self.modal
 
-                    def bind(self, e, d, c, t):
+                    def bind(self, e, d, c, t, q, a):
                         self.engage, self.dismiss, self.close = e, d, c
-                        self.textual = t
+                        self.textual, self.questions, self.answer = t, q, a
+                        LG.log(4, "Teclemmino ⇒ TextModal bind", t, q, a, super_text.kwargs)
 
                     def unbind(self):
                         self.engage = self.dismiss = self.close = lambda *_: None
 
+                    def option(self, _txt):
+                        rd, qu, ct, fi, it= "radio question control field is-info".split()
+                        d, f, a, i, s, h, h1 = list(teclemmino.tag_one)
+                        p, b, hd, sc, fm, fs, ip, lg, lb, ft = list(teclemmino.tag_two)
+                        if _txt:
+                            k, v = _txt.pop(0)
+                        else:
+                            return ""
+                        circled = {k: v for k, v in zip(A2J,"ⒶⒷⒸⒹⒺⒻⒼⒽⒾⒿ")}
+                        res = d(d(lb(i_rad:=ip(id=f"_radio_{k}", type=rd, name=qu), Class=rd)+
+                                  f"\n{circled[k]} {v}", Class=ct), Class=fi)
+                        self.radios.append(i_rad)
+                        return res + self.option(_txt) if _txt else res
+
                     def dom(self, exi=None, mod=None):
+
                         d, f, a, i, s, h, h1 = list(teclemmino.tag_one)
                         p, b, hd, sc, fm, fs, ip, lg, lb, ft = list(teclemmino.tag_two)
                         ii, iw, ig = "button is-info", "button is-warning", "button mr-0 is-danger"
@@ -239,11 +267,16 @@ class Teclemmino:
                               sc(d(fm(
                                   fs(texter := lg(self.get_text())),
                                   Class="form-horizontal"), Class="content"), Class="modal-card-body") +
-                              ft((eng := b("Entrar Aqui", Class=ii, id=eng)), Class="modal-card-foot"), Class="modal-card"),
+                              # ft((eng := b("Entrar Aqui", Class=ii, id=eng)), Class="modal-card-foot"), Class="modal-card"),
+                              ft(
+                                  d(d(engage := b("Entrar Aqui", Class=ii, id=eng), Class="control")+
+                                  d(disengage := b("Cancela", Class=ig, id=dis), Class="control"),
+                                    Class= "field is-grouped"), Class="modal-card-foot mb-5")
+                              , Class="modal-card"),
                             Class="modal", id=mod)
                         closer.bind("click", self.close_modal)
-                        # dmi.bind("click", self.close_modal)
-                        eng.bind("click", self.engage_modal)
+                        disengage.bind("click", self.close_modal)
+                        engage.bind("click", self.engage_modal)
                         # cancel.bind("click", self.cancel_modal)
                         return card, texter
 
@@ -251,7 +284,7 @@ class Teclemmino:
                         ev.stopPropagation()
                         ev.preventDefault()
                         template = teclemmino.parser(template)
-                        LG.log(6,"template_modal", template)
+                        LG.log(4,"template_modal", template)
                         template()
                         self.unbind()
                         self.modal.classList.remove('is-active')
@@ -263,7 +296,10 @@ class Teclemmino:
                         self.template_modal(ev, template=self.close)
 
                     def engage_modal(self, ev):
-                        self.template_modal(ev, template=self.engage)
+                        ok = [rd.checked for rd in self.radios if rd.id[-1] == self.answer] if self.questions else [True]
+                        na = [(rd.checked, rd.id[-1]) for rd in self.radios]
+                        LG.log(4, "Teclemmino lModal ⇒ engage_modal", na, self.questions, self.answer, ok)
+                        self.template_modal(ev, template=(self.engage if ok[-1] else self.dismiss))
 
                     def cancel_modal(self, ev):
                         self.template_modal(ev, template=self.dismiss)
@@ -271,11 +307,20 @@ class Teclemmino:
                     def mostra(self):  # , tit="", txt="", act=None, **kwargs):
                         self.modal.classList.add('is-active')
                         self.texter.text = self.textual
+                        options = self.option(self.questions[:])
+                        _ = (self.texter <= options) if options else None
+                        LG.log(4, "Teclemmino Modal ⇒ mostra", self.textual, self.questions, self.answer, kwargs )
 
                 self.cena = cena
-                self.kwargs = kwargs
-                self.esconde = foi if foi else self.esconde
+                self.pr = pr
+                super_text = self
+                self.kwargs = [(k, v) for k, v in kwargs.items()]
+                self.question = sorted(list({k: v for k, v in kwargs.items() if k in A2J}.items()))
+                self.answer = kwargs["Z"] if "Z" in kwargs else False
+
+                self.esconder = foi if foi else self.nop
                 self.tit, self.txt, self.nome = tit, txt, nome
+                LG.log(4, "Teclemmino ⇒ Texto", kwargs, self.tit, self.txt, self.nome, self.question, foi)
                 self.modal = Texto.modal if Texto.modal else TextModal()
                 Texto.modal = self.modal  # dom("modal_closer_", "modal_popup_")
                 # self.deploy()
@@ -283,13 +328,23 @@ class Teclemmino:
             def nop(self):
                 pass
 
+            def deploy(self, *_):
+                self.vai()
+
             def esconde(self):
-                ...
+                LG.log(6, "Teclemmino ⇒ Texto esconde", self.esconder, callable(self.esconder) and self.esconder())
+                self.esconder.vai() if hasattr(self.esconder, "vai") else None
+                # noinspection PyTypeChecker
+                _vai = self.esconder() if callable(self.esconder) else teclemmino.parser(self.esconder)
+                #
+                _vai.vai() if hasattr(_vai, "vai") else None
+                teclemmino.premiar(self.pr, vito=vito, tit=self.txt) if self.pr>=0 else None
+                pass
 
             def mostra(self):  # , tit="", txt="", act=None, **kwargs):
-                self.modal.bind(self.esconde, self.nop, self.nop, self.tit)
+                self.modal.bind(self.esconde, self.nop, self.nop, self.tit, self.question, self.answer)
                 self.modal.mostra()  # classList.add('is-active')
-                LG.log(4, "mostra")
+                LG.log(6, "Teclemmino Texto ⇒ mostra", self.question, self.tit)
 
             def vai(self, ev=NoEv()):
                 ev.stopPropagation()
@@ -299,12 +354,13 @@ class Teclemmino:
 
 
         class Puzzle(Sprite):
-            def __init__(self, img="", x=0, y=0, w=100, h=100, foi="", **kwargs):
+            def __init__(self, img="", x=100, y=100, w=900, h=500, foi="", pr=-1, **kwargs):
+                self.pr = pr
                 swap = self
                 cena = kwargs["cena"]
                 was = foi
                 foi = teclemmino.parser(foi)
-                LG.log(6, "Puzzle(Sprite):", cena, cena(), was, foi)
+                LG.log(4, "Puzzle(Sprite):", cena, cena(), was, foi)
                 img_, _style, _dim = [v for v in img.values()] if isinstance(img, dict) else (img, {}, D11)
                 dw, dh = _dim.dx, _dim.dy
                 super().__init__(img="", x=x, y=y, w=w, h=h, foi=foi, **kwargs)
@@ -362,10 +418,16 @@ class Teclemmino:
                 [peca.elt.remove() for peca in self.pecas]
 
             def montou(self):
-                resultado = [peca.certo() for peca in self.pecas]
+                resultado = all([peca.certo() for peca in self.pecas])
                 print(resultado)
-                self.vai() if all(resultado) else None
-                return all(resultado)
+                self.vai() if resultado else None
+                teclemmino.premiar(self.pr, vito, tit=self.tit) if resultado and self.pr>=0 else None
+                return resultado
+
+        class Quiz:
+            def __init__(self,nome=None, **kwargs):
+                self.quiz = kwargs
+                self.nome = nome
 
         class Mapa:
             def __init__(self,nome=None, **kwargs):
@@ -391,7 +453,7 @@ class Teclemmino:
         self.vito = vito
         self.assets = {}
         self.last = {}
-        self.classes = (CenaSprite, Sprite, SpriteSala, Texto, Folha, SpriteLabirinto, Mapa, Puzzle)
+        self.classes = (CenaSprite, Sprite, SpriteSala, Texto, Folha, SpriteLabirinto, Mapa, Puzzle, Quiz)
         self.cmd = self.vito_element_builder(vito, self.classes)
 
     def parser(self, ref: str):
@@ -402,15 +464,25 @@ class Teclemmino:
             return ref
 
     def vito_element_builder(self, v, classes):
-        v.CenaSprite, v.Sprite, v.SpriteSala, v.Textor, v.Folha, v.SpriteLabirinto, v.Mapa, v.Puzzle = classes
+        (v.CenaSprite, v.Sprite, v.SpriteSala, v.Textor, v.Folha,
+         v.SpriteLabirinto, v.Mapa, v.Puzzle, v.Quiz) = classes
         builder = [self.cena, self.elemento, self.texto, self.sprite_sala, self.folha, self.valor,
-                   self.icon, self.sprite_labirinto, self.mapa, self.puzzle]
-        return {k: v for k, v in zip(['c', 'e', 't', 's', 'f', 'v', "i", "l", "m", "p"], builder)}
+                   self.icon, self.sprite_labirinto, self.mapa, self.puzzle, self.quiz]
+        return {k: v for k, v in zip(['c', 'e', 't', 's', 'f', 'v', "i", "l", "m", "p", "q"], builder)}
+
+    def premiar(self, asset, vito, tit="premiado"):
+        mdl = vito.Sprite(self.assets["CN"]["_BADGES"].get_image(asset), w=26, h=26, tit=tit,cena=vito.INV.cena)
+        vito.INV.bota(mdl)
 
     def cena(self, asset, **kwargs):
         self.assets[asset] = result = self.vito.CenaSprite(nome=asset, **kwargs)
         self.last = asset
         LG.log(3, "Vito ⇒ cena", asset, kwargs)
+        return result
+
+    def quiz(self, asset, **kwargs):
+        kwargs.update(cena=self.assets[self.last]) if self.last and "cena" not in kwargs else None
+        self.assets[asset] = result = self.vito.Quiz(nome=asset, **kwargs)
         return result
 
     def puzzle(self, asset, **kwargs):
@@ -424,7 +496,7 @@ class Teclemmino:
 
     def sprite_labirinto(self, asset, **kwargs):
         self.assets[asset] = self.vito.SpriteLabirinto(nome=asset, **kwargs)
-        LG.log(5, "Vito ⇒ sprite_labirinto", asset, kwargs)
+        LG.log(4, "Vito ⇒ sprite_labirinto", asset, kwargs)
 
     def sprite_sala(self, asset, **kwargs):
         self.assets[asset] = sala = self.vito.SpriteSala(nome=asset, **kwargs)
@@ -438,8 +510,10 @@ class Teclemmino:
 
     def texto(self, asset, **kwargs):
         kwargs.update(cena=self.assets[self.last]) if self.last and "cena" not in kwargs else None
-        self.assets[asset] = t = self.vito.Textor(nome=asset, one=self.tag_one, two=self.tag_two, **kwargs)
+        # self.assets[asset] = t = self.vito.Textor(nome=asset, one=self.tag_one, two=self.tag_two, **kwargs)
+        self.assets[asset] = t = self.vito.Textor(nome=asset, **kwargs)
         t.deploy(self.vito.document.body)
+        LG.log(6, "Vito ⇒ texto", asset, t.kwargs, kwargs)
         # logging.debug("Vito -> texto", asset, kwargs)
 
     def valor(self, asset, **value):

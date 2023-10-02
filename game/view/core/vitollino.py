@@ -1078,7 +1078,7 @@ class Cena:
     Use para construir uma cena.
     ::
 
-        from spy.vitollino import Cena
+        from _spy.vitollino import Cena
 
         cena_esq = Cena(img="esq.jpg")
         cena_mei = Cena(img="mei.jpg", cena_esq)
@@ -1867,7 +1867,7 @@ class Jogo:
         self.html = html
         self.window = win
         self.timer = timer
-        # from spy.vitollino.jogos import Roteiro
+        # from _spy.vitollino.jogos import Roteiro
         self.rt = self.roteiro = Roteiro
 
     def z(self):
@@ -2021,7 +2021,7 @@ h1 {
 
 
 def __setup__():
-    document.head <= html.STYLE(CSS, type="text/css", media="screen")
+    #document.head <= html.STYLE(CSS, type="text/css", media="screen")
     Popup(Cena())
 
 
