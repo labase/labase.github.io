@@ -40,11 +40,11 @@
     """
     from browser import document, alert, html, window, ajax, timer, svg
     from browser.template import Template
-    from vitollino import Cena, Elemento, Texto, Salao, STYLE, NADA, NDCT, NoEv
+    from vitollino import Cena, Elemento, Texto, Salao, STYLE, NADA, NDCT, NoEv, INVENTARIO
     class MockBrython:
         document, alert, html, window, ajax, timer, svg = document, alert, html, window, ajax, timer, svg
         template, NoEv = Template, NoEv
-        Cena, Elemento, Texto, Salao, STYLE, NADA, NDCT = Cena, Elemento, Texto, Salao, STYLE, NADA, NDCT
+        Cena, Elemento, Texto, Salao, STYLE, NADA, NDCT, INV = Cena, Elemento, Texto, Salao, STYLE, NADA, NDCT, INVENTARIO
     brython = MockBrython
     from game import main
     main(brython)

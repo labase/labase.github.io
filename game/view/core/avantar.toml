@@ -1,6 +1,8 @@
 point = { x = [1,3], y = 2 }
 [valores_CN]
 #ANICONS = "https://i.imgur.com/A2pPOED.png"
+BADGER = "https://i.imgur.com/Sxif9mN.jpg"
+BADGES = "https://i.imgur.com/9iaKE6b.png"
 SNOWY = "https://i.imgur.com/KxcqKpJ.gif"
 SNOW = "https://i.imgur.com/mpOU7Ca.gif"
 HSNOW = "https://i.imgur.com/i5dLK8G.gif"
@@ -20,6 +22,7 @@ SUICONS = [8, 4]
 LAND = [4,8]
 LANDER = [8,8]
 YELLOW = [8,16]
+BADGES = [6, 8]
 #CROW = [1,1]
 [valores_Missao]
 ANIMAL = "https://i.imgur.com/BivOv8y.jpg"
@@ -64,12 +67,17 @@ img =".i.CN._YELLOW.0"
 index = [6,5]
 [c_SEAL]
 img = ".i.CN._YELLOW.0"
-p_seal = {img=".i.PUZZLE._Seal.0", x=100, y=100, w=900, h=500, foi=".i.ROOTzz0.0.0" , texto = "Observação da foca completada!"}
+direita=".i.ROOTzz0.0.0"
+
+p_seal = {img=".i.PUZZLE._Seal.0", pr=1, foi=".i.ROOTzz0.0.0" , texto = "Observação da foca completada!"}
 [c_SEALS]
 img = ".i.CN._YELLOW.1"
-p_seals = {img=".i.PUZZLE._Seals.0", x=100, y=100, w=900, h=500, foi=".i.ROOTzz0.0.0" , texto = "Observação da foca completada!"}
+direita=".i.ROOTzz0.0.0"
+
+p_seals = {img=".i.PUZZLE._Seals.0", pr=2, foi=".i.ROOTzz0.0.0" , texto = "Observação da foca completada!"}
 [c_BALOON]
 img=".i.CN._LANDER.1"
+direita=".i.ROOTzz0.0.0"
 
 [s_ROOT]
 img =".i.CN._LANDER.0"
@@ -85,9 +93,10 @@ texto = "Missão meteorológica completada!"
 foi = ".i.ROOTzz0.0.0"
 [c_ROOT0]
 img=".i.CN._LANDER.0"
-[t_WLC]
+[e_WLC]
 tit = "ola"
 txt = "todos"
+pr = 3
 A = "nuvem"
 B = "nuv"
 C = "nu"
@@ -105,10 +114,7 @@ index = [4,5,6,7]
 [p_bal]
 img = ".i.PUZZLE._Weather.0"
 cena = ".i.ROOTzz3.0.0"
-x=100
-y=100
-w=900
-h=500
+pr = 4
 texto = "Missão meteorológica completada!"
 foi = ".i.ROOTzz0.0.0"
 [e_supri]
