@@ -65,6 +65,10 @@ index = [3,3]
 [l_YEL]
 img =".i.CN._YELLOW.0"
 index = [6,5]
+
+[s_ROOT]
+img =".i.CN._LANDER.0"
+index = [0,1,2,3]
 [c_SEAL]
 img = ".i.CN._YELLOW.0"
 direita=".i.ROOTzz0.0.0"
@@ -78,19 +82,11 @@ p_seals = {img=".i.PUZZLE._Seals.0", pr=2, foi=".i.ROOTzz0.0.0" , texto = "Obser
 [c_BALOON]
 img=".i.CN._LANDER.1"
 direita=".i.ROOTzz0.0.0"
-
-[s_ROOT]
-img =".i.CN._LANDER.0"
-index = [0,1,2,3]
-[p_balo]
-img = ".i.PUZZLE._Baloon.0"
-cena = ".i.BALOON.0.0"
-x=100
-y=100
-w=900
-h=500
-texto = "Missão meteorológica completada!"
-foi = ".i.ROOTzz0.0.0"
+p_balooni = {img=".i.PUZZLE._Baloon.0", pr=7, foi=".i.ROOTzz0.0.0" , texto = "Missão meteorológica completada!"}
+[c_BALOONI]
+img=".i.CN._LANDER.1"
+direita=".i.ROOTzz0.0.0"
+p_baloon = {img=".i.PUZZLE._Weather.0", pr=6, foi=".i.ROOTzz0.0.0" , texto = "Missão meteorológica completada!"}
 [c_ROOT0]
 img=".i.CN._LANDER.0"
 [e_WLC]
@@ -103,7 +99,7 @@ C = "nu"
 Z ="B"
 foi = ".i.ROOTzz3.0.0"
 [mapa_YEL]
-We = {local=[1,1], tit="Aqui teremos o lançamento de um balão", texto="lançar um balão!", foi=".i.ROOT.3.0.0"}
+We = {local=[1,1], tit="Aqui teremos o lançamento de um balão", texto="lançar um balão!", foi=".i.BALOONI"}
 Ae = {local=[2,2], tit="Aqui teremos o lançamento de um balão", texto="lançar um balão!", foi=".i.BALOON"}
 Be = {local=[3,3], tit="Aqui acompanharemos o crescimento de uma foca", texto="Observar uma foca bebê!", foi=".i.SEAL"}
 Bs = {local=[4,0], tit="Aqui acompanharemos o crescimento de uma foca", texto="Observar uma foca bebê!", foi=".i.SEALS"}
@@ -111,12 +107,6 @@ Bs = {local=[4,0], tit="Aqui acompanharemos o crescimento de uma foca", texto="O
 [s_Bioma]
 img =".i.CN._LANDER.0"
 index = [4,5,6,7]
-[p_bal]
-img = ".i.PUZZLE._Weather.0"
-cena = ".i.ROOTzz3.0.0"
-pr = 4
-texto = "Missão meteorológica completada!"
-foi = ".i.ROOTzz0.0.0"
 [e_supri]
 img="*fa fa-parachute-box fa-5x"
 x=900
