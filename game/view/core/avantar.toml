@@ -83,9 +83,11 @@ p_seals = {img=".i.PUZZLE._Seals.0", pr=2, foi=".i.ROOTzz0.0.0" , texto = "Obser
 img=".i.CN._LANDER.1"
 direita=".i.ROOTzz0.0.0"
 p_balooni = {img=".i.PUZZLE._Baloon.0", pr=7, foi=".i.ROOTzz0.0.0" , texto = "Missão meteorológica completada!"}
+t_BAL = {tit = "solta o balaão", txt="monta o qc"}
 [c_BALOONI]
 img=".i.CN._LANDER.1"
 direita=".i.ROOTzz0.0.0"
+t_BOI = {tit = "solta o balaão", txt="monta o qc"}
 p_baloon = {img=".i.PUZZLE._Weather.0", pr=6, foi=".i.ROOTzz0.0.0" , texto = "Missão meteorológica completada!"}
 [c_ROOT0]
 img=".i.CN._LANDER.0"

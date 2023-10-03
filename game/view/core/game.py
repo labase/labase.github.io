@@ -7,6 +7,7 @@
 Changelog
 ---------
 .. versionadded::    23.10
+        ⛲ Desiste de Missões (03).
         🏅 Inclui medalhas no inventário (02).
         ⁉️ Incluir Questões de texto (01).
 
@@ -138,6 +139,7 @@ class Teclemmino:
         class CenaSprite(vito.Cena):
             def __init__(self, img, index=-1, direita="", **kwargs):
                 style_ = {"background-size": f"{8 * 100}% {8 * 100}%"}
+                self.foi_evs = []
 
                 img_, _style, _dim = [v for v in img.values()] if isinstance(img, dict) else (img, style_, D11)
                 # style = dict(width=f"{W}px", height=f"{H}px", overflow="hidden", backgroundImage=f"url({img_})")
@@ -149,10 +151,20 @@ class Teclemmino:
 
                 super().__init__("", **kwargs)
                 self.nome = kwargs["nome"] if "nome" in kwargs else img_
-                self.portal(L=teclemmino.parser(direita)) if direita else None
 
                 self.elt.html = ""
                 self.elt.style = style
+                if direita:
+                    ptl = self.portal(L=teclemmino.parser(direita)())
+                    LG.log(6, "CenaSprite direita", direita, self.nome, direita().nome, ptl)
+
+            def bind(self, ev=None):
+                self.foi_evs.append(ev) if ev not in self.foi_evs else None
+
+            def vai_(self, ev=NoEv):
+                # [foi() for foi in self.foi_evs if callable(foi)]
+                super().vai()
+                ...
 
             def parse(self, ref, *_):
                 _ = self
@@ -269,7 +281,7 @@ class Teclemmino:
                                   Class="form-horizontal"), Class="content"), Class="modal-card-body") +
                               # ft((eng := b("Entrar Aqui", Class=ii, id=eng)), Class="modal-card-foot"), Class="modal-card"),
                               ft(
-                                  d(d(engage := b("Entrar Aqui", Class=ii, id=eng), Class="control")+
+                                  d(d(engage := b("Entrar Aqui", Class=ii, id=eng), Class="control") +
                                   d(disengage := b("Cancela", Class=ig, id=dis), Class="control"),
                                     Class= "field is-grouped"), Class="modal-card-foot mb-5")
                               , Class="modal-card"),
@@ -312,6 +324,7 @@ class Teclemmino:
                         LG.log(4, "Teclemmino Modal ⇒ mostra", self.textual, self.questions, self.answer, kwargs )
 
                 self.cena = cena
+                cena.bind(self.vai_vai) if hasattr(cena, "bind") else None
                 self.pr = pr
                 super_text = self
                 self.kwargs = [(k, v) for k, v in kwargs.items()]
@@ -328,8 +341,12 @@ class Teclemmino:
             def nop(self):
                 pass
 
-            def deploy(self, *_):
+            def vai_vai(self, *_):
+                LG.log(6, " Modal ⇒ vai_vai")
                 self.vai()
+
+            def deploy(self, *_):
+                pass
 
             def esconde(self):
                 LG.log(6, "Teclemmino ⇒ Texto esconde", self.esconder, callable(self.esconder) and self.esconder())
