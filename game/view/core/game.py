@@ -7,6 +7,7 @@
 Changelog
 ---------
 .. versionadded::    23.10
+        🔨 fix lançamento do texto, not yet (04).
         ⛲ Desiste de Missões (03).
         🏅 Inclui medalhas no inventário (02).
         ⁉️ Incluir Questões de texto (01).
@@ -86,9 +87,9 @@ class Teclemmino:
                 return dict(img_=self.img, style_=self.style, dim_=self.dim)
 
         class Sprite(vito.Elemento):
-            def __init__(self, img="", vai=None, style=NDCT, tit="", alt="",
+            def __init__(self, img="", vai=NADA.vai, style=NDCT, tit="", alt="",
                          x=0, y=0, w=100, h=100, o=1, texto='', foi=None, sw=100, sh=100, b=0, s=1,
-                         cena="", score=NDCT, drag=False, drop=NDCT, tipo="100% 100%", **kwargs):
+                         cena=NADA, score=NDCT, drag=False, drop=NDCT, tipo="100% 100%", **kwargs):
                 _style = style
                 from copy import deepcopy
                 self.img_ = deepcopy(img)if isinstance(img, dict) else img
@@ -156,15 +157,19 @@ class Teclemmino:
                 self.elt.style = style
                 if direita:
                     ptl = self.portal(L=teclemmino.parser(direita)())
-                    LG.log(6, "CenaSprite direita", direita, self.nome, direita().nome, ptl)
+                    LG.log(4, "CenaSprite direita", direita, self.nome, ptl)
 
             def bind(self, ev=None):
                 self.foi_evs.append(ev) if ev not in self.foi_evs else None
 
-            def vai_(self, ev=NoEv):
-                # [foi() for foi in self.foi_evs if callable(foi)]
-                super().vai()
+            def vai(self, ev=NoEv):
+                super().vai(ev)
+                LG.log(4, "CenaSprite vai", self.nome, teclemmino.vito.INV.cena.nome)
+                [foi() for foi in self.foi_evs if callable(foi)]
                 ...
+
+            def __call__(self, *args, **kwargs):
+                return self
 
             def parse(self, ref, *_):
                 _ = self
@@ -321,7 +326,7 @@ class Teclemmino:
                         self.texter.text = self.textual
                         options = self.option(self.questions[:])
                         _ = (self.texter <= options) if options else None
-                        LG.log(4, "Teclemmino Modal ⇒ mostra", self.textual, self.questions, self.answer, kwargs )
+                        LG.log(6, "Teclemmino Modal ⇒ mostra", self.textual, self.questions, self.answer, kwargs )
 
                 self.cena = cena
                 cena.bind(self.vai_vai) if hasattr(cena, "bind") else None
@@ -342,8 +347,9 @@ class Teclemmino:
                 pass
 
             def vai_vai(self, *_):
-                LG.log(6, " Modal ⇒ vai_vai")
-                self.vai()
+                LG.log(6, " Modal ⇒ vai_vai", self.cena.nome, teclemmino.vito.INV.cena.nome)
+                self.vai() #if self.cena == teclemmino.vito.INV.cena else None
+                # self.mostra()
 
             def deploy(self, *_):
                 pass

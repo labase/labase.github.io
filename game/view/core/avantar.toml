@@ -62,6 +62,7 @@ Seal = [4, 4]
 [l_BIO]
 img =".i.CN._LANDER.0"
 index = [3,3]
+
 [l_YEL]
 img =".i.CN._YELLOW.0"
 index = [6,5]
@@ -91,6 +92,8 @@ t_BOI = {tit = "solta o balaão", txt="monta o qc"}
 p_baloon = {img=".i.PUZZLE._Weather.0", pr=6, foi=".i.ROOTzz0.0.0" , texto = "Missão meteorológica completada!"}
 [c_ROOT0]
 img=".i.CN._LANDER.0"
+t_BALO = {tit = "solta o balaão", txt="monta o qc"}
+
 [e_WLC]
 tit = "ola"
 txt = "todos"
@@ -134,7 +137,8 @@ b=1
 cena=".i.ROOTzz0.0.0"
 texto="Lista de missões"
 tit="Lista de missões"
-foi=".i.POOL.0.0"
+foi=".i.ROOT0.0.0"
+#foi=".i.POOL.0.0"
 [e_adv]
 img=".i.Missao._AVENTURA.0"
 x=500

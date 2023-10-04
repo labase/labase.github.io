@@ -565,7 +565,7 @@ class Elemento(Elemento_):
         self.elt = html.DIV(Id=tit, title=tit, style=self.style)
         # self.elt.style = self.style
         self.xy = (-111, -111)
-        self.scorer = dict(ponto=1, valor=cena.nome, carta=tit or img, casa=self.xy, move=None)
+        self.scorer = dict(ponto=1, valor=cena.nome if cena else "_NADA_", carta=tit or img, casa=self.xy, move=None)
         self.scorer.update(score)
         # if False:
         #     self._img = html.IMG(Id="img_" + tit, src=img, title=tit, alt=alt,
