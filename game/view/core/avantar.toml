@@ -57,6 +57,11 @@ Seals ="https://i.imgur.com/09geayY.gif"
 Seal ="https://i.imgur.com/09geayY.gif"
 Peng = "https://i.imgur.com/ZVvlkX8.gif"
 Core = "https://i.imgur.com/qS6Ywx8.gif"
+Nyc = "https://activufrj.nce.ufrj.br/studio/SuPyGirls/nycolas.jpg?disp=inline&size=G"
+OpAll = "https://activufrj.nce.ufrj.br/studio/SuPyGirls/IMG-20231003-WA0030.jpg?disp=inline&size=G"
+OpEmi = "https://activufrj.nce.ufrj.br/studio/SuPyGirls/emilly.jpg?disp=inline&size=G"
+ExHan = "https://activufrj.nce.ufrj.br/studio/SuPyGirls/hannah.jpg?disp=inline&size=G"
+ExVic = "https://activufrj.nce.ufrj.br/studio/SuPyGirls/victor.jpg?disp=inline&size=G"
 [folha_PUZZLE]
 Weather = [4,3]
 Baloon = [5,5]
@@ -113,12 +118,22 @@ foi = ".i.ROOTzz3.0.0"
 [mapa_BIO]
 p_penf = {img=".i.PUZZLE.Peng.4.4", pr=4, foi=".i.ROOTzz0.0.0" , texto = "Observação simples de pinguins completada!", cena=".i.CN._LANDER.1", dim=[3,3]}
 p_geof = {img=".i.PUZZLE.Core.4.4", pr=3, foi=".i.ROOTzz0.0.0" , texto = "Perfuração simples completada!", cena=".i.CN._LANDER.1", dim=[4,3]}
+p_xhan = {img=".i.PUZZLE.ExHan.4.4", pr=10, foi=".i.ROOTzz0.0.0" , texto = "Montanha escalada com sucesso!", cena=".i.CN._LANDER.1", dim=[5,4]}
+p_xvic = {img=".i.PUZZLE.ExVic.4.4", pr=11, foi=".i.ROOTzz0.0.0" , texto = "Navegação completada!", cena=".i.CN._LANDER.1", dim=[5,5]}
 Gp = {local=[0,1], tit="Aqui vamos perfurar", texto="Perfurar Gelo Fácil!", foi=".i.geof"}
 Bp = {local=[1,2], tit="Aqui Observaremos Pinguins", texto="Observação simples de pinguins!", foi=".i.penf"}
+Xn = {local=[2,3], tit="Aqui vamos escalar uma montanha", texto="Explorar e Escalar Local!", foi=".i.xhan"}
+Xv = {local=[3,0], tit="Aqui vamos navegar pela Antártida", texto="Explorar e Navegar pela Antártida!", foi=".i.xvic"}
 [mapa_RED]
-p_pen = {img=".i.PUZZLE.Peng.4.4", pr=7, foi=".i.ROOTzz0.0.0" , texto = "Observação de pinguins completada!", cena=".i.CN._LANDER.1", dim=[4,4]}
+p_pemi = {img=".i.PUZZLE.OpEmi.4.4", pr=7, foi=".i.ROOTzz0.0.0" , texto = "Observação inicial de pinguins completada!", cena=".i.CN._LANDER.1", dim=[4,4]}
 p_geo = {img=".i.PUZZLE.Core.4.4", pr=9, foi=".i.ROOTzz0.0.0" , texto = "Perfuração completada!", cena=".i.CN._LANDER.1", dim=[5,5]}
+p_nyc = {img=".i.PUZZLE.Nyc.4.4", pr=5, foi=".i.ROOTzz0.0.0" , texto = "Local explorado!", cena=".i.CN._LANDER.1", dim=[5,5]}
+p_pall = {img=".i.PUZZLE.OpAll.4.4", pr=5, foi=".i.ROOTzz0.0.0" , texto = "Observação de pinguins completada!", cena=".i.CN._LANDER.1", dim=[5,5]}
 Gp = {local=[0,1], tit="Aqui vamos perfurar", texto="Perfurar Gelo!", foi=".i.geo"}
+Xn = {local=[1,2], tit="Aqui vamos explorar uma localidade", texto="Explorar Local!", foi=".i.nyc"}
+Ba = {local=[2,3], tit="Aqui observaremos pinguins", texto="Observar pinguins!", foi=".i.pall"}
+Be = {local=[3,0], tit="Aqui observaremos inicialmente pinguins", texto="Observação inicial de pinguins!", foi=".i.pemi"}
+
 [mapa_YEL]
 p_peng = {img=".i.PUZZLE.Peng.4.4", pr=7, foi=".i.ROOTzz0.0.0" , texto = "Observação de pinguins completada!", cena=".i.CN._LANDER.1", dim=[4,4]}
 p_gelo = {img=".i.PUZZLE.Core.4.4", pr=8, foi=".i.ROOTzz0.0.0" , texto = "Perfuração completada!", cena=".i.CN._LANDER.1", dim=[4,4]}
