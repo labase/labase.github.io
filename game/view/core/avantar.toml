@@ -22,6 +22,7 @@ SUICONS = [8, 4]
 LAND = [4,8]
 LANDER = [8,8]
 YELLOW = [8,16]
+RED = [8,12]
 BADGES = [6, 8]
 #CROW = [1,1]
 [valores_Missao]
@@ -54,6 +55,8 @@ Weather = "https://i.imgur.com/kYFntfo.gif"
 Baloon = "https://i.imgur.com/kYFntfo.gif"
 Seals ="https://i.imgur.com/09geayY.gif"
 Seal ="https://i.imgur.com/09geayY.gif"
+Peng = "https://i.imgur.com/ZVvlkX8.gif"
+Core = "https://i.imgur.com/qS6Ywx8.gif"
 [folha_PUZZLE]
 Weather = [4,3]
 Baloon = [5,5]
@@ -62,9 +65,14 @@ Seal = [4, 4]
 [l_BIO]
 img =".i.CN._LANDER.0"
 index = [3,3]
+
 [l_YEL]
 img =".i.CN._YELLOW.0"
 index = [6,5]
+
+[l_RED]
+img =".i.CN._RED.0"
+index = [4,6]
 
 [s_ROOT]
 img =".i.CN._LANDER.0"
@@ -91,6 +99,8 @@ t_BOI = {tit = "solta o balaão", txt="monta o qc"}
 p_baloon = {img=".i.PUZZLE._Weather.0", pr=6, foi=".i.ROOTzz0.0.0" , texto = "Missão meteorológica completada!"}
 [c_ROOT0]
 img=".i.CN._LANDER.0"
+t_BALO = {tit = "solta o balaão", txt="monta o qc"}
+
 [e_WLC]
 tit = "ola"
 txt = "todos"
@@ -100,29 +110,29 @@ B = "nuv"
 C = "nu"
 Z ="B"
 foi = ".i.ROOTzz3.0.0"
+[mapa_BIO]
+p_penf = {img=".i.PUZZLE.Peng.4.4", pr=4, foi=".i.ROOTzz0.0.0" , texto = "Observação simples de pinguins completada!", cena=".i.CN._LANDER.1", dim=[3,3]}
+p_geof = {img=".i.PUZZLE.Core.4.4", pr=3, foi=".i.ROOTzz0.0.0" , texto = "Perfuração simples completada!", cena=".i.CN._LANDER.1", dim=[4,3]}
+Gp = {local=[0,1], tit="Aqui vamos perfurar", texto="Perfurar Gelo Fácil!", foi=".i.geof"}
+Bp = {local=[1,2], tit="Aqui Observaremos Pinguins", texto="Observação simples de pinguins!", foi=".i.penf"}
+[mapa_RED]
+p_pen = {img=".i.PUZZLE.Peng.4.4", pr=7, foi=".i.ROOTzz0.0.0" , texto = "Observação de pinguins completada!", cena=".i.CN._LANDER.1", dim=[4,4]}
+p_geo = {img=".i.PUZZLE.Core.4.4", pr=9, foi=".i.ROOTzz0.0.0" , texto = "Perfuração completada!", cena=".i.CN._LANDER.1", dim=[5,5]}
+Gp = {local=[0,1], tit="Aqui vamos perfurar", texto="Perfurar Gelo!", foi=".i.geo"}
 [mapa_YEL]
+p_peng = {img=".i.PUZZLE.Peng.4.4", pr=7, foi=".i.ROOTzz0.0.0" , texto = "Observação de pinguins completada!", cena=".i.CN._LANDER.1", dim=[4,4]}
+p_gelo = {img=".i.PUZZLE.Core.4.4", pr=8, foi=".i.ROOTzz0.0.0" , texto = "Perfuração completada!", cena=".i.CN._LANDER.1", dim=[4,4]}
+
 We = {local=[1,1], tit="Aqui teremos o lançamento de um balão", texto="lançar um balão!", foi=".i.BALOONI"}
 Ae = {local=[2,2], tit="Aqui teremos o lançamento de um balão", texto="lançar um balão!", foi=".i.BALOON"}
 Be = {local=[3,3], tit="Aqui acompanharemos o crescimento de uma foca", texto="Observar uma foca bebê!", foi=".i.SEAL"}
 Bs = {local=[4,0], tit="Aqui acompanharemos o crescimento de uma foca", texto="Observar uma foca bebê!", foi=".i.SEALS"}
+Bp = {local=[5,1], tit="Aqui Observaremos Pinguins", texto="Observar pinguins!", foi=".i.peng"}
+Gc = {local=[0,1], tit="Aqui vamos perfurar", texto="Perfurar Gelo!", foi=".i.gelo"}
 
 [s_Bioma]
 img =".i.CN._LANDER.0"
 index = [4,5,6,7]
-[e_supri]
-img="*fa fa-parachute-box fa-5x"
-x=900
-y=300
-texto="Os suprimentos cairam nesta direção"
-cena=".i.ROOTzz1.0.0"
-foi=".i.Biomazz4.0.0"
-[e_base]
-img="*fa fa-campground fa-5x"
-x=900
-y=300
-texto="Voltaremos ao campo base"
-cena=".i.Biomazz5.0.0"
-foi=".i.ROOTzz0.0.0"
 [e_ani]
 img=".i.Missao._ANIMAL.0"
 x=100
@@ -132,9 +142,10 @@ h=500
 o=0.5
 b=1
 cena=".i.ROOTzz0.0.0"
-texto="Lista de missões"
-tit="Lista de missões"
-foi=".i.POOL.0.0"
+texto="Uma Missão Alternativa"
+tit="Missão Alternativa"
+foi=".i.REDzz0zz1.0.0"
+#foi=".i.POOL.0.0"
 [e_adv]
 img=".i.Missao._AVENTURA.0"
 x=500
