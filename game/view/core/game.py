@@ -95,6 +95,9 @@ class Teclemmino:
                 from copy import deepcopy
                 self.img_ = deepcopy(img) if isinstance(img, dict) else img
                 style_ = {}
+                # txt = _kwa["texto"] if "texto" in _kwa else {}
+
+                LG.log(8, "Vito ⇒ Sprite texto⇒", type(texto), isinstance(texto, dict))
 
                 def to_int(key):
                     LG.log(4, _style)
@@ -125,7 +128,10 @@ class Teclemmino:
                     icon = teclemmino.I(Class=img[1:], style={"position": "relative", "color": "grey"})
                     _ = self.elt <= icon
                 # self._texto = Texto(texto, foi=self._foi) if texto else None
-                self._texto = Texto(texto, foi=gone) if texto else None
+                if isinstance(texto, dict):
+                    self._texto = Texto(foi=gone, **texto)
+                else:
+                    self._texto = Texto(texto, foi=gone) if texto else None
                 self.vai = self._texto.vai if texto else self.vai
                 self.o = self.o_ = o
 
@@ -476,14 +482,16 @@ class Teclemmino:
                     _kwa.update(kwa)
                     kwa_ = dict(x=100, y=100)
                     _kwa.update(**kwa_)
+                    txt = _kwa["texto"] if "texto" in _kwa else {}
 
-                    LG.log(4, "Vito ⇒ Mapa deploy⇒", actor.img_, local, local_, _kwa)
+                    LG.log(8, "Vito ⇒ Mapa deploy⇒", type(txt), isinstance(txt, dict))
+                    # LG.log(8, "Vito ⇒ Mapa deploy⇒", actor.img_, type(txt), local, local_, _kwa)
                     sprite = Sprite(cena=local_, **_kwa)
                     # sprite.o = 0.5
                     return sprite
 
                 mapa = teclemmino.assets[nome]
-                pool = 'bio atm xpr cli fri geo per enc sup des sal cai'.split()
+                pool = 'bio atm xpr cli fri geo per enc sup des sal cai jor kpa'.split()
                 act_pool = {k[0]: teclemmino.assets[f"m{k}"] for k in pool}
                 act_pool["w"] = teclemmino.assets["mcli"]
                 self.acts = [deploy(act_pool[key.lower()[0]], **ka) for key, ka in kwargs.items()]
@@ -512,7 +520,7 @@ class Teclemmino:
         return {k: v for k, v in zip(['c', 'e', 't', 's', 'f', 'v', "i", "l", "m", "p", "q"], builder)}
 
     def premiar(self, asset, vito, tit="premiado"):
-        mdl = vito.Sprite(self.assets["CN"]["_BADGES"].get_image(asset), w=26, h=26, tit=tit, cena=vito.INV.cena)
+        mdl = vito.Sprite(self.assets["CN"]["_BADGES"].get_image(asset), w=30, h=30, tit=tit, cena=vito.INV.cena)
         vito.INV.bota(mdl)
 
     def cena(self, asset, **kwargs):
