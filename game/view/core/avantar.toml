@@ -2,6 +2,7 @@ point = { x = [1,3], y = 2 }
 [valores_CN]
 #ANICONS = "https://i.imgur.com/A2pPOED.png"
 #b012, w345, a678, g091011, c121314, x151617, p181920, e212223,r242526, s227829 p303132, d333435
+# Estas imagens são de uso geral no jogo
 BADGER = "https://i.imgur.com/Sxif9mN.jpg"
 BADGES = "https://imgur.com/DgKGbCl.png"
 SNOWY = "https://i.imgur.com/KxcqKpJ.gif"
@@ -12,6 +13,7 @@ SUICONS = "https://i.imgur.com/cM95ybG.jpg"
 ANICONS = "https://i.imgur.com/bmUoCIb.png"
 SUPPLY = "https://i.imgur.com/PWreEK2.gif"
 PARADRP = "https://i.imgur.com/ShQMIoU.png"
+# Estes são usados para gerar as imagens de fundo para os roteiros
 LAND = "https://i.imgur.com/Cmyq9vd.jpg"
 LANDER = "https://i.imgur.com/lc5s0OJ.jpg"
 YELLOW = "https://imgur.com/dzM9NtT.jpg"
@@ -19,6 +21,7 @@ WHITE = "https://imgur.com/khohhCw.jpg"
 RED = "https://imgur.com/IMcwSAq.jpg"
 RO1 = "https://imgur.com/IMcwSAq.jpg"
 [folha_CN]
+# Estes valores recortam as imagens acimas para fazer um conjunto de cenas
 ANICONS = [5, 4]
 SUICONS = [8, 4]
 LAND = [4,8]
@@ -29,6 +32,7 @@ RO1 = [4,6]
 BADGES = [6, 6]
 #CROW = [1,1]
 [valores_Missao]
+# Estas imagens são usadas para fazer as cartas de missão que aparecem nas cenas
 ANIMAL = "https://i.imgur.com/BivOv8y.jpg"
 AVENTURA = "https://imgur.com/CqlwpCh.jpg"
 MISSAO = "https://imgur.com/aFuEYkS.jpg"
@@ -37,6 +41,7 @@ ESCOLA = "https://imgur.com/narhgju.jpg"
 PASSOCA = "https://i.imgur.com/YG7jsPr.png"
 FIGURAS = "https://i.imgur.com/26GPw6E.png"
 [folha_Missao]
+# Estes valores recortam as imagens acimas para fazer um conjunto de cartas
 ESCOLA = [2,1]
 ANIMAL = [3,1]
 AVENTURA = [2,1]
@@ -46,6 +51,9 @@ PASSOCA = [1,1]
 FIGURAS = [1,1]
 [c_POOL]
 img=".i.CN._LANDER.5"
+# Esta coleçaõ de elementos é especial e não pode ser modificada
+# Eles descrevem cartas que podem ser usadas nos mapas
+# A letra que aparece depois do conjunto e_m define que esta carta será usada (ver mapas)
 e_mbio = {img=".i.Missao._MISSAO.0", x=100, y=100, w=300, h=500, o=0.4}
 e_matm = {img=".i.Missao._MISSAO.3", x=200, y=100, w=300, h=500, o=0.4}
 e_mxpr = {img=".i.Missao._MISSAO.6", x=200, y=100, w=300, h=500, o=0.4}
@@ -62,6 +70,7 @@ e_mcai = {img=".i.Missao._EVENTO.15", x=1200, y=100, w=300, h=500, o=0.4}
 e_mjor = {img=".i.Missao._ESCOLA.0", x=1200, y=100, w=300, h=500, o=0.4}
 e_mkpa = {img=".i.Missao._PASSOCA.0", x=1200, y=100, w=300, h=500, o=0.4}
 [valores_PUZZLE]
+# Aqui tem imagens para serem usadas nos quebra-cabeças do jogo
 Campo = "https://i.imgur.com/W548130.png"
 Pesquisa = "https://i.imgur.com/26GPw6E.png"
 Weather = "https://i.imgur.com/kYFntfo.gif"
@@ -85,11 +94,15 @@ AdvSta = "https://i.imgur.com/XGjZLS8.gif"
 KpaMar = "https://imgur.com/bkIybVD.jpg"
 KpaMon = "https://imgur.com/gHghRUz.jpg"
 [folha_PUZZLE]
+# Estes valores recortam as imagens acima para fazer um conjunto de peças do puzzle
+
 Weather = [4,3]
 Baloon = [5,5]
 Seals = [5, 5]
 Seal = [4, 4]
 [l_BIO]
+# Os labirintos criam imagens que se conetam uma nas outras segundo a grade dada por index
+# Eles usam as folhas de recorte das imagens que são usadas quando tem um "_" na frente do nome (_LANDER)
 img =".i.CN._LANDER.0"
 index = [3,3]
 
@@ -113,12 +126,22 @@ index = [1,1]
 #img =".i.CN._LANDER.0"
 #index = [0,1,2,3]
 [mapa_BIO]
+# Cada mapa descreve um roteiro diferente e o ponto de entrada de todos os roteiros estão em mapa_ROOT
+# Os mapas tem dois tipos de elementos, os desafios e as cartas que levam aos desafios
+# Os puzzles tem um nome que começa co "p_". O resto do nome a genta inventa para que ele seja único no arquivo inteiro
+# No puzzle img é a imagem que vai ser recortada, definida em valores_PUZZLE. o foi diz para onde vai uando resolve
+# O texto aparece quando resolve o puzzle. A cena é a imagem que aparece por trás do puzzle e a dim descreve como divide o puzzle
+# pr é o premio que aparece quando completa o puzzle os valores são o da tabela abaixo. onde b é bio, w é clima etc.
 #b012, w345, a678, g091011, c121314, x151617, p181920, e212223,r242526, s227829 p303132, d333435
-
 p_penf = {img=".i.PUZZLE.Peng.4.4", pr=0, foi=".i.ROOTzz0.0.0" , texto = "Observação simples de pinguins completada!", cena=".i.CN._LANDER.1", dim=[3,3]}
 p_geof = {img=".i.PUZZLE.Core.4.4", pr=9, foi=".i.ROOTzz0.0.0" , texto = "Perfuração simples completada!", cena=".i.CN._LANDER.1", dim=[4,3]}
 p_xhan = {img=".i.PUZZLE.ExHan.4.4", pr=15, foi=".i.ROOTzz0.0.0" , texto = "Montanha escalada com sucesso!", cena=".i.CN._LANDER.1", dim=[5,4]}
 p_xvic = {img=".i.PUZZLE.ExVic.4.4", pr=16, foi=".i.ROOTzz0.0.0" , texto = "Navegação completada!", cena=".i.CN._LANDER.1", dim=[5,5]}
+# Em seguir são as descrições das cartas de missão. Elas aparecem nas cenas e podem ser clicadas para acitar uma missão
+# Elas deve começar com uma das letras descritas em POOL (depois da sequência "e_m") G=Geodinâmica, B=Biologia, X=Exploração etc
+# O local vai ser a posição na grade onde a carta vai aparecer (sala, cena). O foi determina um local ou um puzzle que vai abrir
+# a descrição do foi é ".i.nomepuzzle" o nomepuzzle é identico ao que vem depois do "p_" na descrição acima
+# O tit é o texto que aparece na legenta quando para sobre a carta sem clicar. O texto aparece na janela de texto que aparece quando clica
 Gp = {local=[0,1], tit="Aqui vamos perfurar", texto="Perfurar Gelo Fácil!", foi=".i.geof"}
 Bp = {local=[1,2], tit="Aqui Observaremos Pinguins", texto="Observação simples de pinguins!", foi=".i.penf"}
 Xn = {local=[2,3], tit="Aqui vamos escalar uma montanha", texto="Explorar e Escalar Local!", foi=".i.xhan"}
@@ -154,11 +177,14 @@ p_mon = {img=".i.PUZZLE.KpaMon.4.4", pr=12, foi=".i.ROOTzz0.0.0" , texto = "Obse
 
 Jb = {local=[3,0], tit="Vamos desembarcar do navio", texto="Desembarcar!", foi=".i.bote"}
 Je = {local=[4,1], tit="Vamos até a estação", texto="Estação!", foi=".i.esta"}
+# No texto podemos usar entre chaves a formulação de uma pergunta. O tit é a pergunta, A, B etc são as opções e Z é a resposta certa
 kt = {local=[0,1], tit="Converse comigo!", texto= {tit="Você sabia que a temperatura aqui chega a", A="40º", B="-150º", C="-90º", Z="C" }, foi=".i.esta"}
+# Em vez do formato xx = {local=... pode usar esta notação entre colchetes. cada um dos termos vai aparecer em uma linha nova
 [mapa_RO1.ko]
 local=[1,2]
 foi=".i.mar"
 tit="Vamos falar sobre Clima!"
+# Esta maneira facilita a criação de perguntas onde a pergunta e as opções aparecem em linha diferentes
 [mapa_RO1.ko.texto]
 tit="Algo que está ameaçando a Antártida é a Ebulição global. Sabe, é"
 A="O processo acelerado do aquecimento global."
@@ -175,7 +201,7 @@ A="Estimular o turismo predatório."
 B="Descongelar as Geleiras."
 C="Acelerar o crescimento de novas espécies."
 Z="B"
-
+# Este é mapa principal onde o jogo inicia. Podemos colocar aqui uma carta para cada roteiro disponível
 [mapa_ROOT]
 Jb = {local=[0,0], tit="Fuja do Tissunami!", texto="Missão Climática", foi=".i.RO1zz0zz1.0.0"}
 Xb = {local=[0,0], img=".i.Missao._AVENTURA.1", x=500, tit="Explorar!", texto="Missão de Exploração", foi=".i.BIOzz0zz1.0.0"}
@@ -187,6 +213,10 @@ Es = {local=[0,1], x=800, tit="Encontro com outros exploradores!", texto="Buscas
 local=[7,1]
 img=".i.Missao._FIGURAS.0"
 tit="Vamos falar sobre Clima!"
-
+foi=".i.YELzz1zz1.0.0"
 [mapa_RO1.kf.texto]
-tit="A Ebulição global vai afetar a Antártida. Vai terminar por"
+tit="Estou preocupado com o descongelamento das geleiras. O efeito no planeta Terra será "
+A="Emissão de gases"
+B="Elevação do nível do mar"
+C="Congelamento da camada de ozônio"
+Z="B"
