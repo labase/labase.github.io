@@ -35,6 +35,7 @@ MISSAO = "https://imgur.com/aFuEYkS.jpg"
 EVENTO = "https://imgur.com/qa5FFq3.jpg"
 ESCOLA = "https://imgur.com/narhgju.jpg"
 PASSOCA = "https://i.imgur.com/YG7jsPr.png"
+FIGURAS = "https://i.imgur.com/26GPw6E.png"
 [folha_Missao]
 ESCOLA = [2,1]
 ANIMAL = [3,1]
@@ -42,6 +43,7 @@ AVENTURA = [2,1]
 MISSAO = [6,3]
 EVENTO = [6,3]
 PASSOCA = [1,1]
+FIGURAS = [1,1]
 [c_POOL]
 img=".i.CN._LANDER.5"
 e_mbio = {img=".i.Missao._MISSAO.0", x=100, y=100, w=300, h=500, o=0.4}
@@ -55,7 +57,7 @@ e_mper = {img=".i.Missao._EVENTO.0", x=700, y=100, w=300, h=500, o=0.4}
 e_menc = {img=".i.Missao._EVENTO.3", x=700, y=100, w=300, h=500, o=0.4}
 e_msup = {img=".i.Missao._EVENTO.6", x=900, y=100, w=300, h=500, o=0.4}
 e_mdes = {img=".i.Missao._EVENTO.9", x=1000, y=100, w=300, h=500, o=0.4}
-e_msal = {img=".i.Missao._EVENTO.12", x=1100, y=100, w=300, h=500, o=0.4}
+e_mres = {img=".i.Missao._EVENTO.12", x=1100, y=100, w=300, h=500, o=0.4}
 e_mcai = {img=".i.Missao._EVENTO.15", x=1200, y=100, w=300, h=500, o=0.4}
 e_mjor = {img=".i.Missao._ESCOLA.0", x=1200, y=100, w=300, h=500, o=0.4}
 e_mkpa = {img=".i.Missao._PASSOCA.0", x=1200, y=100, w=300, h=500, o=0.4}
@@ -103,43 +105,13 @@ index = [4,6]
 img =".i.CN._RO1.0"
 index = [4,6]
 
-[s_ROOT]
+[l_ROOT]
 img =".i.CN._LANDER.0"
-index = [0,1,2,3]
-[c_SEAL]
-img = ".i.CN._YELLOW.0"
-direita=".i.ROOTzz0.0.0"
-#b012, w345, a678, g091011, c121314, x151617, p181920, e212223,r242526, s227829 p303132, d333435
-
-p_seal = {img=".i.PUZZLE._Seal.0", pr=1, foi=".i.ROOTzz0.0.0" , texto = "Observação da foca completada!"}
-[c_SEALS]
-img = ".i.CN._YELLOW.1"
-direita=".i.ROOTzz0.0.0"
-
-p_seals = {img=".i.PUZZLE._Seals.0", pr=2, foi=".i.ROOTzz0.0.0" , texto = "Observação da foca completada!"}
-[c_BALOON]
-img=".i.CN._LANDER.1"
-direita=".i.ROOTzz0.0.0"
-p_balooni = {img=".i.PUZZLE._Baloon.0", pr=7, foi=".i.ROOTzz0.0.0" , texto = "Missão meteorológica completada!"}
-t_BAL = {tit = "solta o balaão", txt="monta o qc"}
-[c_BALOONI]
-img=".i.CN._LANDER.1"
-direita=".i.ROOTzz0.0.0"
-t_BOI = {tit = "solta o balaão", txt="monta o qc"}
-p_baloon = {img=".i.PUZZLE._Weather.0", pr=6, foi=".i.ROOTzz0.0.0" , texto = "Missão meteorológica completada!"}
-[c_ROOT0]
-img=".i.CN._LANDER.0"
-t_BALO = {tit = "solta o balaão", txt="monta o qc"}
-
-[e_WLC]
-tit = "ola"
-txt = "todos"
-pr = 3
-A = "nuvem"
-B = "nuv"
-C = "nu"
-Z ="B"
-foi = ".i.ROOTzz3.0.0"
+index = [1,1]
+#
+#[s_ROOT0]
+#img =".i.CN._LANDER.0"
+#index = [0,1,2,3]
 [mapa_BIO]
 #b012, w345, a678, g091011, c121314, x151617, p181920, e212223,r242526, s227829 p303132, d333435
 
@@ -151,6 +123,7 @@ Gp = {local=[0,1], tit="Aqui vamos perfurar", texto="Perfurar Gelo Fácil!", foi
 Bp = {local=[1,2], tit="Aqui Observaremos Pinguins", texto="Observação simples de pinguins!", foi=".i.penf"}
 Xn = {local=[2,3], tit="Aqui vamos escalar uma montanha", texto="Explorar e Escalar Local!", foi=".i.xhan"}
 Xv = {local=[3,0], tit="Aqui vamos navegar pela Antártida", texto="Explorar e Navegar pela Antártida!", foi=".i.xvic"}
+
 [mapa_RED]
 p_pemi = {img=".i.PUZZLE.OpEmi.4.4", pr=0, foi=".i.ROOTzz0.0.0" , texto = "Observação inicial de pinguins completada!", cena=".i.CN._LANDER.1", dim=[4,4]}
 p_geo = {img=".i.PUZZLE.Core.4.4", pr=10, foi=".i.ROOTzz0.0.0" , texto = "Perfuração completada!", cena=".i.CN._LANDER.1", dim=[5,5]}
@@ -164,8 +137,14 @@ Be = {local=[3,0], tit="Aqui observaremos inicialmente pinguins", texto="Observa
 [mapa_YEL]
 p_peng = {img=".i.PUZZLE.Peng.4.4", pr=1, foi=".i.ROOTzz0.0.0" , texto = "Observação de pinguins completada!", cena=".i.CN._LANDER.1", dim=[4,4]}
 p_gelo = {img=".i.PUZZLE.Core.4.4", pr=11, foi=".i.ROOTzz0.0.0" , texto = "Perfuração completada!", cena=".i.CN._LANDER.1", dim=[4,4]}
+p_baloon = {img=".i.PUZZLE._Weather.0", pr=6, foi=".i.ROOTzz0.0.0" , texto = "Missão meteorológica completada!", cena=".i.CN._YELLOW.0", dim=[5,4]}
+p_seals = {img=".i.PUZZLE._Seals.0", pr=2, foi=".i.ROOTzz0.0.0" , texto = "Observação da foca completada!", cena=".i.CN._YELLOW.123", dim=[5,5]}
+p_balooni = {img=".i.PUZZLE._Baloon.0", pr=7, foi=".i.ROOTzz0.0.0" , texto = "Missão meteorológica completada!", cena=".i.CN._YELLOW.11", dim=[6,5]}
 
-We = {local=[1,1], tit="Aqui teremos o lançamento de um balão", texto="lançar um balão!", foi=".i.BALOONI"}
+We = {local=[1,1], tit="Aqui teremos o lançamento de um balão", texto="lançar um balão!", foi=".i.baloon"}
+Wb = {local=[0,0], tit="Aqui teremos o lançamento de um balão", texto="lançar um balão!", foi=".i.balooni"}
+Be = {local=[2,2], tit="Aqui observamos pinguins", texto="Espiar pinguins!", foi=".i.peng"}
+Bs = {local=[3,3], tit="Aqui observamos focas", texto="Espiar focas!", foi=".i.seals"}
 
 [mapa_RO1]
 p_bote = {img=".i.PUZZLE.AdvBo0.4.4", pr=1, foi=".i.ROOTzz0.0.0" , texto = "Conseguiu embarcar no bote!", cena=".i.CN._RO1.4", dim=[4,4]}
@@ -197,55 +176,17 @@ B="Descongelar as Geleiras."
 C="Acelerar o crescimento de novas espécies."
 Z="B"
 
-[s_Bioma]
-img =".i.CN._LANDER.0"
-index = [4,5,6,7]
-[e_cli]
-img=".i.Missao._ESCOLA.1"
-x=100
-y=100
-w=300
-h=500
-o=0.5
-b=1
-cena=".i.ROOTzz0.0.0"
-texto="Missão Climática"
-tit="Fuja do Tissunami"
-foi=".i.RO1zz0zz1.0.0"
-[e_ani]
-img=".i.Missao._ANIMAL.0"
-x=100
-y=100
-w=300
-h=500
-o=0.5
-b=1
-cena=".i.ROOTzz1.0.0"
-texto="Uma Missão Alternativa"
-tit="Missão Alternativa"
-foi=".i.REDzz0zz1.0.0"
-#foi=".i.POOL.0.0"
-[e_adv]
-img=".i.Missao._AVENTURA.0"
-x=500
-y=100
-w=300
-h=500
-o=0.5
-b=1
-cena=".i.ROOTzz0.0.0"
-texto="A missão inicia aqui"
-tit="A missão inicia aqui"
-foi=".i.BIOzz0zz1.0.0"
-[e_adt]
-img=".i.Missao._AVENTURA.1"
-x=900
-y=100
-w=300
-h=500
-o=0.5
-b=1
-cena=".i.ROOTzz0.0.0"
-texto="Outra missão inicia aqui"
-tit="Outra missão inicia aqui"
-foi=".i.YELzz0zz1.0.0"
+[mapa_ROOT]
+Jb = {local=[0,0], tit="Fuja do Tissunami!", texto="Missão Climática", foi=".i.RO1zz0zz1.0.0"}
+Xb = {local=[0,0], img=".i.Missao._AVENTURA.1", x=500, tit="Explorar!", texto="Missão de Exploração", foi=".i.BIOzz0zz1.0.0"}
+Xe = {local=[0,0], x=900, tit="Explorando a Antártida!", texto="Missão de Exploração Antártica", foi=".i.YELzz0zz1.0.0"}
+Ss = {local=[0,1], x=50, tit="Suprimentos!", texto="Missão de Suprimentos", foi=".i.YELzz0zz1.0.0"}
+Cs = {local=[0,1], x=400, tit="Busca por caixas perdidas!", texto="Buscas por caixas", foi=".i.YELzz0zz1.0.0"}
+Es = {local=[0,1], x=800, tit="Encontro com outros exploradores!", texto="Buscas por exploradores", foi=".i.RO1zz7zz1.0.0"}
+[mapa_RO1.kf]
+local=[7,1]
+img=".i.Missao._FIGURAS.0"
+tit="Vamos falar sobre Clima!"
+
+[mapa_RO1.kf.texto]
+tit="A Ebulição global vai afetar a Antártida. Vai terminar por"

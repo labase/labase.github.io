@@ -173,6 +173,7 @@ class Teclemmino:
 
             def vai(self, ev=NoEv):
                 super().vai(ev)
+                teclemmino.mark(".".join(self.nome.split("zz")[-2:]))
                 LG.log(4, "CenaSprite vai", self.nome, teclemmino.vito.INV.cena.nome)
                 [foi(ev) for foi in self.foi_evs if callable(foi)]
                 ...
@@ -195,7 +196,8 @@ class Teclemmino:
                 _index = enumerate([all_images[ix * 4:ix * 4 + 4] for ix in range(dx * dy)])
                 # self.salas = salas if salas else self.build_rooms
                 self.nome = _name = kwargs["nome"]
-                _salas = [teclemmino.sprite_sala(f"{_name}zz{ii}", img=img, index=ix) for ii, ix in _index]
+                self.salas = _salas = [
+                    teclemmino.sprite_sala(f"{_name}zz{ii}", img=img, index=ix) for ii, ix in _index]
                 self.matrix: List[SpriteSala]
                 self.matrix = [None] * xdx
                 _matrix = [[None] + _salas[ix:ix + self.index.dx] + [None] for ix in range(0, dx * dy, dx)] + [
@@ -203,6 +205,9 @@ class Teclemmino:
                 _ = [self.matrix.extend(row) for row in _matrix]
                 LG.log(4, "SpriteLabirinto", img, self.matrix)
                 self.lb()
+
+            def vai(self, *_):
+                self.salas[0].norte.vai()
 
             def get(self, jj, kk=-1):
                 result = f"{self.nome}zz{jj}" if kk < 0 else f"{self.nome}zz{jj}zz{kk}"
@@ -480,26 +485,37 @@ class Teclemmino:
                     _kwa = actor.copy()
                     local_ = mapa.get(*local)
                     _kwa.update(kwa)
-                    kwa_ = dict(x=100, y=100)
+                    kwa_ = dict(x=kwa["x"] if "x" in kwa else 100, y=100)
                     _kwa.update(**kwa_)
+                    _kwa.update(**dict(img=self.parser(kwa["img"]))) if "img" in kwa else None
                     txt = _kwa["texto"] if "texto" in _kwa else {}
 
-                    LG.log(8, "Vito ⇒ Mapa deploy⇒", type(txt), isinstance(txt, dict))
+                    LG.log(4, "Vito ⇒ Mapa deploy⇒", txt, _kwa["img"] if "img" in _kwa else 9999)
                     # LG.log(8, "Vito ⇒ Mapa deploy⇒", actor.img_, type(txt), local, local_, _kwa)
                     sprite = Sprite(cena=local_, **_kwa)
                     # sprite.o = 0.5
                     return sprite
 
-                mapa = teclemmino.assets[nome]
-                pool = 'bio atm xpr cli fri geo per enc sup des sal cai jor kpa'.split()
+                self.mapa = mapa = teclemmino.assets[nome]
+                pool = 'bio atm xpr cli fri geo per enc sup des res cai jor kpa'.split()
                 act_pool = {k[0]: teclemmino.assets[f"m{k}"] for k in pool}
                 act_pool["w"] = teclemmino.assets["mcli"]
                 self.acts = [deploy(act_pool[key.lower()[0]], **ka) for key, ka in kwargs.items()]
-                LG.log(5, "Vito ⇒ Mapa ⇒", nome, mapa.get(1, 0), kwargs)
+                LG.log(5, "Vito ⇒ Mapa ⇒", nome, mapa, kwargs)
 
-                ...
+            def vai(self, *_):
+                self.mapa.vai()
+
+            def parser(self, ref: str):
+                if isinstance(ref, str) and ref.startswith("."):
+                    _, _, repo, folha, ix, *_ = ref.split(".")
+                    LG.log(4, "Vito ⇒ Mapa parser⇒", repo, folha, ix, teclemmino.assets[repo][folha].get_image(ix))
+                    return teclemmino.assets[repo][folha].get_image(ix)
+                else:
+                    return ref
 
         self.vito = vito
+        self.rosa: Sprite
         self.assets = {}
         self.last = {}
         self.classes = (CenaSprite, Sprite, SpriteSala, Texto, Folha, SpriteLabirinto, Mapa, Puzzle, Quiz)
@@ -628,8 +644,13 @@ class Teclemmino:
         self.start_game_from_root_element()
         return True
 
+    def mark(self, coord):
+        self.rosa.elt.text = coord
     def start_game_from_root_element(self):
+        self.rosa = self.vito.Sprite("https://imgur.com/odmJe4Z.jpg", w=30, h=30, cena=self.vito.INV.cena)
+        self.vito.INV.bota(self.rosa)
         self.assets["ROOT"].vai() if "ROOT" in self.assets else None
+        self.mark("0.0")
 
 
 class Main:
