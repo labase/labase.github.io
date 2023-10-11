@@ -7,6 +7,7 @@
 Changelog
 ---------
 .. versionadded::    23.10
+        ⛲ Editor online de TOML (10).
         🏭 Reformata puzzle com cena automática (05).
         🔨 fix lançamento do texto, not yet (04).
         ⛲ Desiste de Missões (03).
@@ -32,6 +33,8 @@ Changelog
 import unittest
 from collections import namedtuple as ntp
 from typing import List
+
+VERSION = "version=23.10.10a"
 
 Dim = ntp("Dimensions", "dx dy")
 D11 = ntp("Dimensions", "dx dy")(1, 1)
@@ -460,6 +463,7 @@ class Teclemmino:
                 # self.venceu = venceu or j.n(cena, "Voce venceu!")
 
             def parse(self, nome, *args):
+                _ = self
                 puz = teclemmino.assets[nome]
                 LG.log(5, "Puzzle parse", nome, puz, *args)
                 return puz.cena
@@ -507,6 +511,7 @@ class Teclemmino:
                 self.mapa.vai()
 
             def parser(self, ref: str):
+                _ = self
                 if isinstance(ref, str) and ref.startswith("."):
                     _, _, repo, folha, ix, *_ = ref.split(".")
                     LG.log(4, "Vito ⇒ Mapa parser⇒", repo, folha, ix, teclemmino.assets[repo][folha].get_image(ix))
@@ -515,7 +520,7 @@ class Teclemmino:
                     return ref
 
         self.vito = vito
-        self.rosa: Sprite
+        self.rosa = self.avt = self.editor = None
         self.assets = {}
         self.last = {}
         self.classes = (CenaSprite, Sprite, SpriteSala, Texto, Folha, SpriteLabirinto, Mapa, Puzzle, Quiz)
@@ -635,19 +640,79 @@ class Teclemmino:
         [go(cmd, name, **value) for cmd, name, value in toml_it]
         return True
 
-    def load_(self, cfile=str('view/core/avantar.toml')):
+    def load_(self, cfile=str('view/core/avantar.toml'), str_io=None):
         import tomlib
+        # self.splash_screen()
+        if str_io:
+            self.avt = str_io
+            tom_obj = dict(tomlib.loads(self.avt))
+            self.parse_(tom_obj)
+            self.start_game_from_root_element()
+            return True
+
         with open(cfile, "r") as avt:
-            tom_obj = dict(tomlib.loads(avt.read()))
+            avt.seek(0)
+            self.avt = avt.read()
+            tom_obj = dict(tomlib.loads(self.avt))
             self.parse_(tom_obj)
             # print("self.assets", self.assets)
-        self.start_game_from_root_element()
+        # self.start_game_from_root_element()
+        LG.log(4, "load_ ⇒ file_, cfile, str_io,: ⇒", cfile, str_io, "\n", self.avt[:100])
+        self.splash_screen() if not str_io else self.start_game_from_root_element()
         return True
 
     def mark(self, coord):
         self.rosa.elt.text = coord
-    def start_game_from_root_element(self):
+
+    def splash_screen(self):
+        splash = self.vito.Cena("/image/avantar_splash.jpg")
+
+        splash.vai()
+        self.vito.Sprite("*fa fa-play fa-10x", x=800, y=450, w=150, h=150, cena=splash, tit="Vamos Jogar!",
+                         vai=self.start_game_from_root_element)
+        self.vito.Sprite("*fa fa-circle fa-2x", x=950, y=180, w=60, h=60, o=0.1, cena=splash, tit="*",
+                         vai=self.start_toml_editor)
+
+    def start_toml_editor(self, _=None):
+        def send_toml_to_loader(*_):
+            toml_ = self.editor.getValue()
+            self.vito.INV.tira(run.tit)
+            self.load_(str_io=toml_)
+
+        cena = self.vito.Cena("", nome="editor").vai()
+        run = self.vito.Sprite("*fa fa-play fa-2x", x=800, y=450, w=150, h=150, cena=cena, tit="Salva e Executa",
+                               nome="_run_", vai=send_toml_to_loader)
+        self.vito.INV.bota(run)
+        cena.elt.html = ""
+        cena.elt.id = "editor"
+        cena.elt.style.minHeight = "650px"
+        cena.elt.style.top = "35px"
+        # return
+        self.editor = editor = self.vito.window.ace.edit("editor")
+        editor.setTheme("ace/theme/cobalt")
+        editor.session.setMode("ace/mode/toml")
+        editor.focus()
+        editor.style = dict(position="absolute", top="100px", height="500px")
+        editor.style.height = "500px"
+        editor.resize()
+        editor.setValue(self.avt)
+
+    def manage_code(self):
+        window, document, editor, storage = self.vito.window, self.vito.document, self.editor, self.vito.storage
+        if "code" in document.query:
+            code = document.query.getlist("code")[0]
+            editor.setValue(code)
+        else:
+            if storage is not None and "avantar_toml" in storage:
+                editor.setValue(storage["avantar_toml"])
+            else:
+                editor.setValue(self.avt)
+        editor.scrollToRow(0)
+        editor.gotoLine(0)
+
+    def start_game_from_root_element(self, _=None):
         self.rosa = self.vito.Sprite("https://imgur.com/odmJe4Z.jpg", w=30, h=30, cena=self.vito.INV.cena)
+
         self.vito.INV.bota(self.rosa)
         self.assets["ROOT"].vai() if "ROOT" in self.assets else None
         self.mark("0.0")
@@ -659,6 +724,7 @@ class Main:
         # y = [[l for l in k] for k in x]
         # y= dict(x)
         br.template("_tt_").render(titulo="A V A N T A R 🐧")
+        br.template("_version_").render(version=VERSION)
         self.teclemmino = Teclemmino(br)
         self.br = br
 
