@@ -15,6 +15,9 @@
     <link rel="stylesheet" href="../css/style.css" type='text/css'>
     <script type=" text/javascript " src=" https://cdn.jsdelivr.net/npm/brython@3.11/brython.min.js ">
     </script>
+    <script type=" text/javascript " src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.29.0/ace.js"></script>
+    <script type=" text/javascript " src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.29.0/theme-cobalt.min.js"></script>
+    <script type=" text/javascript " src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.29.0/mode-toml.min.js"></script>
     <script type=" text/javascript " src=" https://cdn.jsdelivr.net/npm/brython@3.11/brython_stdlib.js ">
     </script>
     <script type="text/javascript">
@@ -41,8 +44,13 @@
     from browser import document, alert, html, window, ajax, timer, svg
     from browser.template import Template
     from vitollino import Cena, Elemento, Texto, Salao, STYLE, NADA, NDCT, NoEv, INVENTARIO
+    if hasattr(window, 'localStorage'):
+        from browser.local_storage import storage
+    else:
+        storage = None
+
     class MockBrython:
-        document, alert, html, window, ajax, timer, svg = document, alert, html, window, ajax, timer, svg
+        document, alert, html, window, ajax, timer, svg, storage = document, alert, html, window, ajax, timer, svg, storage
         template, NoEv = Template, NoEv
         Cena, Elemento, Texto, Salao, STYLE, NADA, NDCT, INV = Cena, Elemento, Texto, Salao, STYLE, NADA, NDCT, INVENTARIO
     brython = MockBrython
@@ -63,9 +71,9 @@
 <!--        </div>-->
     </div>
 </div>
-<div style="position:absolute; top:700px; left:2px; height: 10px;">
+<div style="position:absolute; top:650px; left:2px; height: 10px;">
     <p>
-            <span id="_version_" style="color:#FFFFEE;font-size:8px;font-family:courier new,courier,monospace;">
+            <span id="_version_" style="color:#555444;font-size:8px;font-family:courier new,courier,monospace;">
                 {version}</span>
     </p>
 </div>
