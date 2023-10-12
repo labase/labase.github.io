@@ -7,6 +7,8 @@
 Changelog
 ---------
 .. versionadded::    23.10
+        🧩 Incluir side games Cubo (11a).
+        ⛲ Card automático de missão, posição e imagem (11).
         ⛲ Editor online de TOML (10).
         🏭 Reformata puzzle com cena automática (05).
         🔨 fix lançamento do texto, not yet (04).
@@ -34,7 +36,9 @@ import unittest
 from collections import namedtuple as ntp
 from typing import List
 
-VERSION = "version=23.10.10a"
+WIDTH = 1350
+
+VERSION = "version=23.10.11"
 
 Dim = ntp("Dimensions", "dx dy")
 D11 = ntp("Dimensions", "dx dy")(1, 1)
@@ -63,7 +67,7 @@ class Teclemmino:
     def __init__(self, vito):
         # noinspection SpellCheckingInspection
         STYLE, NADA, NDCT, NoEv = vito.STYLE, vito.NADA, vito.NDCT, vito.NoEv
-        STYLE['width'] = 1350
+        STYLE['width'] = WIDTH
         html = vito.html
         self.I = html.I
         self.tag_one = One(html.DIV, html.FIGURE, html.A, html.IMG, html.SPAN, html.H4, html.H1)
@@ -138,6 +142,9 @@ class Teclemmino:
                 self.vai = self._texto.vai if texto else self.vai
                 self.o = self.o_ = o
 
+            def as_card(self):
+                return self
+
             def copy(self):
                 s = self
                 attr = "img vai tit alt texto foi x y w h o".split()
@@ -167,16 +174,35 @@ class Teclemmino:
 
                 self.elt.html = ""
                 self.elt.style = style
+                self.cards = []
                 if direita:
                     ptl = self.portal(L=teclemmino.parser(direita)())
                     LG.log(4, "CenaSprite direita", direita, self.nome, ptl)
+
+            def __le__(self, other):
+                self.cards.append(other.as_card()) if (hasattr(other, "as_card")) else None
+                n_cards = len(self.cards)
+                super().__le__(other)
+                def move_card(crd):
+                    nonlocal delta
+                    crd.x = delta
+                    delta += (card_spacing + crd.w)
+                    return crd
+                if n_cards > 1:
+                    all_cards_width = sum(card.w for card in self.cards)
+                    all_spacing, card_width = WIDTH - all_cards_width, all_cards_width // n_cards
+                    card_spacing= all_spacing // (n_cards+1)
+                    cards =zip([0]+[crd.w for crd in self.cards], self.cards[1:])
+                    delta = card_spacing
+                    [move_card(crd=card) for x, card in enumerate(self.cards) ]
 
             def bind(self, ev=None):
                 self.foi_evs.append(ev) if ev not in self.foi_evs else None
 
             def vai(self, ev=NoEv):
                 super().vai(ev)
-                teclemmino.mark(".".join(self.nome.split("zz")[-2:]))
+                teclemmino.mark(".".join(self.nome.split("zz")[-2:]) if "zz" in self.nome else "@@")
+                # teclemmino.mark(".".join(self.nome.split("zz")[-2:]) if isinstance(self.nome, str) else "@@")
                 LG.log(4, "CenaSprite vai", self.nome, teclemmino.vito.INV.cena.nome)
                 [foi(ev) for foi in self.foi_evs if callable(foi)]
                 ...
@@ -478,6 +504,32 @@ class Teclemmino:
                 teclemmino.premiar(self.pr, vito, tit=self.tit) if resultado and self.pr >= 0 else None
                 return resultado
 
+        class Cube(Puzzle):
+            def __init__(self, img="", x=100, y=100, w=900, h=500, foi="", pr=-1, **kwargs):
+                self.pr = pr
+                swap = self
+                cena = kwargs["cena"]
+                self.cena = kwargs["cena"] = cena = (
+                    CenaSprite(img=cena, direita=foi) if "dim" in kwargs else cena)
+                self.cena.nome = self.nome = str(foi)
+                was = foi
+                foi = teclemmino.parser(foi)
+                # img_, _style, _dim = [v for v in img.values()] if isinstance(img, dict) else (img, {}, D11)
+                # dim = kwargs["dim"] if "dim" in kwargs else [_dim.dx, _dim.dy]
+                # dw, dh = dim
+                # LG.log(4, f"Puzzle(Sprite) foi {foi()}:", cena, cena() if callable(cena) else "#", was, dim, dw, dh)
+                super().__init__(img="", x=x, y=y, w=w, h=h, foi=foi, **kwargs)
+                cenas = "t4bBEOI 5WoBpmz XGjZLS8 VrYCtas tt37M2J ZbCzZFb".split()
+                cenas = img.split()
+                vito.Cubos(cenas, cena=self.cena, tw=900, th=500, nx=3, ny=2, foi=self.montou)
+
+            def montou(self):
+                # resultado = all([peca.certo() for peca in self.pecas])
+                # print(resultado)
+                self.vai()
+                teclemmino.premiar(self.pr, vito, tit=self.tit)
+                return True
+
         class Quiz:
             def __init__(self, nome=None, **kwargs):
                 self.quiz = kwargs
@@ -523,7 +575,7 @@ class Teclemmino:
         self.rosa = self.avt = self.editor = None
         self.assets = {}
         self.last = {}
-        self.classes = (CenaSprite, Sprite, SpriteSala, Texto, Folha, SpriteLabirinto, Mapa, Puzzle, Quiz)
+        self.classes = (CenaSprite, Sprite, SpriteSala, Texto, Folha, SpriteLabirinto, Mapa, Puzzle, Quiz, Cube)
         self.cmd = self.vito_element_builder(vito, self.classes)
 
     def parser(self, ref: str):
@@ -535,10 +587,10 @@ class Teclemmino:
 
     def vito_element_builder(self, v, classes):
         (v.CenaSprite, v.Sprite, v.SpriteSala, v.Textor, v.Folha,
-         v.SpriteLabirinto, v.Mapa, v.Puzzle, v.Quiz) = classes
+         v.SpriteLabirinto, v.Mapa, v.Puzzle, v.Quiz, v.Cube) = classes
         builder = [self.cena, self.elemento, self.texto, self.sprite_sala, self.folha, self.valor,
-                   self.icon, self.sprite_labirinto, self.mapa, self.puzzle, self.quiz]
-        return {k: v for k, v in zip(['c', 'e', 't', 's', 'f', 'v', "i", "l", "m", "p", "q"], builder)}
+                   self.icon, self.sprite_labirinto, self.mapa, self.puzzle, self.cube, self.quiz]
+        return {k: v for k, v in zip(['c', 'e', 't', 's', 'f', 'v', "i", "l", "m", "p", "u", "q"], builder)}
 
     def premiar(self, asset, vito, tit="premiado"):
         mdl = vito.Sprite(self.assets["CN"]["_BADGES"].get_image(asset), w=30, h=30, tit=tit, cena=vito.INV.cena)
@@ -558,6 +610,11 @@ class Teclemmino:
     def puzzle(self, asset, **kwargs):
         kwargs.update(cena=self.assets[self.last]) if self.last and "cena" not in kwargs else None
         self.assets[asset] = result = self.vito.Puzzle(nome=asset, **kwargs)
+        return result
+
+    def cube(self, asset, **kwargs):
+        kwargs.update(cena=self.assets[self.last]) if self.last and "cena" not in kwargs else None
+        self.assets[asset] = result = self.vito.Cube(nome=asset, **kwargs)
         return result
 
     def mapa(self, asset, **kwargs):
@@ -671,6 +728,8 @@ class Teclemmino:
         self.vito.Sprite("*fa fa-play fa-10x", x=800, y=450, w=150, h=150, cena=splash, tit="Vamos Jogar!",
                          vai=self.start_game_from_root_element)
         self.vito.Sprite("*fa fa-circle fa-2x", x=950, y=180, w=60, h=60, o=0.1, cena=splash, tit="*",
+                         vai=self.start_toml_editor)
+        self.vito.Elemento("https://imgur.com/sxAm5LA.png", x=580, y=440, w=160, h=160, o=0.1, cena=splash, tit="*",
                          vai=self.start_toml_editor)
 
     def start_toml_editor(self, _=None):

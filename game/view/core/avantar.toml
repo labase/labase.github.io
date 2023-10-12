@@ -71,6 +71,7 @@ e_mjor = {img=".i.Missao._ESCOLA.0", x=1200, y=100, w=300, h=500, o=0.4}
 e_mkpa = {img=".i.Missao._PASSOCA.0", x=1200, y=100, w=300, h=500, o=0.4}
 [valores_PUZZLE]
 # Aqui tem imagens para serem usadas nos quebra-cabeças do jogo
+SuprCb= "t4bBEOI 5WoBpmz XGjZLS8 VrYCtas tt37M2J ZbCzZFb"
 Campo = "https://i.imgur.com/W548130.png"
 Pesquisa = "https://i.imgur.com/26GPw6E.png"
 Weather = "https://i.imgur.com/kYFntfo.gif"
@@ -203,12 +204,16 @@ C="Acelerar o crescimento de novas espécies."
 Z="B"
 # Este é mapa principal onde o jogo inicia. Podemos colocar aqui uma carta para cada roteiro disponível
 [mapa_ROOT]
+u_pint = {img=".i.PUZZLE.SuprCb.4.4", pr=1, foi=".i.ROOTzz0.0.0" , texto = "Conseguiu embarcar no bote!", cena=".i.CN._RO1.4", dim=[4,4]}
+
 Jb = {local=[0,0], tit="Fuja do Tissunami!", texto="Missão Climática", foi=".i.RO1zz0zz1.0.0"}
 Xb = {local=[0,0], img=".i.Missao._AVENTURA.1", x=500, tit="Explorar!", texto="Missão de Exploração", foi=".i.BIOzz0zz1.0.0"}
 Xe = {local=[0,0], x=900, tit="Explorando a Antártida!", texto="Missão de Exploração Antártica", foi=".i.YELzz0zz1.0.0"}
 Ss = {local=[0,1], x=50, tit="Suprimentos!", texto="Missão de Suprimentos", foi=".i.YELzz0zz1.0.0"}
 Cs = {local=[0,1], x=400, tit="Busca por caixas perdidas!", texto="Buscas por caixas", foi=".i.YELzz0zz1.0.0"}
 Es = {local=[0,1], x=800, tit="Encontro com outros exploradores!", texto="Buscas por exploradores", foi=".i.RO1zz7zz1.0.0"}
+Sc = {local=[0,1], x=1100, tit="Busca por suprimentos!", texto="Buscas suprmentos", foi=".i.pint"}
+
 [mapa_RO1.kf]
 local=[7,1]
 img=".i.Missao._FIGURAS.0"
