@@ -7,6 +7,7 @@
 Changelog
 ---------
 .. versionadded::    23.10
+        🔨 🧩 Fix side games Cubo (13).
         🧩 Incluir side games Cubo (11a).
         ⛲ Card automático de missão, posição e imagem (11).
         ⛲ Editor online de TOML (10).
@@ -38,7 +39,7 @@ from typing import List
 
 WIDTH = 1350
 
-VERSION = "version=23.10.11"
+VERSION = "version=23.10.13"
 
 Dim = ntp("Dimensions", "dx dy")
 D11 = ntp("Dimensions", "dx dy")(1, 1)
@@ -104,7 +105,7 @@ class Teclemmino:
                 style_ = {}
                 # txt = _kwa["texto"] if "texto" in _kwa else {}
 
-                LG.log(8, "Vito ⇒ Sprite texto⇒", type(texto), isinstance(texto, dict))
+                LG.log(4, "Vito ⇒ Sprite texto⇒", type(texto), isinstance(texto, dict))
 
                 def to_int(key):
                     LG.log(4, _style)
@@ -192,7 +193,6 @@ class Teclemmino:
                     all_cards_width = sum(card.w for card in self.cards)
                     all_spacing, card_width = WIDTH - all_cards_width, all_cards_width // n_cards
                     card_spacing= all_spacing // (n_cards+1)
-                    cards =zip([0]+[crd.w for crd in self.cards], self.cards[1:])
                     delta = card_spacing
                     [move_card(crd=card) for x, card in enumerate(self.cards) ]
 
@@ -424,17 +424,14 @@ class Teclemmino:
         class Puzzle(Sprite):
             def __init__(self, img="", x=100, y=100, w=900, h=500, foi="", pr=-1, **kwargs):
                 self.pr = pr
+                self.cena, self.nome = lambda: None, None
                 swap = self
-                cena = kwargs["cena"]
-                self.cena = kwargs["cena"] = cena = (
-                    CenaSprite(img=cena, direita=foi) if "dim" in kwargs else cena)
-                self.cena.nome = self.nome = str(foi)
-                was = foi
-                foi = teclemmino.parser(foi)
+                foi = self.prepare(foi, kwargs)
+                cena = self.cena
                 img_, _style, _dim = [v for v in img.values()] if isinstance(img, dict) else (img, {}, D11)
                 dim = kwargs["dim"] if "dim" in kwargs else [_dim.dx, _dim.dy]
                 dw, dh = dim
-                LG.log(4, f"Puzzle(Sprite) foi {foi()}:", cena, cena() if callable(cena) else "#", was, dim, dw, dh)
+                LG.log(4, f"Puzzle(Sprite) foi {foi()}:", cena, cena() if callable(cena) else "#", foi, dim, dw, dh)
                 super().__init__(img="", x=x, y=y, w=w, h=h, foi=foi, **kwargs)
 
                 class Peca(vito.Elemento):
@@ -488,6 +485,13 @@ class Teclemmino:
                 self.pecas = [Peca(local, index) for local, index in enumerate(pecas)]
                 # self.venceu = venceu or j.n(cena, "Voce venceu!")
 
+            def prepare(self, foi, kwargs):
+                cena = kwargs["cena"]
+                self.cena = kwargs["cena"] = (
+                    CenaSprite(img=cena, direita=foi) if "dim" in kwargs else cena)
+                self.cena.nome = self.nome = str(foi)
+                return teclemmino.parser(foi)
+
             def parse(self, nome, *args):
                 _ = self
                 puz = teclemmino.assets[nome]
@@ -505,27 +509,22 @@ class Teclemmino:
                 return resultado
 
         class Cube(Puzzle):
-            def __init__(self, img="", x=100, y=100, w=900, h=500, foi="", pr=-1, **kwargs):
+            def __init__(self, img="", x=100, y=100, w=900, h=600, foi="", pr=-1, **kwargs):
                 self.pr = pr
-                swap = self
-                cena = kwargs["cena"]
-                self.cena = kwargs["cena"] = cena = (
-                    CenaSprite(img=cena, direita=foi) if "dim" in kwargs else cena)
-                self.cena.nome = self.nome = str(foi)
-                was = foi
-                foi = teclemmino.parser(foi)
-                # img_, _style, _dim = [v for v in img.values()] if isinstance(img, dict) else (img, {}, D11)
-                # dim = kwargs["dim"] if "dim" in kwargs else [_dim.dx, _dim.dy]
-                # dw, dh = dim
-                # LG.log(4, f"Puzzle(Sprite) foi {foi()}:", cena, cena() if callable(cena) else "#", was, dim, dw, dh)
-                super().__init__(img="", x=x, y=y, w=w, h=h, foi=foi, **kwargs)
+                self.cena, self.nome = lambda: None, None
+                foi = self.prepare(foi, kwargs)
+                super().__init__(img="", x=x, y=y, w=w, h=h, foi=foi, pr=pr, **kwargs)
                 cenas = "t4bBEOI 5WoBpmz XGjZLS8 VrYCtas tt37M2J ZbCzZFb".split()
-                cenas = img.split()
-                vito.Cubos(cenas, cena=self.cena, tw=900, th=500, nx=3, ny=2, foi=self.montou)
+                cenas = img.split() if img else cenas
+                dmx, dmy = kwargs["dim"] if "dim" in kwargs else [3, 2]
+
+                LG.log(4, "Vito ⇒ Cubo deploy⇒", self.pr, w, h, dmx, dmy, min(w//dmx,h//dmy))
+                vito.Cubos(cenas, cena=self.cena, tw=w, th=h, nx=dmx, ny=dmy, foi=self.montou)
 
             def montou(self):
                 # resultado = all([peca.certo() for peca in self.pecas])
                 # print(resultado)
+                LG.log(4, "Vito ⇒ Cubo montou⇒", self.pr, self.tit)
                 self.vai()
                 teclemmino.premiar(self.pr, vito, tit=self.tit)
                 return True

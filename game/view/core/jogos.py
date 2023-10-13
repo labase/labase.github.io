@@ -242,6 +242,7 @@ class Cubos:
                 """
                 self.cubo = cubo
                 w, h = tw // nx, th // ny
+                w = h = min(w, h)
                 self.dh = h
                 x, y = (inx % nx) * w, (inx // nx) * h
                 super().__init__(IMGUR.format(face), x=x + ofx, y=y - OFF + ofy, w=w, h=h,
@@ -375,11 +376,11 @@ class Cubos:
                 # Cubo.CUBOS.write(f"inx: {inx} face: {fc0} ori: {ot0} gfr: {go_face_roll} face: {fc1} ori: {ot1} ")
 
         cena = cena or Cena(IMGUR.format(FUNDO)).vai()
-        tw, th = (tw, tw // nx * ny) if tw else (th // ny * nx, th)
+        # tw, th = (tw, tw // nx * ny) if tw else (th // ny * nx, th)
         Cubo.CUBOS = self
         # self.el = Elemento(IMGUR.format(FUNDO), w=300, h=100, cena=cena, style={"color": "white"})
         self.cubos = cubos = [Cubo(inx=inx, faces=cenas) for inx in range(nx * ny)]
-        [cube.roll(randint(0, 23)) for cube in cubos]
+        [cube.roll(randint(0, 23)) for cube in cubos] * 2
         # [cube.roll(0) for cube in cubos]
 
     def complete(self):

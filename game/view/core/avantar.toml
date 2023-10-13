@@ -204,7 +204,7 @@ C="Acelerar o crescimento de novas espécies."
 Z="B"
 # Este é mapa principal onde o jogo inicia. Podemos colocar aqui uma carta para cada roteiro disponível
 [mapa_ROOT]
-u_pint = {img=".i.PUZZLE.SuprCb.4.4", pr=1, foi=".i.ROOTzz0.0.0" , texto = "Conseguiu embarcar no bote!", cena=".i.CN._RO1.4", dim=[4,4]}
+u_pint = {img=".i.PUZZLE.SuprCb.4.4", pr=1, foi=".i.ROOTzz0.0.0" , texto = "Conseguiu embarcar no bote!", cena=".i.CN._RO1.4", dim=[5,3]}
 
 Jb = {local=[0,0], tit="Fuja do Tissunami!", texto="Missão Climática", foi=".i.RO1zz0zz1.0.0"}
 Xb = {local=[0,0], img=".i.Missao._AVENTURA.1", x=500, tit="Explorar!", texto="Missão de Exploração", foi=".i.BIOzz0zz1.0.0"}
