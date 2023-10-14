@@ -7,6 +7,7 @@
 Changelog
 ---------
 .. versionadded::    23.10
+        ⛲ Inventário pega (13a)
         🔨 🧩 Fix side games Cubo (13).
         🧩 Incluir side games Cubo (11a).
         ⛲ Card automático de missão, posição e imagem (11).
@@ -85,7 +86,7 @@ class Teclemmino:
                 self.dim = d = ntp("Dimensions", "dx dy")(*dimensions)
                 self.img = img
                 # self.style = {"max-width": f"{d.dx * 100}%", "max-height": f"{d.dy * 100}%"}
-                self.style = {"background-size": f"{d.dx * 100}% {d.dy * 100}%"}
+                self.style = {"backgroundSize": f"{d.dx * 100}% {d.dy * 100}%"}
 
             def get_image(self, index):
                 index = int(index)
@@ -96,7 +97,7 @@ class Teclemmino:
                 return dict(img_=self.img, style_=self.style, dim_=self.dim)
 
         class Sprite(vito.Elemento):
-            def __init__(self, img="", vai=NADA.vai, style=NDCT, tit="", alt="",
+            def __init__(self, img="", vai=NADA.vai, style=NDCT, tit="", alt="", put=False,
                          x=0, y=0, w=100, h=100, o=1, texto='', foi=None, sw=100, sh=100, b=0, s=1,
                          cena=NADA, score=NDCT, drag=False, drop=NDCT, tipo="100% 100%", **kwargs):
                 _style = style
@@ -105,19 +106,27 @@ class Teclemmino:
                 style_ = {}
                 # txt = _kwa["texto"] if "texto" in _kwa else {}
 
-                LG.log(4, "Vito ⇒ Sprite texto⇒", type(texto), isinstance(texto, dict))
+                LG.log(8, "Vito ⇒ Sprite texto⇒", texto if isinstance(texto, str) else "xoxox", tit) if put else None
+                def _go():
+                    self.w = self.h = 30
+                    self.elt.style.backgroundSize="30px 30px;"
+                    self.siz = (30, 30)
+                    teclemmino.vito.INV.bota(self)
+                    self.elt.style=dict(backgroundSize="30px 30px;")
+                    return foi
 
                 def to_int(key):
                     LG.log(4, _style)
                     return [int(cdd[:-1]) for cdd in _style[key].split()]
+                go = foi if not put else _go
 
-                gone = foi() if callable(foi) else foi
+                gone = foi() if callable(foi) else go
                 _ = score, drag, drop, tipo
                 img_, _style, _dim = [v for v in img.values()] if isinstance(img, dict) else (img, {}, D11)
                 if _style:
-                    (ox, oy), (dx, dy) = to_int("backgroundPosition"), to_int("background-size")
+                    (ox, oy), (dx, dy) = to_int("backgroundPosition"), to_int("backgroundSize")
                     style_["backgroundPosition"] = f"{-ox / 100 * w}px {-oy / 100 * h}px"
-                    style_["background-size"] = f"{dx / 100 * w}px {dy / 100 * h}px"
+                    style_["backgroundSize"] = "100% 100%" if put else f"{dx / 100 * w}px {dy / 100 * h}px"
 
                 style = dict(width=f"{w}px", height=f"{h}px", overflow="hidden", filter=f"blur({b}px)", scale=s)
                 LG.log(4, style)
@@ -128,8 +137,8 @@ class Teclemmino:
                 LG.log(3, "Sprite(vito.Elemento) ⇒", img, foi, cena, style)
 
                 super().__init__(img=img, vai=vai, tit=tit, alt=alt,
-                                 x=x, y=y, w=w, h=h, o=o, texto=texto, foi=foi,
-                                 style=style, cena=cena, tipo=f"{sw}px {sh}px",
+                                 x=x, y=y, w=w, h=h, o=o, texto=texto, foi=go,
+                                 style=style, cena=cena, tipo="100% 100%",
                                  **kwargs)
 
                 if img_.startswith("*"):
@@ -137,9 +146,9 @@ class Teclemmino:
                     _ = self.elt <= icon
                 # self._texto = Texto(texto, foi=self._foi) if texto else None
                 if isinstance(texto, dict):
-                    self._texto = Texto(foi=gone, **texto)
+                    self._texto = Texto(foi=go, **texto)
                 else:
-                    self._texto = Texto(texto, foi=gone) if texto else None
+                    self._texto = Texto(texto, foi=go) if texto else None
                 self.vai = self._texto.vai if texto else self.vai
                 self.o = self.o_ = o
 
@@ -159,7 +168,7 @@ class Teclemmino:
 
         class CenaSprite(vito.Cena):
             def __init__(self, img, index=-1, direita="", **kwargs):
-                style_ = {"background-size": f"{8 * 100}% {8 * 100}%"}
+                style_ = {"backgroundSize": f"{8 * 100}% {8 * 100}%"}
                 self.foi_evs = []
 
                 img_, _style, _dim = [v for v in img.values()] if isinstance(img, dict) else (img, style_, D11)
@@ -728,7 +737,7 @@ class Teclemmino:
                          vai=self.start_game_from_root_element)
         self.vito.Sprite("*fa fa-circle fa-2x", x=950, y=180, w=60, h=60, o=0.1, cena=splash, tit="*",
                          vai=self.start_toml_editor)
-        self.vito.Elemento("https://imgur.com/sxAm5LA.png", x=580, y=440, w=160, h=160, o=0.1, cena=splash, tit="*",
+        self.vito.Elemento("https://imgur.com/sxAm5LA.png", x=580, y=440, w=160, h=160, o=0.1, cena=splash, tit="Avantar",
                          vai=self.start_toml_editor)
 
     def start_toml_editor(self, _=None):
@@ -769,7 +778,7 @@ class Teclemmino:
         editor.gotoLine(0)
 
     def start_game_from_root_element(self, _=None):
-        self.rosa = self.vito.Sprite("https://imgur.com/odmJe4Z.jpg", w=30, h=30, cena=self.vito.INV.cena)
+        self.rosa = self.vito.Sprite("https://imgur.com/odmJe4Z.jpg", w=30, h=30, o=0.5, cena=self.vito.INV.cena)
 
         self.vito.INV.bota(self.rosa)
         self.assets["ROOT"].vai() if "ROOT" in self.assets else None
