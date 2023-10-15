@@ -7,9 +7,10 @@
 Changelog
 ---------
 .. versionadded::    23.10
-        ⛲ Inventário pega (13a)
+        ☣️ Dificuldade dos jogos (15).
+        ⛲ Inventário pega (13 a).
         🔨 🧩 Fix side games Cubo (13).
-        🧩 Incluir side games Cubo (11a).
+        🧩 Incluir side games Cubo (11 a).
         ⛲ Card automático de missão, posição e imagem (11).
         ⛲ Editor online de TOML (10).
         🏭 Reformata puzzle com cena automática (05).
@@ -37,11 +38,10 @@ Changelog
 import unittest
 from collections import namedtuple as ntp
 from typing import List
+VERSION = "version=23.10.15"
 
+CUBE_SIDES = ["t4bBEOI" "5WoBpmz" "XGjZLS8" "VrYCtas" "tt37M2J" "ZbCzZFb"]
 WIDTH = 1350
-
-VERSION = "version=23.10.13"
-
 Dim = ntp("Dimensions", "dx dy")
 D11 = ntp("Dimensions", "dx dy")(1, 1)
 SEP = "_"
@@ -98,7 +98,7 @@ class Teclemmino:
 
         class Sprite(vito.Elemento):
             def __init__(self, img="", vai=NADA.vai, style=NDCT, tit="", alt="", put=False,
-                         x=0, y=0, w=100, h=100, o=1, texto='', foi=None, sw=100, sh=100, b=0, s=1,
+                         x=0, y=0, w=100, h=100, o=1, texto='', foi=None, b=0, s=1,
                          cena=NADA, score=NDCT, drag=False, drop=NDCT, tipo="100% 100%", **kwargs):
                 _style = style
                 from copy import deepcopy
@@ -106,7 +106,7 @@ class Teclemmino:
                 style_ = {}
                 # txt = _kwa["texto"] if "texto" in _kwa else {}
 
-                LG.log(8, "Vito ⇒ Sprite texto⇒", texto if isinstance(texto, str) else "xoxox", tit) if put else None
+                LG.log(8, "Vito ⇒ Sprite texto⇒", texto if isinstance(texto, str) else "_nada_", tit) if put else None
                 def _go():
                     self.w = self.h = 30
                     self.elt.style.backgroundSize="30px 30px;"
@@ -120,7 +120,7 @@ class Teclemmino:
                     return [int(cdd[:-1]) for cdd in _style[key].split()]
                 go = foi if not put else _go
 
-                gone = foi() if callable(foi) else go
+                # gone = foi() if callable(foi) else go
                 _ = score, drag, drop, tipo
                 img_, _style, _dim = [v for v in img.values()] if isinstance(img, dict) else (img, {}, D11)
                 if _style:
@@ -168,19 +168,20 @@ class Teclemmino:
 
         class CenaSprite(vito.Cena):
             def __init__(self, img, index=-1, direita="", **kwargs):
-                style_ = {"backgroundSize": f"{8 * 100}% {8 * 100}%"}
+                _style_ = {"backgroundSize": f"{8 * 100}% {8 * 100}%"}
                 self.foi_evs = []
+                def parse_img(img_=img, style_=None, dim_=D11):
+                    return img_, style_ or _style_, dim_
 
-                img_, _style, _dim = [v for v in img.values()] if isinstance(img, dict) else (img, style_, D11)
-                # style = dict(width=f"{W}px", height=f"{H}px", overflow="hidden", backgroundImage=f"url({img_})")
+                _img_, _style_, _dim = parse_img(**img) if isinstance(img, dict) else (img, _style_, D11)
                 style = dict(width=f"{W}px", height=f"{H}px", overflow="hidden")
                 position = f"{index % _dim.dx * 100}% {index // _dim.dx * 100}%"
-                _style.update(backgroundPosition=position) if index > 0 else None
-                style.update(**_style)
-                style.update(**{"background-image": f"url({img_})"})
+                _style_.update(backgroundPosition=position) if index > 0 else None
+                style.update(**_style_)
+                style.update(**{"background-image": f"url({_img_})"})
 
                 super().__init__("", **kwargs)
-                self.nome = kwargs["nome"] if "nome" in kwargs else img_
+                self.nome = kwargs["nome"] if "nome" in kwargs else _img_
 
                 self.elt.html = ""
                 self.elt.style = style
@@ -431,7 +432,7 @@ class Teclemmino:
                 return False
 
         class Puzzle(Sprite):
-            def __init__(self, img="", x=100, y=100, w=900, h=500, foi="", pr=-1, **kwargs):
+            def __init__(self, img="", x=100, y=100, w=900, h=500, foi="", pr=-1, dif=0.02, **kwargs):
                 self.pr = pr
                 self.cena, self.nome = lambda: None, None
                 swap = self
@@ -491,8 +492,8 @@ class Teclemmino:
                 # pecas = list(range(_dim.dx * _dim.dy))
                 shuffle(pecas)
                 # Peca(0, 0)
-                self.pecas = [Peca(local, index) for local, index in enumerate(pecas)]
-                # self.venceu = venceu or j.n(cena, "Voce venceu!")
+                self.pecas = [Peca(local, index) for local, index in enumerate(pecas)] if dim else []
+                self.diff = teclemmino.vito_weather_overlay(vito, cena, dif)
 
             def prepare(self, foi, kwargs):
                 cena = kwargs["cena"]
@@ -511,6 +512,9 @@ class Teclemmino:
                 [peca.elt.remove() for peca in self.pecas]
 
             def montou(self):
+                # self.current_difficulty += self.dif
+                # self.weather.o = self.current_difficulty
+                self.diff.dif()
                 resultado = all([peca.certo() for peca in self.pecas])
                 print(resultado)
                 self.vai() if resultado else None
@@ -518,17 +522,31 @@ class Teclemmino:
                 return resultado
 
         class Cube(Puzzle):
-            def __init__(self, img="", x=100, y=100, w=900, h=600, foi="", pr=-1, **kwargs):
+            def __init__(self, img="", x=100, y=100, w=900, h=600, foi="", pr=-1, dif=0.02, **kwargs):
                 self.pr = pr
-                self.cena, self.nome = lambda: None, None
-                foi = self.prepare(foi, kwargs)
-                super().__init__(img="", x=x, y=y, w=w, h=h, foi=foi, pr=pr, **kwargs)
-                cenas = "t4bBEOI 5WoBpmz XGjZLS8 VrYCtas tt37M2J ZbCzZFb".split()
+                # c = kwargs["cena"]
+                # c.nome = str(img)
+                # self.cena, self.nome = lambda: None, None
+                # foi = self.prepare(foi, kwargs)
+                dim, kwargs["dim"] =  kwargs["dim"], (0, 0)
+                super().__init__(img=img, x=x, y=y, w=w, h=h, foi=foi, pr=pr, dif=dif, **kwargs)
+                cenas = CUBE_SIDES
                 cenas = img.split() if img else cenas
-                dmx, dmy = kwargs["dim"] if "dim" in kwargs else [3, 2]
+                dmx, dmy = dim #kwargs["dim"] if "dim" in kwargs else [3, 2]
 
-                LG.log(4, "Vito ⇒ Cubo deploy⇒", self.pr, w, h, dmx, dmy, min(w//dmx,h//dmy))
-                vito.Cubos(cenas, cena=self.cena, tw=w, th=h, nx=dmx, ny=dmy, foi=self.montou)
+                self.cb = vito.Cubos(cenas, cena=self.cena, tw=w, th=h, nx=dmx, ny=dmy, foi=self.montou)
+                self.diff.entra(self.cena)
+                # _ = self.cena.elt <= self.diff.elt
+                # self.go = self.cb.go
+                self.cb.go = self.roll
+                # self.diff = teclemmino.vito_weather_overlay(vito, self.cena, dif)
+                LG.log(4, "Vito ⇒ Cubo deploy⇒", self.pr, self.diff.img, self.cena, self.cena )
+
+
+            def roll(self):
+                self.diff.dif()
+                # print("roll", self.diff.current_difficulty)
+                # self.go()
 
             def montou(self):
                 # resultado = all([peca.certo() for peca in self.pecas])
@@ -592,6 +610,22 @@ class Teclemmino:
             return self.assets[cls].parse(cls, *ix)
         else:
             return ref
+
+    def vito_weather_overlay(self, v, cena, dif):
+        class Weather(v.Elemento):
+            def __init__(self):
+                from random import choice
+
+                clim = choice("mpOU7Ca tGXhkjw i5dLK8G4 4B1xuMw 9iGTJ6Q OlOj4FV".split())
+                super().__init__(f"https://i.imgur.com/{clim}.gif", x=0, y=0, o=0.2, w=1350, h=650, cena=cena)
+                self.o = 0
+                self.current_difficulty = 0
+                self.elt.style.pointerEvents = "none"
+                self.difficulty  = dif
+            def dif(self):
+                self.current_difficulty += self.difficulty
+                self.o = self.current_difficulty
+        return Weather()
 
     def vito_element_builder(self, v, classes):
         (v.CenaSprite, v.Sprite, v.SpriteSala, v.Textor, v.Folha,

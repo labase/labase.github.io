@@ -492,7 +492,8 @@ class Elemento_:
         styler.update(style)
         self.elt.style = styler
         self.cena = cena
-        self.scorer.update(valor=cena.nome, move=self.xy,
+        nome = cena.nome if isinstance(cena, Cena) and hasattr(cena, "nome") else "_NADA_"
+        self.scorer.update(valor=nome, move=self.xy,
                            casa=(styler["left"], styler["top"] if "top" in styler else 0))
         self._auto_score(**self.scorer)
         cena <= self
@@ -565,7 +566,8 @@ class Elemento(Elemento_):
         self.elt = html.DIV(Id=tit, title=tit, style=self.style)
         # self.elt.style = self.style
         self.xy = (-111, -111)
-        self.scorer = dict(ponto=1, valor=cena.nome if cena else "_NADA_", carta=tit or img, casa=self.xy, move=None)
+        nome = cena.nome if isinstance(cena, Cena) and hasattr(cena, "nome") else "_NADA_"
+        self.scorer = dict(ponto=1, valor=nome, carta=tit or img, casa=self.xy, move=None)
         self.scorer.update(score)
         # if False:
         #     self._img = html.IMG(Id="img_" + tit, src=img, title=tit, alt=alt,
