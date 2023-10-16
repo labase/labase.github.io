@@ -7,6 +7,7 @@
 Changelog
 ---------
 .. versionadded::    23.10
+        🎏 Pique WebRTC (15 a).
         ☣️ Dificuldade dos jogos (15).
         ⛲ Inventário pega (13 a).
         🔨 🧩 Fix side games Cubo (13).
@@ -39,7 +40,8 @@ import unittest
 from collections import namedtuple as ntp
 from typing import List
 VERSION = "version=23.10.15"
-
+FLARE_ = "https://imgur.com/gQgpUFg.gif"
+FLARE = "9CSpt5C"
 CUBE_SIDES = ["t4bBEOI" "5WoBpmz" "XGjZLS8" "VrYCtas" "tt37M2J" "ZbCzZFb"]
 WIDTH = 1350
 Dim = ntp("Dimensions", "dx dy")
@@ -76,6 +78,34 @@ class Teclemmino:
         self.tag_two = Two(html.P, html.BUTTON, html.HEADER, html.SECTION, html.FORM,
                            html.FIELDSET, html.INPUT, html.LEGEND, html.LABEL, html.FOOTER)
         teclemmino = self
+
+        class WebRTC:
+            def __init__(self):
+                self.channel = self
+                self.connect()
+
+            def publish(self, *_):
+                pass
+
+            def connect(self):
+                def msg(_message):
+                    vito.INV.cena.marquee(_message.data)
+                try:
+                    from env import ABLY
+
+                    ably_pr = vito.ably
+                    ably = ably_pr.Realtime.Promise.new(ABLY)
+                    ably.connection.once('connected')
+                    print('Connected to Ably!')
+                    self.channel = channel = ably.channels.get('quickstart')
+                    channel.subscribe('greeting', msg)
+                except ImportError:
+                    pass
+
+            def envia(self, message="hello!", *_):
+                    self.channel.publish('greeting', message)
+
+        self.rtc = WebRTC()
 
         class Folha:
             # def __init__(self, img, nome=None, **kwargs):
@@ -189,6 +219,41 @@ class Teclemmino:
                 if direita:
                     ptl = self.portal(L=teclemmino.parser(direita)())
                     LG.log(4, "CenaSprite direita", direita, self.nome, ptl)
+                self.loc = loc = ".".join(self.nome.split("zz")[-2:]) if "zz" in self.nome else "@@"
+                # self.elt <= vito.html.MARQUEE(f"Local : {loc}")
+                self.mrq = mrq = vito.document.createElement("marquee")
+                mrq.text = f"Local : {loc}"
+                mrq.setAttribute("scrollamount", "5")
+                # mrq.setAttribute("bgcolor", "rgba(0.4,200,200,200)")
+                # mrq.setAttribute("bgcolor", "rgba(200,200,200,0.4)")
+                # mrq.setAttribute("bgcolor", "#AAA4")
+                mrq.style.backgroundColor = "#AAAAAA55"
+                mrq.style.marginTop = "35px"
+                mrq.style.marginLeft = "200px"
+                mrq.style.marginRight = "200px"
+                # mrq.loop = 5
+                _ = self.elt <=mrq
+
+            def marquee(self, text, scroll_amount=5):
+                def on_finish(*_):
+                    print("on_finish", self.loc)
+                    self.mrq.text = "Local:" + self.loc
+                    self.mrq.setAttribute("scrollamount", scroll_amount)
+                    self.mrq.loop = -1
+                    self.mrq.start()
+                self.mrq.bind("finish", on_finish)
+                # self.mrq.bind("onfinish", on_finish)
+                self.mrq.setAttribute("scrollamount", "20")
+                print("marquee", text)
+                if 'emergência' in text:
+                    print(text)
+                    fl = vito.Elemento(f"https://i.imgur.com/{FLARE}.gif", x=1000, y=0, o=0.2, w=350, h=650, cena=self)
+                    fl.o = 0.6
+                    fl.elt.style.pointerEvents = "none"
+
+                    # fl = teclemmino.vito_weather_overlay(vito,self,0.8,FLARE)
+                self.mrq.text = text + self.loc
+                self.mrq.loop = 1
 
             def __le__(self, other):
                 self.cards.append(other.as_card()) if (hasattr(other, "as_card")) else None
@@ -210,6 +275,7 @@ class Teclemmino:
                 self.foi_evs.append(ev) if ev not in self.foi_evs else None
 
             def vai(self, ev=NoEv):
+                self.marquee("entrando: ")
                 super().vai(ev)
                 teclemmino.mark(".".join(self.nome.split("zz")[-2:]) if "zz" in self.nome else "@@")
                 # teclemmino.mark(".".join(self.nome.split("zz")[-2:]) if isinstance(self.nome, str) else "@@")
@@ -611,12 +677,12 @@ class Teclemmino:
         else:
             return ref
 
-    def vito_weather_overlay(self, v, cena, dif):
+    def vito_weather_overlay(self, v, cena, dif, img=None):
         class Weather(v.Elemento):
             def __init__(self):
                 from random import choice
 
-                clim = choice("mpOU7Ca tGXhkjw i5dLK8G4 4B1xuMw 9iGTJ6Q OlOj4FV".split())
+                clim = img or choice("mpOU7Ca tGXhkjw i5dLK8G4 4B1xuMw 9iGTJ6Q OlOj4FV".split())
                 super().__init__(f"https://i.imgur.com/{clim}.gif", x=0, y=0, o=0.2, w=1350, h=650, cena=cena)
                 self.o = 0
                 self.current_difficulty = 0
