@@ -40,6 +40,7 @@ EVENTO = "https://imgur.com/qa5FFq3.jpg"
 ESCOLA = "https://imgur.com/narhgju.jpg"
 PASSOCA = "https://i.imgur.com/YG7jsPr.png"
 FIGURAS = "https://i.imgur.com/26GPw6E.png"
+MAYSA = "https://imgur.com/xIPQvxl.png"
 [folha_Missao]
 # Estes valores recortam as imagens acimas para fazer um conjunto de cartas
 ESCOLA = [2,1]
@@ -48,6 +49,7 @@ AVENTURA = [2,1]
 MISSAO = [6,3]
 EVENTO = [6,3]
 PASSOCA = [1,1]
+MAYSA = [1,1]
 FIGURAS = [1,1]
 [c_POOL]
 img=".i.CN._LANDER.5"
@@ -206,12 +208,14 @@ Z="B"
 # Este é mapa principal onde o jogo inicia. Podemos colocar aqui uma carta para cada roteiro disponível
 [mapa_ROOT]
 u_pint = {img=".i.PUZZLE.SuprCb.4.4", pr=1, foi=".i.ROOTzz0.0.0" , texto = "Conseguiu embarcar no bote!", cena=".i.CN._RO1.4", dim=[5,3]}
+#r_caix = {img=".i.PUZZLE.SuprCb.4.4", pr=1, foi=".i.ROOTzz0.0.0" , texto = "Obteve itens!", cena=".i.RO1zz7zz1.0.0", dim=[5,3]}
+r_caix = {img="", pr=1, foi=".i.ROOTzz0.0.0" , texto = "Obteve itens!", cena=".i.CN._RO1.5", dif=0.04, dim=[5,3]}
 
 Jb = {local=[0,0], tit="Fuja do Tissunami!", texto="Missão Climática", foi=".i.RO1zz0zz1.0.0"}
 Xb = {local=[0,0], img=".i.Missao._AVENTURA.1", x=500, tit="Explorar!", texto="Missão de Exploração", foi=".i.BIOzz0zz1.0.0"}
 Xe = {local=[0,0], x=900, tit="Explorando a Antártida!", texto="Missão de Exploração Antártica", foi=".i.YELzz0zz1.0.0"}
 Ss = {local=[0,1], x=50, tit="Suprimentos!", texto="Missão de Suprimentos", foi=".i.YELzz0zz1.0.0"}
-Cs = {local=[0,1], x=400, tit="Busca por caixas perdidas!", texto="Buscas por caixas", foi=".i.YELzz0zz1.0.0"}
+Cs = {local=[0,1], x=400, tit="Busca por caixas perdidas!", texto="Buscas por caixas", foi=".i.caix"}
 Es = {local=[0,1], x=800, tit="Encontro com outros exploradores!", texto="Buscas por exploradores", foi=".i.RO1zz7zz1.0.0"}
 #Sc = {local=[0,1], x=1100, tit="Busca por suprimentos!", texto="Buscas suprmentos", foi=".i.pint"}
 
@@ -224,7 +228,8 @@ Fc = {local=[0,3], tit="Criosfera", texto="Criosfera", foi=".i.pint"}
 Gc = {local=[0,3], tit="Geodinâmica", texto="Geodinâmica", foi=".i.pint"}
 Pc = {local=[0,3], tit="Perigo", texto="Perigo", foi=".i.pint"}
 Dc = {local=[0,3], tit="Desastre", texto="Desastre", foi=".i.pint"}
-Ep = {local=[0,1], img="https://imgur.com/sxAm5LA.png", y=400, tit="Busca por suprimentos!", texto="Buscas suprmentos", foi=".i.pint"}
+#Ep = {local=[0,1], img="https://imgur.com/sxAm5LA.png", y=400, tit="Busca por suprimentos!", texto="Buscas suprmentos", foi=".i.pint"}
+Ep = {local=[0,1], img=".i.Missao._MAYSA.0", y=400, tit="Busca por suprimentos!", texto="Buscas suprmentos", foi=".i.pint"}
 
 
 
