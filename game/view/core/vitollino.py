@@ -108,7 +108,7 @@ class _PATTERN:
     radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 30px),
     radial-gradient(white, rgba(255,255,255,.1) 2px, transparent 40px),
     radial-gradient(rgba(255,255,255,.4), rgba(255,255,255,.1) 2px, transparent 30px);
-    background-size: 550px 550px, 350px 350px, 250px 250px, 150px 150px; 
+    backgroundSize: 550px 550px, 350px 350px, 250px 250px, 150px 150px; 
     background-position: 0 0, 40px 60px, 130px 270px, 70px 100px;""".replace("\n", "").split(";") if tp)}
 
     NCROSS = {k.strip(): v for k, v in (tp.split(": ") for tp in """opacity: 0.7;
@@ -118,7 +118,7 @@ class _PATTERN:
     linear-gradient(#A8B1BB 8px, transparent 8px) 0 -4px,
     linear-gradient(90deg, #A8B1BB 8px, transparent 8px) -4px 0;
     background-color: slategray;
-    background-size: 60px 60px, 60px 60px, 30px 30px, 30px 30px;""".replace("\n", "").split(";") if tp)}
+    backgroundSize: 60px 60px, 60px 60px, 30px 30px, 30px 30px;""".replace("\n", "").split(";") if tp)}
 
     OCROSS = {k.strip(): v for k, v in (tp.split(": ") for tp in """opacity: 0.7;
     background: 
@@ -127,7 +127,7 @@ class _PATTERN:
     linear-gradient(#A8B1BB 8px, transparent 8px) 0 -4px,
     linear-gradient(90deg, #A8B1BB 8px, transparent 8px) -4px 0;
     background-color: slategray;
-    background-size: 100px 100px, 100px 100px, 50px 50px, 50px 50px;""".replace("\n", "").split(";") if tp)}
+    backgroundSize: 100px 100px, 100px 100px, 50px 50px, 50px 50px;""".replace("\n", "").split(";") if tp)}
 
     BCROSS = {k.strip(): v for k, v in (tp.split(": ") for tp in """opacity: 0.7;
     background-color: slategray;
@@ -135,19 +135,19 @@ class _PATTERN:
     radial-gradient(slategray 9px, transparent 10px),        
     repeating-radial-gradient(slategray 0, slategray 4px, transparent 5px, transparent 15px,
     slategray 16px, slategray 20px, transparent 21px, transparent 30px);    
-    background-size: 30px 30px, 90px 90px; 
+    backgroundSize: 30px 30px, 90px 90px; 
     background-position: 0 0;""".replace("\n", "").split(";") if tp)}
 
     SHIPPO = {k.strip(): v for k, v in (tp.split(": ") for tp in """opacity: 0.5;background-color: #def;
     background-image: radial-gradient(closest-side, transparent 98%, rgba(0,0,0,.3) 99%),
     radial-gradient(closest-side, transparent 98%, rgba(0,0,0,.3) 99%);
-    background-size: 80px 80px;
+    backgroundSize: 80px 80px;
     background-position: 0 0, 40px 40px;""".replace("\n", "").split(";") if tp)}
     RADGRAD = ", ".join(["rgba({a},{a},{a},{b}) {c}%".format(
         a=200 if c % 2 else 20, b=0.6, c=c * 10) for c in range(0, 11)])
 
     BOKEH = {k.strip(): v for k, v in (tp.split(": ") for tp in """opacity: 0.5;
-    background-size: 60px 60px, 60px 60px, 30px 30px, 30px 30px, 100% 100%;background: 
+    backgroundSize: 60px 60px, 60px 60px, 30px 30px, 30px 30px, 100% 100%;background: 
     radial-gradient({}) 0 0;""".replace("\n", "").format(RADGRAD).split(";") if tp)}
 
 
@@ -492,7 +492,8 @@ class Elemento_:
         styler.update(style)
         self.elt.style = styler
         self.cena = cena
-        self.scorer.update(valor=cena.nome, move=self.xy,
+        nome = cena.nome if isinstance(cena, Cena) and hasattr(cena, "nome") else "_NADA_"
+        self.scorer.update(valor=nome, move=self.xy,
                            casa=(styler["left"], styler["top"] if "top" in styler else 0))
         self._auto_score(**self.scorer)
         cena <= self
@@ -555,8 +556,8 @@ class Elemento(Elemento_):
                              'left': x, 'top': y, 'width': '{}px'.format(w), 'height': '{}px'.format(h),
                              'background-image': 'url({})'.format(img),
                              'background-position': '{} {}'.format(0, 0),
-                             # 'background-size': '{}px {}px'.format(w, h)
-                             'background-size': tipo,
+                             # 'backgroundSize': '{}px {}px'.format(w, h)
+                             'backgroundSize': tipo,
                              'background-repeat': 'no-repeat'
                              })
         # self.style["min-width"], self.style["min-height"] = w, h
@@ -565,7 +566,8 @@ class Elemento(Elemento_):
         self.elt = html.DIV(Id=tit, title=tit, style=self.style)
         # self.elt.style = self.style
         self.xy = (-111, -111)
-        self.scorer = dict(ponto=1, valor=cena.nome if cena else "_NADA_", carta=tit or img, casa=self.xy, move=None)
+        nome = cena.nome if isinstance(cena, Cena) and hasattr(cena, "nome") else "_NADA_"
+        self.scorer = dict(ponto=1, valor=nome, carta=tit or img, casa=self.xy, move=None)
         self.scorer.update(score)
         # if False:
         #     self._img = html.IMG(Id="img_" + tit, src=img, title=tit, alt=alt,
@@ -612,7 +614,7 @@ class Elemento(Elemento_):
                  'position': 'unset', 'overflow': 'hidden',
                  'background-image': 'url({})'.format(self._img),
                  'background-position': '{} {}'.format(0, 0),
-                 'background-size': '{}px {}px'.format(30, 20),
+                 'backgroundSize': '{}px {}px'.format(30, 20),
                  }
         self.do_drag(False)
         # Texto(self.cena, "Finally,got my correct name: {}".format(self.tit)).vai()

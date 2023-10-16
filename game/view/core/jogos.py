@@ -224,6 +224,7 @@ class Cubos:
         """
 
         self.spy, self.spx, self.foi = spy, spx, foi
+        _cubos = self
 
         class Face(Elemento):
             """Representa a face do cubo.
@@ -242,6 +243,7 @@ class Cubos:
                 """
                 self.cubo = cubo
                 w, h = tw // nx, th // ny
+                w = h = min(w, h)
                 self.dh = h
                 x, y = (inx % nx) * w, (inx // nx) * h
                 super().__init__(IMGUR.format(face), x=x + ofx, y=y - OFF + ofy, w=w, h=h,
@@ -296,8 +298,8 @@ class Cubos:
             def orient(self, ori):
                 """ Reorienta a face para refletir as rolagens do cubo.
 
-                :param ori: qudrante da rotação da face, entre 0 e 3.
-                :return: sempre falso.
+                :param ori: Quadrante da rotação da face, entre 0 e 3.
+                :return: Sempre falso.
                 """
                 self.elt.style.transform = f"rotate({ori * 90}deg)"
                 return False
@@ -364,23 +366,27 @@ class Cubos:
             def inx(self):
                 """Índice que representa uma combinação da face com a orientação.
 
-                :return: índice que representa uma combinação da face com a orientação.
+                :return: Índice que representa uma combinação da face com a orientação.
                 """
                 return self.face * 4 + self.orient
 
             def go(self, inx):
                 go_face_roll = Cubo.ROLL[self.orient][self.face][inx]
                 self.roll(go_face_roll)
+                _cubos.go()
                 # fc1, ot1 = self.face, self.orient
                 # Cubo.CUBOS.write(f"inx: {inx} face: {fc0} ori: {ot0} gfr: {go_face_roll} face: {fc1} ori: {ot1} ")
 
         cena = cena or Cena(IMGUR.format(FUNDO)).vai()
-        tw, th = (tw, tw // nx * ny) if tw else (th // ny * nx, th)
+        # tw, th = (tw, tw // nx * ny) if tw else (th // ny * nx, th)
         Cubo.CUBOS = self
         # self.el = Elemento(IMGUR.format(FUNDO), w=300, h=100, cena=cena, style={"color": "white"})
         self.cubos = cubos = [Cubo(inx=inx, faces=cenas) for inx in range(nx * ny)]
-        [cube.roll(randint(0, 23)) for cube in cubos]
+        [cube.roll(randint(0, 23)) for cube in cubos] * 2
         # [cube.roll(0) for cube in cubos]
+
+    def go(self):
+        pass
 
     def complete(self):
         """Calcula para ver se todos os cubos apresentam a mesma face.

@@ -13,15 +13,29 @@
     <link rel="shortcut icon" href="/image/favico.ico" type="image/x-icon"/>
     <link rel="stylesheet" href="../css/bulma.css" type='text/css'>
     <link rel="stylesheet" href="../css/style.css" type='text/css'>
-    <script type=" text/javascript " src=" https://cdn.jsdelivr.net/npm/brython@3.11/brython.min.js ">
-    </script>
+    <script type=" text/javascript " src=" https://cdn.jsdelivr.net/npm/brython@3.11/brython.min.js "></script>
+    <script type=" text/javascript " src=" https://cdn.jsdelivr.net/npm/brython@3.11/brython_stdlib.js "></script>
     <script type=" text/javascript " src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.29.0/ace.js"></script>
     <script type=" text/javascript " src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.29.0/theme-cobalt.min.js"></script>
     <script type=" text/javascript " src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.29.0/mode-toml.min.js"></script>
-    <script type=" text/javascript " src=" https://cdn.jsdelivr.net/npm/brython@3.11/brython_stdlib.js ">
-    </script>
+    <script src="https://cdn.ably.com/lib/ably.min-1.js"></script>
     <script type="text/javascript">
-        var GONE = '1';
+        /*
+
+        const ably = new Ably.Realtime.Promise(ablykey);
+        ably.connection.once('connected');
+        console.log('Connected to Ably!');
+        const channel = ably.channels.get('quickstart');
+
+
+
+        Subscribe to a channel.
+        The promise resolves when the channel is attached
+        (and resolves synchronously if the channel is already attached).
+
+        channel.subscribe('greeting', (message) => {
+        console.log('Received a greeting message in realtime: ' + message.data)});
+        */
     </script>
 </head>
 <body bgcolor="#003333" background-image="https://i.imgur.com/U3HUCIL.jpg" onload="brython(
@@ -52,7 +66,7 @@
 
     class MockBrython:
         document, alert, html, window, ajax, timer, svg, storage = document, alert, html, window, ajax, timer, svg, storage
-        template, NoEv = Template, NoEv
+        template, NoEv, ably = Template, NoEv, window.Ably
         Cena, Elemento, Texto, Salao, STYLE, NADA, NDCT, INV = Cena, Elemento, Texto, Salao, STYLE, NADA, NDCT, INVENTARIO
         Cubos, CENAS = Cubos, CENAS
     brython = MockBrython

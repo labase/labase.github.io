@@ -175,6 +175,7 @@ p_bote = {img=".i.PUZZLE.AdvBo0.4.4", pr=1, foi=".i.ROOTzz0.0.0" , texto = "Cons
 p_esta = {img=".i.PUZZLE.AdvSta.4.4", pr=11, foi=".i.ROOTzz0.0.0" , texto = "Chegou na Estação!", cena=".i.CN._RO1.6", dim=[4,4]}
 p_mar = {img=".i.PUZZLE.KpaMar.4.4", pr=13, foi=".i.ROOTzz0.0.0" , texto = "Atravessou o mar!", cena=".i.CN._RO1.14", dim=[6,5]}
 p_mon = {img=".i.PUZZLE.KpaMon.4.4", pr=12, foi=".i.ROOTzz0.0.0" , texto = "Observou uma montanha!", cena=".i.CN._RO1.8", dim=[5,4]}
+e_fer = {img="https://imgur.com/hOgrOJ5.png", foi=".i.ROOTzz0.0.0", put=1, x=200, y=200, tit="px",texto="Você encontrou um peixe!", cena=".i.RO1zz1zz3.1.3"}
 
 Jb = {local=[3,0], tit="Vamos desembarcar do navio", texto="Desembarcar!", foi=".i.bote"}
 Je = {local=[4,1], tit="Vamos até a estação", texto="Estação!", foi=".i.esta"}
@@ -204,7 +205,7 @@ C="Acelerar o crescimento de novas espécies."
 Z="B"
 # Este é mapa principal onde o jogo inicia. Podemos colocar aqui uma carta para cada roteiro disponível
 [mapa_ROOT]
-u_pint = {img=".i.PUZZLE.SuprCb.4.4", pr=1, foi=".i.ROOTzz0.0.0" , texto = "Conseguiu embarcar no bote!", cena=".i.CN._RO1.4", dim=[4,4]}
+u_pint = {img=".i.PUZZLE.SuprCb.4.4", pr=1, foi=".i.ROOTzz0.0.0" , texto = "Conseguiu embarcar no bote!", cena=".i.CN._RO1.4", dim=[5,3]}
 
 Jb = {local=[0,0], tit="Fuja do Tissunami!", texto="Missão Climática", foi=".i.RO1zz0zz1.0.0"}
 Xb = {local=[0,0], img=".i.Missao._AVENTURA.1", x=500, tit="Explorar!", texto="Missão de Exploração", foi=".i.BIOzz0zz1.0.0"}
@@ -212,7 +213,20 @@ Xe = {local=[0,0], x=900, tit="Explorando a Antártida!", texto="Missão de Expl
 Ss = {local=[0,1], x=50, tit="Suprimentos!", texto="Missão de Suprimentos", foi=".i.YELzz0zz1.0.0"}
 Cs = {local=[0,1], x=400, tit="Busca por caixas perdidas!", texto="Buscas por caixas", foi=".i.YELzz0zz1.0.0"}
 Es = {local=[0,1], x=800, tit="Encontro com outros exploradores!", texto="Buscas por exploradores", foi=".i.RO1zz7zz1.0.0"}
-Sc = {local=[0,1], x=1100, tit="Busca por suprimentos!", texto="Buscas suprmentos", foi=".i.pint"}
+#Sc = {local=[0,1], x=1100, tit="Busca por suprimentos!", texto="Buscas suprmentos", foi=".i.pint"}
+
+Bc = {local=[0,2], tit="Bioma", texto="Bioma", foi=".i.pint"}
+Ac = {local=[0,2], tit="Atmosfera", texto="Atmosfera", foi=".i.pint"}
+Cc = {local=[0,2], tit="Clima", texto="Clima", foi=".i.pint"}
+Kc = {local=[0,2], tit="Kaique", texto="Kaique", foi=".i.pint"}
+
+Fc = {local=[0,3], tit="Criosfera", texto="Criosfera", foi=".i.pint"}
+Gc = {local=[0,3], tit="Geodinâmica", texto="Geodinâmica", foi=".i.pint"}
+Pc = {local=[0,3], tit="Perigo", texto="Perigo", foi=".i.pint"}
+Dc = {local=[0,3], tit="Desastre", texto="Desastre", foi=".i.pint"}
+Ep = {local=[0,1], img="https://imgur.com/sxAm5LA.png", y=400, tit="Busca por suprimentos!", texto="Buscas suprmentos", foi=".i.pint"}
+
+
 
 [mapa_RO1.kf]
 local=[7,1]
