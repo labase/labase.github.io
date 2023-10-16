@@ -7,6 +7,7 @@
 Changelog
 ---------
 .. versionadded::    23.10
+        🧩 🗑️ Incluir trash game (16).
         🎏 Pique WebRTC (15 a).
         ☣️ Dificuldade dos jogos (15).
         ⛲ Inventário pega (13 a).
@@ -39,9 +40,10 @@ Changelog
 import unittest
 from collections import namedtuple as ntp
 from typing import List
-VERSION = "version=23.10.15"
+VERSION = "version=23.10.16"
 FLARE_ = "https://imgur.com/gQgpUFg.gif"
 FLARE = "9CSpt5C"
+# noinspection SpellCheckingInspection
 CUBE_SIDES = ["t4bBEOI" "5WoBpmz" "XGjZLS8" "VrYCtas" "tt37M2J" "ZbCzZFb"]
 WIDTH = 1350
 Dim = ntp("Dimensions", "dx dy")
@@ -54,6 +56,26 @@ LOG_LEVEL = 7
 IMGSIZE, IMG_HEIGHT = f"{32 * W}px", f"{4 * H}px"
 # noinspection SpellCheckingInspection
 A2J = "abcdefghij".upper()
+
+LIXO = "https://raw.githubusercontent.com/kwarwp/ada/master/gatil/trink/lixocenter.svg"
+RUBBISH = "https://i.imgur.com/fCEvaqu.png"
+R_OFF_X, R_OFF_Y, TOFF, SCAL =625, 380, 10, 2.5
+Hero = ntp("Hero", "luck pers level")
+# noinspection SpellCheckingInspection
+lixo = ['mala', 'chaves', 'escova', 'isqueiro', 'suco', 'vinil', 'baralho', 'dez',
+        'eifell', 'porquinho', 'bule', 'luva', 'panda', 'cafe', 'guitarra', 'aranha',
+        'livro', 'soldado', 'garrafa', 'pizza', 'fone', 'microfone', 'plug', 'visa', 'lata', 'moeda', 'carro', 'sino',
+        'presente', 'ipod', 'clarineta', 'cinquenta', 'sujeira', 'blob', 'sujo',
+        'facao', 'copinho', 'espremedor', 'pandeiro', 'sacola', 'latao', 'pimenta', 'areia',
+        'regar', 'latinha', 'casca', 'hd', 'tenis', 'filme', 'ampulheta', 'pimentao',
+        'bumerangue', 'relogio_pulso', 'relogio', 'oculos', 'martelo', 'faca', 'joaninha',
+        'radio', 'bussola', 'chapeu', 'alicate', 'trolha', 'tamborim', 'pelucia', 'formiga',
+        'jornal', 'chave_fenda', 'vidro', 'cd', 'calculadora', 'lapiseira', 'lampada', 'diploma',
+        'lapis', 'tesoura', 'disquete', 'escorpiao', 'bife', 'lagosta', 'pera', 'cubo', 'canivete',
+        'pulover', 'banana', 'tampinha', 'cantil', 'rolha', 'fava', 'vaso', 'vinho', 'bola',
+        'dalia', 'saco', 'melancia', 'azeitona', 'limao', 'hotdog', 'cachecol', 'papel', 'pote',
+        'picareta']
+
 
 
 class Log:
@@ -197,6 +219,7 @@ class Teclemmino:
                 LG.log(3, _texto, self.vai)
 
         class CenaSprite(vito.Cena):
+            # noinspection SpellCheckingInspection
             def __init__(self, img, index=-1, direita="", **kwargs):
                 _style_ = {"backgroundSize": f"{8 * 100}% {8 * 100}%"}
                 self.foi_evs = []
@@ -233,11 +256,12 @@ class Teclemmino:
                 mrq.style.marginRight = "200px"
                 # mrq.loop = 5
                 _ = self.elt <=mrq
-
+            # noinspection SpellCheckingInspection
             def marquee(self, text, scroll_amount=5):
                 def on_finish(*_):
                     print("on_finish", self.loc)
                     self.mrq.text = "Local:" + self.loc
+                    # noinspection SpellCheckingInspection
                     self.mrq.setAttribute("scrollamount", scroll_amount)
                     self.mrq.loop = -1
                     self.mrq.start()
@@ -588,7 +612,7 @@ class Teclemmino:
                 return resultado
 
         class Cube(Puzzle):
-            def __init__(self, img="", x=100, y=100, w=900, h=600, foi="", pr=-1, dif=0.02, **kwargs):
+            def __init__(self, img="", x=100, y=100, w=900, h=600, foi="", pr=-1, dif=0.01, **kwargs):
                 self.pr = pr
                 # c = kwargs["cena"]
                 # c.nome = str(img)
@@ -621,6 +645,133 @@ class Teclemmino:
                 self.vai()
                 teclemmino.premiar(self.pr, vito, tit=self.tit)
                 return True
+
+        class Thrash(Sprite):
+            def __init__(self, img="", x=0, y=30, w=1300, h=650, foi="", pr=-1, dif=0.05, **kwargs):
+                # noinspection SpellCheckingInspection
+                self.sujeira = ['sujeira', 'blob', 'sujo', 'formiga', 'areia', 'casca', 'joaninha', 'escorpiao',
+                                'aranha', 'latinha'] * 4
+                self.pr = pr
+                self.cena = self.fundo = self.remaining_shuffle_count = self.rubbish = self.nome = None
+                foi = self.prepare(foi, kwargs)
+                super().__init__(img=img or RUBBISH, x=x, y=y, w=w, h=h, foi=foi, pr=pr, dif=dif, **kwargs)
+                LG.log(8, "Vito ⇒ Thrash __init__⇒", self.pr, foi, self.img_, img, kwargs)
+                self._inicia()
+                self.diff = teclemmino.vito_weather_overlay(vito, self.cena, dif)
+
+
+
+            def prepare(self, foi, kwargs):
+                cena = kwargs["cena"]
+                self.cena = kwargs["cena"] = (
+                    CenaSprite(img=cena, direita=foi) if "dim" in kwargs else cena)
+                self.cena.nome = self.nome = str(foi)
+                return teclemmino.parser(foi)
+
+            def _inicia(self, *_):
+
+                self.cache = self.create_script_tag(LIXO)
+                self.bonus = 20
+                # pycard = vito.document["pydiv"]
+                pycard = vito.document.body
+                hidden = vito.Elemento('', style={'position': 'absolute', 'top': -2000, 'left': -2000})
+                _ = hidden.elt <= self.cache
+                _ = pycard <= hidden.elt
+                self.comida = ['carpa', 'bacalhau', 'atum', 'robalo', 'dourado']
+                self.dump(self.cena)
+
+            def __vai(self, *_):
+                _ = self
+                self.dump(self.cena)
+
+            def parse(self, nome, *args):
+                _ = self
+                puz = teclemmino.assets[nome]
+                LG.log(5, "Puzzle parse", nome, puz, *args)
+                return puz.cena
+
+            def dump(self, cena, sorte=4):
+                from random import shuffle, randint
+                h = Hero(1, 2, 10)  # TheHero()
+                self.cena = cena
+                self.remaining_shuffle_count = 20 + 2 * h.pers + h.level // 5
+                self.rubbish = vito.svg.svg(version="1.1", viewBox="400 250 1000 600", width="1600", height="800")
+                _ = self.elt <= self.rubbish
+                comer = self.comida * (4 + h.level // 2)
+                shuffle(comer)
+                shuffle(lixo)
+                trash = 20 + 2 * h.level
+                sujo = 10 + 2 * h.level
+                sorte += h.luck + randint(0, h.level) // 3
+                pilha = lixo[:trash] + self.sujeira[:sujo] + comer[:sorte] + ['gato']
+                shuffle(pilha)
+                # noinspection SpellCheckingInspection
+                for indice, label in enumerate(pilha):
+                    dx, dy = randint(-300, 300), 100 - randint(-100, 100)
+                    dy = (300 - abs(dx)) // 2
+                    dx, dy = 200 - dx, 100 - randint(-dy, dy)
+                    obj = vito.svg.use(id=f"#{indice:03d}{label}", href=f"#{label}", x=200, y=100, width=250, height=250,
+                                       transform=f"translate({dx} {dy})  rotate({7 * indice} {R_OFF_X} {R_OFF_Y}) scale(2.5)")
+                    _ = self.rubbish <= obj
+                    obj.bind('click', self._vai)
+                    obj.setAttribute("data-didit", "_no_")
+
+            # def _vai_(self, ev):
+            #     self.__vai(ev)
+
+            def quit(self, *_):
+                self.remaining_shuffle_count = 0
+                if not self.remaining_shuffle_count:
+                    self.fundo.elt.remove()
+                    # self.desiste.elt.remove()
+                    # TheHero().learn(self.bonus)
+                    return
+
+            def _vai(self, ev):
+                from random import randint
+                ev.preventDefault()
+                ev.stopPropagation()
+                self.diff.dif()
+                self.remaining_shuffle_count -= 1
+                if not self.remaining_shuffle_count:
+                    self.quit()
+                    return
+
+                dx, dy = randint(-300, 300), 100 - randint(-100, 100)
+                dy = abs(300 - dx) // 3
+                dx, dy = 200 - dx, 100 - randint(-dy, dy)
+                obj = vito.document[ev.target.id]
+                obj_name = ev.target.id[4:]
+                if obj.getAttribute("data-didit") == "_did_":
+                    return
+                if obj_name in self.comida + ["gato"]:
+                    food = vito.Elemento('', x=0, y=50, w=200, h=200, tit=f"{ev.target.id}_", cena=self.cena)
+                    stag = vito.svg.svg(version="1.1", width="200", height="200")
+                    _ = food.elt <= stag
+                    _ = stag <= obj
+                    obj.setAttribute('transform', f"translate(-{R_OFF_X - 485} -{R_OFF_Y - 170}) scale(0.60 1.35)")
+                    # obj.setAttribute('transform', f"translate(-{R_OFF_X - 485} -{R_OFF_Y - 220}) scale(0.60 1.35)")
+                    vito.INV.bota(food)
+                    obj.setAttribute("data-didit", "_did_")
+                    if obj_name == "gato":
+                        obj.setAttribute('transform', f"translate(-{R_OFF_X - 485} -{R_OFF_Y - 295}) scale(0.60 0.6)")
+                        # food.vai = TheHero().calma
+                        # TheHero().blacking(food.tit)
+                        return
+                    # TheHero().fishing(food.tit)
+                else:
+                    obj.setAttribute('transform',
+                                     f"translate({dx} {dy})  rotate({7 * randint(0, 70)} {R_OFF_X} {R_OFF_Y}) scale(2.5)")
+
+            @staticmethod
+            def create_script_tag(src):
+                import urllib.request
+                _fp = urllib.request.urlopen(src)
+                _data = _fp.read()
+
+                _tag = vito.document.createElement('div')
+                _tag.html = _data
+                return _tag
 
         class Quiz:
             def __init__(self, nome=None, **kwargs):
@@ -667,7 +818,7 @@ class Teclemmino:
         self.rosa = self.avt = self.editor = None
         self.assets = {}
         self.last = {}
-        self.classes = (CenaSprite, Sprite, SpriteSala, Texto, Folha, SpriteLabirinto, Mapa, Puzzle, Quiz, Cube)
+        self.classes = (CenaSprite, Sprite, SpriteSala, Texto, Folha, SpriteLabirinto, Mapa, Puzzle, Quiz, Cube, Thrash)
         self.cmd = self.vito_element_builder(vito, self.classes)
 
     def parser(self, ref: str):
@@ -682,6 +833,7 @@ class Teclemmino:
             def __init__(self):
                 from random import choice
 
+                # noinspection SpellCheckingInspection
                 clim = img or choice("mpOU7Ca tGXhkjw i5dLK8G4 4B1xuMw 9iGTJ6Q OlOj4FV".split())
                 super().__init__(f"https://i.imgur.com/{clim}.gif", x=0, y=0, o=0.2, w=1350, h=650, cena=cena)
                 self.o = 0
@@ -695,10 +847,10 @@ class Teclemmino:
 
     def vito_element_builder(self, v, classes):
         (v.CenaSprite, v.Sprite, v.SpriteSala, v.Textor, v.Folha,
-         v.SpriteLabirinto, v.Mapa, v.Puzzle, v.Quiz, v.Cube) = classes
+         v.SpriteLabirinto, v.Mapa, v.Puzzle, v.Quiz, v.Cube, v.Thrash) = classes
         builder = [self.cena, self.elemento, self.texto, self.sprite_sala, self.folha, self.valor,
-                   self.icon, self.sprite_labirinto, self.mapa, self.puzzle, self.cube, self.quiz]
-        return {k: v for k, v in zip(['c', 'e', 't', 's', 'f', 'v', "i", "l", "m", "p", "u", "q"], builder)}
+                   self.icon, self.sprite_labirinto, self.mapa, self.puzzle, self.cube, self.quiz, self.caixa]
+        return {k: v for k, v in zip(['c', 'e', 't', 's', 'f', 'v', "i", "l", "m", "p", "u", "q", "r"], builder)}
 
     def premiar(self, asset, vito, tit="premiado"):
         mdl = vito.Sprite(self.assets["CN"]["_BADGES"].get_image(asset), w=30, h=30, tit=tit, cena=vito.INV.cena)
@@ -708,6 +860,11 @@ class Teclemmino:
         self.assets[asset] = result = self.vito.CenaSprite(nome=asset, **kwargs)
         self.last = asset
         LG.log(3, "Vito ⇒ cena", asset, kwargs)
+        return result
+
+    def caixa(self, asset, **kwargs):
+        kwargs.update(cena=self.assets[self.last]) if self.last and "cena" not in kwargs else None
+        self.assets[asset] = result = self.vito.Thrash(nome=asset, **kwargs)
         return result
 
     def quiz(self, asset, **kwargs):
@@ -837,8 +994,7 @@ class Teclemmino:
                          vai=self.start_game_from_root_element)
         self.vito.Sprite("*fa fa-circle fa-2x", x=950, y=180, w=60, h=60, o=0.1, cena=splash, tit="*",
                          vai=self.start_toml_editor)
-        self.vito.Elemento("https://imgur.com/sxAm5LA.png", x=580, y=440, w=160, h=160, o=0.1, cena=splash, tit="Avantar",
-                         vai=self.start_toml_editor)
+        self.vito.Elemento("https://imgur.com/sxAm5LA.png", x=580, y=440, w=160, h=160, o=0.1, cena=splash, tit="Avantar")
 
     def start_toml_editor(self, _=None):
         def send_toml_to_loader(*_):
