@@ -1,5 +1,6 @@
 #! /usr/bin/env python
 # -*- coding: UTF8 -*-
+# noinspection GrazieInspection
 """Game criado usando a interface declarativa Teclemmino.
 
 .. codeauthor:: Carlo Oliveira <carlo@nce.ufrj.br>
@@ -7,6 +8,7 @@
 Changelog
 ---------
 .. versionadded::    23.10
+        ⛲ 🗃️ Inclui arquivos TOML (17).
         🧩 🗑️ Incluir trash game (16).
         🎏 Pique WebRTC (15 a).
         ☣️ Dificuldade dos jogos (15).
@@ -40,6 +42,7 @@ Changelog
 import unittest
 from collections import namedtuple as ntp
 from typing import List
+
 VERSION = "version=23.10.16"
 FLARE_ = "https://imgur.com/gQgpUFg.gif"
 FLARE = "9CSpt5C"
@@ -59,7 +62,7 @@ A2J = "abcdefghij".upper()
 
 LIXO = "https://raw.githubusercontent.com/kwarwp/ada/master/gatil/trink/lixocenter.svg"
 RUBBISH = "https://i.imgur.com/fCEvaqu.png"
-R_OFF_X, R_OFF_Y, TOFF, SCAL =625, 380, 10, 2.5
+R_OFF_X, R_OFF_Y, TOFF, SCAL = 625, 380, 10, 2.5
 Hero = ntp("Hero", "luck pers level")
 # noinspection SpellCheckingInspection
 lixo = ['mala', 'chaves', 'escova', 'isqueiro', 'suco', 'vinil', 'baralho', 'dez',
@@ -75,7 +78,6 @@ lixo = ['mala', 'chaves', 'escova', 'isqueiro', 'suco', 'vinil', 'baralho', 'dez
         'pulover', 'banana', 'tampinha', 'cantil', 'rolha', 'fava', 'vaso', 'vinho', 'bola',
         'dalia', 'saco', 'melancia', 'azeitona', 'limao', 'hotdog', 'cachecol', 'papel', 'pote',
         'picareta']
-
 
 
 class Log:
@@ -112,6 +114,7 @@ class Teclemmino:
             def connect(self):
                 def msg(_message):
                     vito.INV.cena.marquee(_message.data)
+
                 try:
                     from env import ABLY
 
@@ -125,7 +128,7 @@ class Teclemmino:
                     pass
 
             def envia(self, message="hello!", *_):
-                    self.channel.publish('greeting', message)
+                self.channel.publish('greeting', message)
 
         self.rtc = WebRTC()
 
@@ -159,17 +162,19 @@ class Teclemmino:
                 # txt = _kwa["texto"] if "texto" in _kwa else {}
 
                 LG.log(8, "Vito ⇒ Sprite texto⇒", texto if isinstance(texto, str) else "_nada_", tit) if put else None
+
                 def _go():
                     self.w = self.h = 30
-                    self.elt.style.backgroundSize="30px 30px;"
+                    self.elt.style.backgroundSize = "30px 30px;"
                     self.siz = (30, 30)
                     teclemmino.vito.INV.bota(self)
-                    self.elt.style=dict(backgroundSize="30px 30px;")
+                    self.elt.style = dict(backgroundSize="30px 30px;")
                     return foi
 
                 def to_int(key):
                     LG.log(4, _style)
                     return [int(cdd[:-1]) for cdd in _style[key].split()]
+
                 go = foi if not put else _go
 
                 # gone = foi() if callable(foi) else go
@@ -223,6 +228,7 @@ class Teclemmino:
             def __init__(self, img, index=-1, direita="", **kwargs):
                 _style_ = {"backgroundSize": f"{8 * 100}% {8 * 100}%"}
                 self.foi_evs = []
+
                 def parse_img(img_=img, style_=None, dim_=D11):
                     return img_, style_ or _style_, dim_
 
@@ -255,7 +261,8 @@ class Teclemmino:
                 mrq.style.marginLeft = "200px"
                 mrq.style.marginRight = "200px"
                 # mrq.loop = 5
-                _ = self.elt <=mrq
+                _ = self.elt <= mrq
+
             # noinspection SpellCheckingInspection
             def marquee(self, text, scroll_amount=5):
                 def on_finish(*_):
@@ -265,6 +272,7 @@ class Teclemmino:
                     self.mrq.setAttribute("scrollamount", scroll_amount)
                     self.mrq.loop = -1
                     self.mrq.start()
+
                 self.mrq.bind("finish", on_finish)
                 # self.mrq.bind("onfinish", on_finish)
                 self.mrq.setAttribute("scrollamount", "20")
@@ -283,17 +291,19 @@ class Teclemmino:
                 self.cards.append(other.as_card()) if (hasattr(other, "as_card")) else None
                 n_cards = len(self.cards)
                 super().__le__(other)
+
                 def move_card(crd):
                     nonlocal delta
                     crd.x = delta
                     delta += (card_spacing + crd.w)
                     return crd
+
                 if n_cards > 1:
                     all_cards_width = sum(card.w for card in self.cards)
                     all_spacing, card_width = WIDTH - all_cards_width, all_cards_width // n_cards
-                    card_spacing= all_spacing // (n_cards+1)
+                    card_spacing = all_spacing // (n_cards + 1)
                     delta = card_spacing
-                    [move_card(crd=card) for x, card in enumerate(self.cards) ]
+                    [move_card(crd=card) for x, card in enumerate(self.cards)]
 
             def bind(self, ev=None):
                 self.foi_evs.append(ev) if ev not in self.foi_evs else None
@@ -492,6 +502,12 @@ class Teclemmino:
             def nop(self):
                 pass
 
+            def parse(self, nome, *args):
+                _ = self
+                puz = teclemmino.assets[nome]
+                LG.log(5, "Texto parse", nome, puz, *args)
+                return puz.cena
+
             def vai_vai(self, ev=NoEv):
                 LG.log(5, " Modal ⇒ vai_vai", self.cena.nome, teclemmino.vito.INV.cena.nome, ev)
                 self.vai()  # if self.cena == teclemmino.vito.INV.cena else None
@@ -618,11 +634,11 @@ class Teclemmino:
                 # c.nome = str(img)
                 # self.cena, self.nome = lambda: None, None
                 # foi = self.prepare(foi, kwargs)
-                dim, kwargs["dim"] =  kwargs["dim"], (0, 0)
+                dim, kwargs["dim"] = kwargs["dim"], (0, 0)
                 super().__init__(img=img, x=x, y=y, w=w, h=h, foi=foi, pr=pr, dif=dif, **kwargs)
                 cenas = CUBE_SIDES
                 cenas = img.split() if img else cenas
-                dmx, dmy = dim #kwargs["dim"] if "dim" in kwargs else [3, 2]
+                dmx, dmy = dim  # kwargs["dim"] if "dim" in kwargs else [3, 2]
 
                 self.cb = vito.Cubos(cenas, cena=self.cena, tw=w, th=h, nx=dmx, ny=dmy, foi=self.montou)
                 self.diff.entra(self.cena)
@@ -630,8 +646,7 @@ class Teclemmino:
                 # self.go = self.cb.go
                 self.cb.go = self.roll
                 # self.diff = teclemmino.vito_weather_overlay(vito, self.cena, dif)
-                LG.log(4, "Vito ⇒ Cubo deploy⇒", self.pr, self.diff.img, self.cena, self.cena )
-
+                LG.log(4, "Vito ⇒ Cubo deploy⇒", self.pr, self.diff.img, self.cena, self.cena)
 
             def roll(self):
                 self.diff.dif()
@@ -649,7 +664,7 @@ class Teclemmino:
         class Thrash(Sprite):
             def __init__(self, img="", x=0, y=30, w=1300, h=650, foi="", pr=-1, dif=0.05, **kwargs):
                 # noinspection SpellCheckingInspection
-                self.sujeira = ['sujeira', 'blob', 'sujo', 'formiga', 'areia', 'casca', 'joaninha', 'escorpiao',
+                self.sujeira = ['sujeira', 'blob', 'sujo', 'formiga', 'areia', 'casca', 'papel', 'copinho',
                                 'aranha', 'latinha'] * 4
                 self.pr = pr
                 self.cena = self.fundo = self.remaining_shuffle_count = self.rubbish = self.nome = None
@@ -658,8 +673,6 @@ class Teclemmino:
                 LG.log(8, "Vito ⇒ Thrash __init__⇒", self.pr, foi, self.img_, img, kwargs)
                 self._inicia()
                 self.diff = teclemmino.vito_weather_overlay(vito, self.cena, dif)
-
-
 
             def prepare(self, foi, kwargs):
                 cena = kwargs["cena"]
@@ -710,8 +723,9 @@ class Teclemmino:
                     dx, dy = randint(-300, 300), 100 - randint(-100, 100)
                     dy = (300 - abs(dx)) // 2
                     dx, dy = 200 - dx, 100 - randint(-dy, dy)
-                    obj = vito.svg.use(id=f"#{indice:03d}{label}", href=f"#{label}", x=200, y=100, width=250, height=250,
-                                       transform=f"translate({dx} {dy})  rotate({7 * indice} {R_OFF_X} {R_OFF_Y}) scale(2.5)")
+                    obj = vito.svg.use(
+                        id=f"#{indice:03d}{label}", href=f"#{label}", x=200, y=100, width=250, height=250,
+                        transform=f"translate({dx} {dy})  rotate({7 * indice} {R_OFF_X} {R_OFF_Y}) scale(2.5)")
                     _ = self.rubbish <= obj
                     obj.bind('click', self._vai)
                     obj.setAttribute("data-didit", "_no_")
@@ -760,8 +774,9 @@ class Teclemmino:
                         return
                     # TheHero().fishing(food.tit)
                 else:
-                    obj.setAttribute('transform',
-                                     f"translate({dx} {dy})  rotate({7 * randint(0, 70)} {R_OFF_X} {R_OFF_Y}) scale(2.5)")
+                    obj.setAttribute(
+                        'transform',
+                        f"translate({dx} {dy})  rotate({7 * randint(0, 70)} {R_OFF_X} {R_OFF_Y}) scale(2.5)")
 
             @staticmethod
             def create_script_tag(src):
@@ -839,22 +854,57 @@ class Teclemmino:
                 self.o = 0
                 self.current_difficulty = 0
                 self.elt.style.pointerEvents = "none"
-                self.difficulty  = dif
+                self.difficulty = dif
+
             def dif(self):
                 self.current_difficulty += self.difficulty
                 self.o = self.current_difficulty
+
         return Weather()
 
     def vito_element_builder(self, v, classes):
         (v.CenaSprite, v.Sprite, v.SpriteSala, v.Textor, v.Folha,
          v.SpriteLabirinto, v.Mapa, v.Puzzle, v.Quiz, v.Cube, v.Thrash) = classes
-        builder = [self.cena, self.elemento, self.texto, self.sprite_sala, self.folha, self.valor,
-                   self.icon, self.sprite_labirinto, self.mapa, self.puzzle, self.cube, self.quiz, self.caixa]
-        return {k: v for k, v in zip(['c', 'e', 't', 's', 'f', 'v', "i", "l", "m", "p", "u", "q", "r"], builder)}
+        builder = [self.cena, self.elemento, self.texto, self.sprite_sala, self.folha, self.valor, self.icon,
+                   self.sprite_labirinto, self.mapa, self.puzzle, self.cube, self.quiz, self.caixa, self.extra]
+        return {k: v for k, v in zip(['c', 'e', 't', 's', 'f', 'v', "i", "l", "m", "p", "u", "q", "r", "x"], builder)}
 
     def premiar(self, asset, vito, tit="premiado"):
         mdl = vito.Sprite(self.assets["CN"]["_BADGES"].get_image(asset), w=30, h=30, tit=tit, cena=vito.INV.cena)
         vito.INV.bota(mdl)
+
+    def extra(self, asset, **kwargs):
+        extra = self
+
+        class Extra:
+            def __init__(self, nome=asset):
+                self.nome, self.kwargs = nome, kwargs
+                self.url = kwargs['url']
+                self.cnt = ''
+
+            def load_from_url(self):
+                import urllib.request
+                _fp = urllib.request.urlopen(self.url)
+                return _fp.read()
+
+            def parse(self, nome, *args):
+                self.vai()
+                _ = self, nome, *args
+                # puz = extra.assets[nome]
+                # LG.log(5, "Puzzle parse", nome, puz, *args)
+                # return puz.cena
+
+            def vai(self):
+                cnt = self.load_from_url()
+                LG.log(8, "Extra.vai ⇒ ", asset, kwargs, cnt)
+                extra.load_(str_io=str(cnt))
+        url = kwargs['url']  # .replace("@", "_")
+        # cnt = load_from_url(url)
+        LG.log(8, "extra ⇒ ", asset, kwargs, url)
+        self.assets[asset] = result = Extra(nome=asset)
+        return result
+
+        # self.load_(str_io=str(cnt))
 
     def cena(self, asset, **kwargs):
         self.assets[asset] = result = self.vito.CenaSprite(nome=asset, **kwargs)
@@ -980,8 +1030,8 @@ class Teclemmino:
             # print("self.assets", self.assets)
         # self.start_game_from_root_element()
         LG.log(4, "load_ ⇒ file_, cfile, str_io,: ⇒", cfile, str_io, "\n", self.avt[:100])
-        self.splash_screen() if not str_io else self.start_game_from_root_element()
-        return True
+        # self.splash_screen() if not str_io else self.start_game_from_root_element()
+        return str_io
 
     def mark(self, coord):
         self.rosa.elt.text = coord
@@ -994,7 +1044,8 @@ class Teclemmino:
                          vai=self.start_game_from_root_element)
         self.vito.Sprite("*fa fa-circle fa-2x", x=950, y=180, w=60, h=60, o=0.1, cena=splash, tit="*",
                          vai=self.start_toml_editor)
-        self.vito.Elemento("https://imgur.com/sxAm5LA.png", x=580, y=440, w=160, h=160, o=0.1, cena=splash, tit="Avantar")
+        self.vito.Elemento("https://imgur.com/sxAm5LA.png", x=580, y=440, w=160, h=160, o=0.1, cena=splash,
+                           tit="Avantar")
 
     def start_toml_editor(self, _=None):
         def send_toml_to_loader(*_):
@@ -1053,7 +1104,8 @@ class Main:
 
     def load(self, cfile=str('avantar.toml')):
         _ = cfile
-        self.teclemmino.load_()
+        str_io = self.teclemmino.load_()
+        self.teclemmino.splash_screen() if not str_io else self.teclemmino.start_game_from_root_element()
 
 
 def main(br):

@@ -20,6 +20,8 @@ YELLOW = "https://imgur.com/dzM9NtT.jpg"
 WHITE = "https://imgur.com/khohhCw.jpg"
 RED = "https://imgur.com/IMcwSAq.jpg"
 RO1 = "https://imgur.com/IMcwSAq.jpg"
+RBO = "https://raw.githubusercontent.com/kwarwp/radia/main/kristen/main.py"
+
 [folha_CN]
 # Estes valores recortam as imagens acimas para fazer um conjunto de cenas
 ANICONS = [5, 4]
@@ -206,14 +208,19 @@ B="Descongelar as Geleiras."
 C="Acelerar o crescimento de novas espécies."
 Z="B"
 # Este é mapa principal onde o jogo inicia. Podemos colocar aqui uma carta para cada roteiro disponível
+[v_ACT]
+rbo = "https://activufrj.nce.ufrj.br/raw/wiki/SuPyGirls/Roteiro_TOML_Bioma_1"
+RBO = "https://raw.githubusercontent.com/kwarwp/radia/main/kristen/main.py"
+#RBO = "https://cdn.jsdelivr.net/gh/kwarwp/radia@latest/kristen/main.py"
 [mapa_ROOT]
-u_pint = {img=".i.PUZZLE.SuprCb.4.4", pr=1, foi=".i.ROOTzz0.0.0" , texto = "Conseguiu embarcar no bote!", cena=".i.CN._RO1.4", dim=[5,3]}
+u_pint = {img=".i.PUZZLE.SuprCb.4.4", pr=1, foi=".i.ROOTzz0.0.0" , texto = "Conseguiu embarcar no bote!", cena=".i.CN._RO1.4", dim=[2,1]}
 #r_caix = {img=".i.PUZZLE.SuprCb.4.4", pr=1, foi=".i.ROOTzz0.0.0" , texto = "Obteve itens!", cena=".i.RO1zz7zz1.0.0", dim=[5,3]}
 r_caix = {img="", pr=1, foi=".i.ROOTzz0.0.0" , texto = "Obteve itens!", cena=".i.CN._RO1.5", dif=0.04, dim=[5,3]}
-
+x_actbio = {url=".i.ACT.RBO.0.0"}
+#x_actbio = {url=".i.PUZZLE.SuprCb.4.4"}
 Jb = {local=[0,0], tit="Fuja do Tissunami!", texto="Missão Climática", foi=".i.RO1zz0zz1.0.0"}
 Xb = {local=[0,0], img=".i.Missao._AVENTURA.1", x=500, tit="Explorar!", texto="Missão de Exploração", foi=".i.BIOzz0zz1.0.0"}
-Xe = {local=[0,0], x=900, tit="Explorando a Antártida!", texto="Missão de Exploração Antártica", foi=".i.YELzz0zz1.0.0"}
+Xe = {local=[0,0], x=900, tit="Explorando a Antártida!", texto="Missão de Exploração Antártica", foi=".i.actbio"}
 Ss = {local=[0,1], x=50, tit="Suprimentos!", texto="Missão de Suprimentos", foi=".i.YELzz0zz1.0.0"}
 Cs = {local=[0,1], x=400, tit="Busca por caixas perdidas!", texto="Buscas por caixas", foi=".i.caix"}
 Es = {local=[0,1], x=800, tit="Encontro com outros exploradores!", texto="Buscas por exploradores", foi=".i.RO1zz7zz1.0.0"}
@@ -244,3 +251,5 @@ A="Emissão de gases"
 B="Elevação do nível do mar"
 C="Congelamento da camada de ozônio"
 Z="B"
+# XXX@@@ --> missao yy autor gabi
+# XXX@@@ --> missao yy autor gabi FIM
