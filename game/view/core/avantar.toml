@@ -122,10 +122,53 @@ index = [4,6]
 [l_RO1]
 img =".i.CN._RO1.0"
 index = [4,6]
+local = [['Amundsen–Scott - Norte', 'Amundsen–Scott - Leste', 'Amundsen–Scott - Sul', 'Amundsen–Scott - Oeste'] ,
+['Arctowski  - Norte', 'Arctowski  - Leste', 'Arctowski  - Sul', 'Arctowski  - Oeste'] ,
+['Arrival Heights  - Norte', 'Arrival Heights  - Leste', 'Arrival Heights  - Sul', 'Arrival Heights  - Oeste'] ,
+['Artigas  - Norte', 'Artigas  - Leste', 'Artigas  - Sul', 'Artigas  - Oeste'] ,
+['Arturo Prat  - Norte', 'Arturo Prat  - Leste', 'Arturo Prat  - Sul', 'Arturo Prat  - Oeste'] ,
+['Belgrano II  - Norte', 'Belgrano II  - Leste', 'Belgrano II  - Sul', 'Belgrano II  - Oeste'] ,
+['Bellingshausen  - Norte', 'Bellingshausen  - Leste', 'Bellingshausen  - Sul', 'Bellingshausen  - Oeste'] ,
+['Bharati  - Norte', 'Bharati  - Leste', 'Bharati  - Sul', 'Bharati  - Oeste'] ,
+['Carlini  - Norte', 'Carlini  - Leste', 'Carlini  - Sul', 'Carlini  - Oeste'] ,
+['Casey  - Norte', 'Casey  - Leste', 'Casey  - Sul', 'Casey  - Oeste'] ,
+['Concordia  - Norte', 'Concordia  - Leste', 'Concordia  - Sul', 'Concordia  - Oeste'] ,
+['Davis  - Norte', 'Davis  - Leste', 'Davis  - Sul', 'Davis  - Oeste'] ,
+["Dumont d'Urville  - Norte", "Dumont d'Urville  - Leste", "Dumont d'Urville  - Sul", "Dumont d'Urville  - Oeste"] ,
+['Eco-Nelson  - Norte', 'Eco-Nelson  - Leste', 'Eco-Nelson  - Sul', 'Eco-Nelson  - Oeste'] ,
+['Villa Las Estrellas  - Norte', 'Villa Las Estrellas  - Leste', 'Villa Las Estrellas  - Sul', 'Villa Las Estrellas  - Oeste'] ,
+['Escudero  - Norte', 'Escudero  - Leste', 'Escudero  - Sul', 'Escudero  - Oeste'] ,
+['Esperanza  - Norte', 'Esperanza  - Leste', 'Esperanza  - Sul', 'Esperanza  - Oeste'] ,
+['GARS  - Norte', 'GARS  - Leste', 'GARS  - Sul', 'GARS  - Oeste'] ,
+["General Bernardo O'Higgins  - Norte", "General Bernardo O'Higgins  - Leste", "General Bernardo O'Higgins  - Sul", "General Bernardo O'Higgins  - Oeste"] ,
+['Great Wall  - Norte', 'Great Wall  - Leste', 'Great Wall  - Sul', 'Great Wall  - Oeste'] ,
+['Jang Bogo  - Norte', 'Jang Bogo  - Leste', 'Jang Bogo  - Sul', 'Jang Bogo  - Oeste'] ,
+['Halley  - Norte', 'Halley  - Leste', 'Halley  - Sul', 'Halley  - Oeste'] ,
+['King Sejong  - Norte', 'King Sejong  - Leste', 'King Sejong  - Sul', 'King Sejong  - Oeste'] ,
+['Maitri  - Norte', 'Maitri  - Leste', 'Maitri  - Sul', 'Maitri  - Oeste'] ,
+['Marambio  - Norte', 'Marambio  - Leste', 'Marambio  - Sul', 'Marambio  - Oeste'] ,
+['Mawson  - Norte', 'Mawson  - Leste', 'Mawson  - Sul', 'Mawson  - Oeste'] ,
+['McMurdo  - Norte', 'McMurdo  - Leste', 'McMurdo  - Sul', 'McMurdo  - Oeste'] ,
+['Mirny  - Norte', 'Mirny  - Leste', 'Mirny  - Sul', 'Mirny  - Oeste'] ,
+['Neumayer III  - Norte', 'Neumayer III  - Leste', 'Neumayer III  - Sul', 'Neumayer III  - Oeste'] ,
+['Novolazarevskaya  - Norte', 'Novolazarevskaya  - Leste', 'Novolazarevskaya  - Sul', 'Novolazarevskaya  - Oeste'] ,
+['Orcadas  - Norte', 'Orcadas  - Leste', 'Orcadas  - Sul', 'Orcadas  - Oeste'] ,
+['Palmer  - Norte', 'Palmer  - Leste', 'Palmer  - Sul', 'Palmer  - Oeste'] ,
+['Progress  - Norte', 'Progress  - Leste', 'Progress  - Sul', 'Progress  - Oeste'] ,
+['Rothera[14]  - Norte', 'Rothera[14]  - Leste', 'Rothera[14]  - Sul', 'Rothera[14]  - Oeste'] ,
+['San Martín  - Norte', 'San Martín  - Leste', 'San Martín  - Sul', 'San Martín  - Oeste'] ,
+['SANAE IV  - Norte', 'SANAE IV  - Leste', 'SANAE IV  - Sul', 'SANAE IV  - Oeste'] ,
+['Scott Base  - Norte', 'Scott Base  - Leste', 'Scott Base  - Sul', 'Scott Base  - Oeste'] ,
+['Showa  - Norte', 'Showa  - Leste', 'Showa  - Sul', 'Showa  - Oeste'] ,
+['Troll  - Norte', 'Troll  - Leste', 'Troll  - Sul', 'Troll  - Oeste'] ,
+['Vernadsky  - Norte', 'Vernadsky  - Leste', 'Vernadsky  - Sul', 'Vernadsky  - Oeste'] ,
+['Vostok  - Norte', 'Vostok  - Leste', 'Vostok  - Sul', 'Vostok  - Oeste'] ,
+['Zhongshan  - Norte', 'Zhongshan  - Leste', 'Zhongshan  - Sul', 'Zhongshan  - Oeste'] ,]
 
 [l_ROOT]
 img =".i.CN._LANDER.0"
 index = [1,1]
+local = [["Cmd. Ferraz - Norte", "Cmd. Ferraz - Leste", "Cmd. Ferraz - Sul", "Cmd. Ferraz - Oeste"]]
 #
 #[s_ROOT0]
 #img =".i.CN._LANDER.0"
@@ -210,13 +253,13 @@ Z="B"
 # Este é mapa principal onde o jogo inicia. Podemos colocar aqui uma carta para cada roteiro disponível
 [v_ACT]
 rbo = "https://activufrj.nce.ufrj.br/raw/wiki/SuPyGirls/Roteiro_TOML_Bioma_1"
-RBO = "https://raw.githubusercontent.com/kwarwp/radia/main/kristen/main.py"
+RBO = "https://raw.githubusercontent.com/kwarwp/avantar/main/root/main.py"
 #RBO = "https://cdn.jsdelivr.net/gh/kwarwp/radia@latest/kristen/main.py"
 [mapa_ROOT]
 u_pint = {img=".i.PUZZLE.SuprCb.4.4", pr=1, foi=".i.ROOTzz0.0.0" , texto = "Conseguiu embarcar no bote!", cena=".i.CN._RO1.4", dim=[2,1]}
 #r_caix = {img=".i.PUZZLE.SuprCb.4.4", pr=1, foi=".i.ROOTzz0.0.0" , texto = "Obteve itens!", cena=".i.RO1zz7zz1.0.0", dim=[5,3]}
 r_caix = {img="", pr=1, foi=".i.ROOTzz0.0.0" , texto = "Obteve itens!", cena=".i.CN._RO1.5", dif=0.04, dim=[5,3]}
-x_actbio = {url=".i.ACT.RBO.0.0"}
+x_actbio = {url=".i.ACT.RBO.0.0", auto=1}
 #x_actbio = {url=".i.PUZZLE.SuprCb.4.4"}
 Jb = {local=[0,0], tit="Fuja do Tissunami!", texto="Missão Climática", foi=".i.RO1zz0zz1.0.0"}
 Xb = {local=[0,0], img=".i.Missao._AVENTURA.1", x=500, tit="Explorar!", texto="Missão de Exploração", foi=".i.BIOzz0zz1.0.0"}
