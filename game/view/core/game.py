@@ -8,6 +8,7 @@
 Changelog
 ---------
 .. versionadded::    23.10
+        ⛲ 🗃️ redireciona TOML (18 a).
         🧑‍🔬 Nome de Estação, Inicia TOML (18).
         ⛲ 🗃️ Inclui arquivos TOML (17).
         🧩 🗑️ Incluir trash game (16).
@@ -891,6 +892,7 @@ class Teclemmino:
             def __init__(self, nome=asset):
                 self.nome, self.kwargs = nome, kwargs
                 self.url = kwargs['url']
+                self.foi = kwargs['foi']().vai if "foi" in kwargs else lambda *_: None
                 self.cnt = ''
 
             def load_from_url(self):
@@ -909,11 +911,12 @@ class Teclemmino:
                 cnt = self.load_from_url()
                 LG.log(4, "Extra.vai ⇒ ", asset, kwargs, cnt)
                 extra.load_(str_io=str(cnt))
+                self.foi()
         url = kwargs['url']  # .replace("@", "_")
 
         # cnt = load_from_url(url)
-        LG.log(4, "extra ⇒ ", asset, kwargs, url)
         self.assets[asset] = result = Extra(nome=asset)
+        LG.log(8, "extra ⇒ ", asset, kwargs, url, result.foi, result.foi())
         result.vai() if "auto" in kwargs else None
         return result
 
@@ -1120,6 +1123,30 @@ class Main:
 
         str_io = self.teclemmino.load_()
         t_e.splash_screen() if not str_io else t_e.start_game_from_root_element()
+
+    def util(self):
+        _ = self
+        # noinspection SpellCheckingInspection
+        alpha = r'!#$%&\()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]^_`abcdefghijklmnopqrstuvwxyz{|}~'
+        cph = "abc"
+        txt = "tests/editor.html"
+        print(txt)
+
+        def enc(text, cyp):
+            st, cyp = alpha.index(cyp[-1]), cyp[:-1]
+            cod = text.translate(str.maketrans(alpha, alpha[st:] + alpha[:st]))
+            return cod if not cyp else enc(cod[-1] + cod[:-1], cyp)
+
+        cdd = enc(txt, cph)
+        print(cdd)
+
+        def dec(text, cyp):
+            st, cyp = alpha.index(cyp[0]), cyp[1:]
+            cod = text.translate(str.maketrans(alpha[st:] + alpha[:st], alpha))
+            # return cod[off:]+cod[:off] if not cyp else dec(cod[-1]+cod[:-1],cyp)
+            return cod if not cyp else dec(cod[:0] + cod[1:], cyp)
+
+        print(dec(cdd, cph))
 
 
 def main(br):
