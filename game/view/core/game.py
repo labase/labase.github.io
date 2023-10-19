@@ -8,6 +8,7 @@
 Changelog
 ---------
 .. versionadded::    23.10
+        🔨 fix extra, sorteio do cubo (19).
         ⛲ 🗃️ redireciona TOML (18 a).
         🧑‍🔬 Nome de Estação, Inicia TOML (18).
         ⛲ 🗃️ Inclui arquivos TOML (17).
@@ -45,7 +46,7 @@ import unittest
 from collections import namedtuple as ntp
 from typing import List
 
-VERSION = "version=23.10.18"
+VERSION = "version=23.10.19"
 FLARE_ = "https://imgur.com/gQgpUFg.gif"
 FLARE = "9CSpt5C"
 # noinspection SpellCheckingInspection
@@ -584,7 +585,7 @@ class Teclemmino:
                         ev.stopPropagation()
                         src_id = ev.data['text']
                         local = int(src_id.split('_')[-1])
-                        print(f"local -> {local}: {src_id}| índice -> {self.index}")
+                        LG.log(4, f"local -> {local}: {src_id}| índice -> {self.index}")
                         self.dropped(local)
 
                     def dropped(self, local):
@@ -592,7 +593,7 @@ class Teclemmino:
                         # o_local = swap.pecas[local].local
                         m, u = self, swap.pecas[local]
                         u.x, u.y, u.local, m.x, m.y, m.local = m.x, m.y, m.local, u.x, u.y, u.local
-                        print(f"índice, o outro -> {self.index} @ {self.local} <-> {u} @ {u.local}")
+                        LG.log(4, f"índice, o outro -> {self.index} @ {self.local} <-> {u} @ {u.local}")
                         swap.montou()
 
                     def certo(self):
@@ -630,7 +631,7 @@ class Teclemmino:
                 # self.weather.o = self.current_difficulty
                 self.diff.dif()
                 resultado = all([peca.certo() for peca in self.pecas])
-                print(resultado)
+                LG.log(4, resultado)
                 self.vai() if resultado else None
                 teclemmino.premiar(self.pr, vito, tit=self.tit) if resultado and self.pr >= 0 else None
                 return resultado
@@ -894,6 +895,7 @@ class Teclemmino:
                 self.url = kwargs['url']
                 self.foi = kwargs['foi']().vai if "foi" in kwargs else lambda *_: None
                 self.cnt = ''
+                self.do_vai = self._vai
 
             def load_from_url(self):
                 import urllib.request
@@ -907,17 +909,32 @@ class Teclemmino:
                 # LG.log(5, "Puzzle parse", nome, puz, *args)
                 # return puz.cena
 
-            def vai(self):
+            def _foi(self):
+                LG.log(8, "Extra._foi ⇒ ", asset, kwargs)
+                self.foi()
+
+            def _vai(self):
                 cnt = self.load_from_url()
-                LG.log(4, "Extra.vai ⇒ ", asset, kwargs, cnt)
+                LG.log(5, "Extra._vai ⇒ ", asset, kwargs)
                 extra.load_(str_io=str(cnt))
                 self.foi()
+
+            def vai(self):
+                self.do_vai()
+                LG.log(5, "Extra.vai ⇒ ", asset, kwargs)
+                self.do_vai = self._foi
+
         url = kwargs['url']  # .replace("@", "_")
 
         # cnt = load_from_url(url)
-        self.assets[asset] = result = Extra(nome=asset)
-        LG.log(8, "extra ⇒ ", asset, kwargs, url, result.foi, result.foi())
-        result.vai() if "auto" in kwargs else None
+        if asset not in self.assets:
+            self.assets[asset] = result = Extra(nome=asset)
+            LG.log(5, "extra ⇒ ", asset, kwargs, url, result.foi, result.foi())
+            result.vai() if "auto" in kwargs else None
+        else:
+            result = self.assets[asset]
+            LG.log(5, "extra ⇒ ", asset, result, url, result.foi, result.foi())
+            result.foi()
         return result
 
         # self.load_(str_io=str(cnt))

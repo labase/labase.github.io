@@ -382,8 +382,9 @@ class Cubos:
         Cubo.CUBOS = self
         # self.el = Elemento(IMGUR.format(FUNDO), w=300, h=100, cena=cena, style={"color": "white"})
         self.cubos = cubos = [Cubo(inx=inx, faces=cenas) for inx in range(nx * ny)]
-        scrambler = list(range(23)) * (nx*ny//23 + 1)
-        scramble = zip(cubos, sample(scrambler, nx*ny))
+        # scrambler = list(range(23)) * (nx*ny//23 + 1)
+        scrambler = [ix % 23 for ix, _ in enumerate(cubos)]
+        scramble = zip(cubos, sample(scrambler, len(cubos)))
         # [cube.roll(randint(0, 23)) for cube in cubos] * 2
         [cube.roll(face) for cube, face in scramble]
         # [cube.roll(0) for cube in cubos]
