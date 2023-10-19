@@ -20,6 +20,8 @@ YELLOW = "https://imgur.com/dzM9NtT.jpg"
 WHITE = "https://imgur.com/khohhCw.jpg"
 RED = "https://imgur.com/IMcwSAq.jpg"
 RO1 = "https://imgur.com/IMcwSAq.jpg"
+RBO = "https://raw.githubusercontent.com/kwarwp/radia/main/kristen/main.py"
+
 [folha_CN]
 # Estes valores recortam as imagens acimas para fazer um conjunto de cenas
 ANICONS = [5, 4]
@@ -120,10 +122,53 @@ index = [4,6]
 [l_RO1]
 img =".i.CN._RO1.0"
 index = [4,6]
+local = [['Amundsen–Scott - Norte', 'Amundsen–Scott - Leste', 'Amundsen–Scott - Sul', 'Amundsen–Scott - Oeste'] ,
+['Arctowski  - Norte', 'Arctowski  - Leste', 'Arctowski  - Sul', 'Arctowski  - Oeste'] ,
+['Arrival Heights  - Norte', 'Arrival Heights  - Leste', 'Arrival Heights  - Sul', 'Arrival Heights  - Oeste'] ,
+['Artigas  - Norte', 'Artigas  - Leste', 'Artigas  - Sul', 'Artigas  - Oeste'] ,
+['Arturo Prat  - Norte', 'Arturo Prat  - Leste', 'Arturo Prat  - Sul', 'Arturo Prat  - Oeste'] ,
+['Belgrano II  - Norte', 'Belgrano II  - Leste', 'Belgrano II  - Sul', 'Belgrano II  - Oeste'] ,
+['Bellingshausen  - Norte', 'Bellingshausen  - Leste', 'Bellingshausen  - Sul', 'Bellingshausen  - Oeste'] ,
+['Bharati  - Norte', 'Bharati  - Leste', 'Bharati  - Sul', 'Bharati  - Oeste'] ,
+['Carlini  - Norte', 'Carlini  - Leste', 'Carlini  - Sul', 'Carlini  - Oeste'] ,
+['Casey  - Norte', 'Casey  - Leste', 'Casey  - Sul', 'Casey  - Oeste'] ,
+['Concordia  - Norte', 'Concordia  - Leste', 'Concordia  - Sul', 'Concordia  - Oeste'] ,
+['Davis  - Norte', 'Davis  - Leste', 'Davis  - Sul', 'Davis  - Oeste'] ,
+["Dumont d'Urville  - Norte", "Dumont d'Urville  - Leste", "Dumont d'Urville  - Sul", "Dumont d'Urville  - Oeste"] ,
+['Eco-Nelson  - Norte', 'Eco-Nelson  - Leste', 'Eco-Nelson  - Sul', 'Eco-Nelson  - Oeste'] ,
+['Villa Las Estrellas  - Norte', 'Villa Las Estrellas  - Leste', 'Villa Las Estrellas  - Sul', 'Villa Las Estrellas  - Oeste'] ,
+['Escudero  - Norte', 'Escudero  - Leste', 'Escudero  - Sul', 'Escudero  - Oeste'] ,
+['Esperanza  - Norte', 'Esperanza  - Leste', 'Esperanza  - Sul', 'Esperanza  - Oeste'] ,
+['GARS  - Norte', 'GARS  - Leste', 'GARS  - Sul', 'GARS  - Oeste'] ,
+["General Bernardo O'Higgins  - Norte", "General Bernardo O'Higgins  - Leste", "General Bernardo O'Higgins  - Sul", "General Bernardo O'Higgins  - Oeste"] ,
+['Great Wall  - Norte', 'Great Wall  - Leste', 'Great Wall  - Sul', 'Great Wall  - Oeste'] ,
+['Jang Bogo  - Norte', 'Jang Bogo  - Leste', 'Jang Bogo  - Sul', 'Jang Bogo  - Oeste'] ,
+['Halley  - Norte', 'Halley  - Leste', 'Halley  - Sul', 'Halley  - Oeste'] ,
+['King Sejong  - Norte', 'King Sejong  - Leste', 'King Sejong  - Sul', 'King Sejong  - Oeste'] ,
+['Maitri  - Norte', 'Maitri  - Leste', 'Maitri  - Sul', 'Maitri  - Oeste'] ,
+['Marambio  - Norte', 'Marambio  - Leste', 'Marambio  - Sul', 'Marambio  - Oeste'] ,
+['Mawson  - Norte', 'Mawson  - Leste', 'Mawson  - Sul', 'Mawson  - Oeste'] ,
+['McMurdo  - Norte', 'McMurdo  - Leste', 'McMurdo  - Sul', 'McMurdo  - Oeste'] ,
+['Mirny  - Norte', 'Mirny  - Leste', 'Mirny  - Sul', 'Mirny  - Oeste'] ,
+['Neumayer III  - Norte', 'Neumayer III  - Leste', 'Neumayer III  - Sul', 'Neumayer III  - Oeste'] ,
+['Novolazarevskaya  - Norte', 'Novolazarevskaya  - Leste', 'Novolazarevskaya  - Sul', 'Novolazarevskaya  - Oeste'] ,
+['Orcadas  - Norte', 'Orcadas  - Leste', 'Orcadas  - Sul', 'Orcadas  - Oeste'] ,
+['Palmer  - Norte', 'Palmer  - Leste', 'Palmer  - Sul', 'Palmer  - Oeste'] ,
+['Progress  - Norte', 'Progress  - Leste', 'Progress  - Sul', 'Progress  - Oeste'] ,
+['Rothera[14]  - Norte', 'Rothera[14]  - Leste', 'Rothera[14]  - Sul', 'Rothera[14]  - Oeste'] ,
+['San Martín  - Norte', 'San Martín  - Leste', 'San Martín  - Sul', 'San Martín  - Oeste'] ,
+['SANAE IV  - Norte', 'SANAE IV  - Leste', 'SANAE IV  - Sul', 'SANAE IV  - Oeste'] ,
+['Scott Base  - Norte', 'Scott Base  - Leste', 'Scott Base  - Sul', 'Scott Base  - Oeste'] ,
+['Showa  - Norte', 'Showa  - Leste', 'Showa  - Sul', 'Showa  - Oeste'] ,
+['Troll  - Norte', 'Troll  - Leste', 'Troll  - Sul', 'Troll  - Oeste'] ,
+['Vernadsky  - Norte', 'Vernadsky  - Leste', 'Vernadsky  - Sul', 'Vernadsky  - Oeste'] ,
+['Vostok  - Norte', 'Vostok  - Leste', 'Vostok  - Sul', 'Vostok  - Oeste'] ,
+['Zhongshan  - Norte', 'Zhongshan  - Leste', 'Zhongshan  - Sul', 'Zhongshan  - Oeste'] ,]
 
 [l_ROOT]
 img =".i.CN._LANDER.0"
 index = [1,1]
+local = [["Cmd. Ferraz - Norte", "Cmd. Ferraz - Leste", "Cmd. Ferraz - Sul", "Cmd. Ferraz - Oeste"]]
 #
 #[s_ROOT0]
 #img =".i.CN._LANDER.0"
@@ -172,75 +217,83 @@ Wb = {local=[0,0], tit="Aqui teremos o lançamento de um balão", texto="lançar
 Be = {local=[2,2], tit="Aqui observamos pinguins", texto="Espiar pinguins!", foi=".i.peng"}
 Bs = {local=[3,3], tit="Aqui observamos focas", texto="Espiar focas!", foi=".i.seals"}
 
-[mapa_RO1]
-p_bote = {img=".i.PUZZLE.AdvBo0.4.4", pr=1, foi=".i.ROOTzz0.0.0" , texto = "Conseguiu embarcar no bote!", cena=".i.CN._RO1.4", dim=[4,4]}
-p_esta = {img=".i.PUZZLE.AdvSta.4.4", pr=11, foi=".i.ROOTzz0.0.0" , texto = "Chegou na Estação!", cena=".i.CN._RO1.6", dim=[4,4]}
-p_mar = {img=".i.PUZZLE.KpaMar.4.4", pr=13, foi=".i.ROOTzz0.0.0" , texto = "Atravessou o mar!", cena=".i.CN._RO1.14", dim=[6,5]}
-p_mon = {img=".i.PUZZLE.KpaMon.4.4", pr=12, foi=".i.ROOTzz0.0.0" , texto = "Observou uma montanha!", cena=".i.CN._RO1.8", dim=[5,4]}
-e_fer = {img="https://imgur.com/hOgrOJ5.png", foi=".i.ROOTzz0.0.0", put=1, x=200, y=200, tit="px",texto="Você encontrou um peixe!", cena=".i.RO1zz1zz3.1.3"}
-
-Jb = {local=[3,0], tit="Vamos desembarcar do navio", texto="Desembarcar!", foi=".i.bote"}
-Je = {local=[4,1], tit="Vamos até a estação", texto="Estação!", foi=".i.esta"}
-# No texto podemos usar entre chaves a formulação de uma pergunta. O tit é a pergunta, A, B etc são as opções e Z é a resposta certa
-kt = {local=[0,1], tit="Converse comigo!", texto= {tit="Você sabia que a temperatura aqui chega a", A="40º", B="-150º", C="-90º", Z="C" }, foi=".i.esta"}
-# Em vez do formato xx = {local=... pode usar esta notação entre colchetes. cada um dos termos vai aparecer em uma linha nova
-[mapa_RO1.ko]
-local=[1,2]
-foi=".i.mar"
-tit="Vamos falar sobre Clima!"
-# Esta maneira facilita a criação de perguntas onde a pergunta e as opções aparecem em linha diferentes
-[mapa_RO1.ko.texto]
-tit="Algo que está ameaçando a Antártida é a Ebulição global. Sabe, é"
-A="O processo acelerado do aquecimento global."
-B="A mudança do estado líquido para o gasoso."
-C="O processo de condensação de vapores no ar."
-Z="A"
-[mapa_RO1.km]
-local=[2,3]
-foi=".i.mon"
-tit="Vamos falar sobre a Ebulição Global!"
-[mapa_RO1.km.texto]
-tit="A Ebulição global vai afetar a Antártida. Vai terminar por"
-A="Estimular o turismo predatório."
-B="Descongelar as Geleiras."
-C="Acelerar o crescimento de novas espécies."
-Z="B"
-# Este é mapa principal onde o jogo inicia. Podemos colocar aqui uma carta para cada roteiro disponível
+#[mapa_RO1]
+#p_bote = {img=".i.PUZZLE.AdvBo0.4.4", pr=1, foi=".i.ROOTzz0.0.0" , texto = "Conseguiu embarcar no bote!", cena=".i.CN._RO1.4", dim=[4,4]}
+#p_esta = {img=".i.PUZZLE.AdvSta.4.4", pr=11, foi=".i.ROOTzz0.0.0" , texto = "Chegou na Estação!", cena=".i.CN._RO1.6", dim=[4,4]}
+#p_mar = {img=".i.PUZZLE.KpaMar.4.4", pr=13, foi=".i.ROOTzz0.0.0" , texto = "Atravessou o mar!", cena=".i.CN._RO1.14", dim=[6,5]}
+#p_mon = {img=".i.PUZZLE.KpaMon.4.4", pr=12, foi=".i.ROOTzz0.0.0" , texto = "Observou uma montanha!", cena=".i.CN._RO1.8", dim=[5,4]}
+#e_fer = {img="https://imgur.com/hOgrOJ5.png", foi=".i.ROOTzz0.0.0", put=1, x=200, y=200, tit="px",texto="Você encontrou um peixe!", cena=".i.RO1zz1zz3.1.3"}
+#
+#Jb = {local=[3,0], tit="Vamos desembarcar do navio", texto="Desembarcar!", foi=".i.bote"}
+#Je = {local=[4,1], tit="Vamos até a estação", texto="Estação!", foi=".i.esta"}
+## No texto podemos usar entre chaves a formulação de uma pergunta. O tit é a pergunta, A, B etc são as opções e Z é a resposta certa
+#kt = {local=[0,1], tit="Converse comigo!", texto= {tit="Você sabia que a temperatura aqui chega a", A="40º", B="-150º", C="-90º", Z="C" }, foi=".i.esta"}
+## Em vez do formato xx = {local=... pode usar esta notação entre colchetes. cada um dos termos vai aparecer em uma linha nova
+#[mapa_RO1.ko]
+#local=[1,2]
+#foi=".i.mar"
+#tit="Vamos falar sobre Clima!"
+## Esta maneira facilita a criação de perguntas onde a pergunta e as opções aparecem em linha diferentes
+#[mapa_RO1.ko.texto]
+#tit="Algo que está ameaçando a Antártida é a Ebulição global. Sabe, é"
+#A="O processo acelerado do aquecimento global."
+#B="A mudança do estado líquido para o gasoso."
+#C="O processo de condensação de vapores no ar."
+#Z="A"
+#[mapa_RO1.km]
+#local=[2,3]
+#foi=".i.mon"
+#tit="Vamos falar sobre a Ebulição Global!"
+#[mapa_RO1.km.texto]
+#tit="A Ebulição global vai afetar a Antártida. Vai terminar por"
+#A="Estimular o turismo predatório."
+#B="Descongelar as Geleiras."
+#C="Acelerar o crescimento de novas espécies."
+#Z="B"
+## Este é mapa principal onde o jogo inicia. Podemos colocar aqui uma carta para cada roteiro disponível
+[v_ACT]
+rbo = "https://activufrj.nce.ufrj.br/raw/wiki/SuPyGirls/Roteiro_TOML_Bioma_1"
+RBO = "https://raw.githubusercontent.com/kwarwp/avantar/main/root/main.py"
+#RBO = "https://cdn.jsdelivr.net/gh/kwarwp/radia@latest/kristen/main.py"
 [mapa_ROOT]
-u_pint = {img=".i.PUZZLE.SuprCb.4.4", pr=1, foi=".i.ROOTzz0.0.0" , texto = "Conseguiu embarcar no bote!", cena=".i.CN._RO1.4", dim=[5,3]}
+u_pint = {img=".i.PUZZLE.SuprCb.4.4", pr=1, foi=".i.ROOTzz0.0.0" , texto = "Conseguiu embarcar no bote!", cena=".i.CN._RO1.4", dim=[2,1]}
 #r_caix = {img=".i.PUZZLE.SuprCb.4.4", pr=1, foi=".i.ROOTzz0.0.0" , texto = "Obteve itens!", cena=".i.RO1zz7zz1.0.0", dim=[5,3]}
 r_caix = {img="", pr=1, foi=".i.ROOTzz0.0.0" , texto = "Obteve itens!", cena=".i.CN._RO1.5", dif=0.04, dim=[5,3]}
-
-Jb = {local=[0,0], tit="Fuja do Tissunami!", texto="Missão Climática", foi=".i.RO1zz0zz1.0.0"}
-Xb = {local=[0,0], img=".i.Missao._AVENTURA.1", x=500, tit="Explorar!", texto="Missão de Exploração", foi=".i.BIOzz0zz1.0.0"}
-Xe = {local=[0,0], x=900, tit="Explorando a Antártida!", texto="Missão de Exploração Antártica", foi=".i.YELzz0zz1.0.0"}
-Ss = {local=[0,1], x=50, tit="Suprimentos!", texto="Missão de Suprimentos", foi=".i.YELzz0zz1.0.0"}
-Cs = {local=[0,1], x=400, tit="Busca por caixas perdidas!", texto="Buscas por caixas", foi=".i.caix"}
-Es = {local=[0,1], x=800, tit="Encontro com outros exploradores!", texto="Buscas por exploradores", foi=".i.RO1zz7zz1.0.0"}
-#Sc = {local=[0,1], x=1100, tit="Busca por suprimentos!", texto="Buscas suprmentos", foi=".i.pint"}
-
-Bc = {local=[0,2], tit="Bioma", texto="Bioma", foi=".i.pint"}
-Ac = {local=[0,2], tit="Atmosfera", texto="Atmosfera", foi=".i.pint"}
-Cc = {local=[0,2], tit="Clima", texto="Clima", foi=".i.pint"}
-Kc = {local=[0,2], tit="Kaique", texto="Kaique", foi=".i.pint"}
-
-Fc = {local=[0,3], tit="Criosfera", texto="Criosfera", foi=".i.pint"}
-Gc = {local=[0,3], tit="Geodinâmica", texto="Geodinâmica", foi=".i.pint"}
-Pc = {local=[0,3], tit="Perigo", texto="Perigo", foi=".i.pint"}
-Dc = {local=[0,3], tit="Desastre", texto="Desastre", foi=".i.pint"}
-#Ep = {local=[0,1], img="https://imgur.com/sxAm5LA.png", y=400, tit="Busca por suprimentos!", texto="Buscas suprmentos", foi=".i.pint"}
-Ep = {local=[0,1], img=".i.Missao._MAYSA.0", y=400, tit="Busca por suprimentos!", texto="Buscas suprmentos", foi=".i.pint"}
+x_actbio = {url=".i.ACT.RBO.0.0", auto=1, foi=".i.RO1zz0zz1.0.0"}
+#x_actbio = {url=".i.PUZZLE.SuprCb.4.4"}
+#Jb = {local=[0,0], tit="Fuja do Tissunami!", texto="Missão Climática", foi=".i.RO1zz0zz1.0.0"}
+#Xb = {local=[0,0], img=".i.Missao._AVENTURA.1", x=500, tit="Explorar!", texto="Missão de Exploração", foi=".i.BIOzz0zz1.0.0"}
+#Xe = {local=[0,0], x=900, tit="Explorando a Antártida!", texto="Missão de Exploração Antártica", foi=".i.actbio"}
+#Ss = {local=[0,1], x=50, tit="Suprimentos!", texto="Missão de Suprimentos", foi=".i.YELzz0zz1.0.0"}
+#Cs = {local=[0,1], x=400, tit="Busca por caixas perdidas!", texto="Buscas por caixas", foi=".i.caix"}
+#Es = {local=[0,1], x=800, tit="Encontro com outros exploradores!", texto="Buscas por exploradores", foi=".i.RO1zz7zz1.0.0"}
+##Sc = {local=[0,1], x=1100, tit="Busca por suprimentos!", texto="Buscas suprmentos", foi=".i.pint"}
+#
+#Bc = {local=[0,2], tit="Bioma", texto="Bioma", foi=".i.pint"}
+#Ac = {local=[0,2], tit="Atmosfera", texto="Atmosfera", foi=".i.pint"}
+#Cc = {local=[0,2], tit="Clima", texto="Clima", foi=".i.pint"}
+#Kc = {local=[0,2], tit="Kaique", texto="Kaique", foi=".i.pint"}
 
 
 
-[mapa_RO1.kf]
-local=[7,1]
-img=".i.Missao._FIGURAS.0"
-tit="Vamos falar sobre Clima!"
-foi=".i.YELzz1zz1.0.0"
-[mapa_RO1.kf.texto]
-tit="Estou preocupado com o descongelamento das geleiras. O efeito no planeta Terra será "
-A="Emissão de gases"
-B="Elevação do nível do mar"
-C="Congelamento da camada de ozônio"
-Z="B"
+
+#[mapa_RO1.kf]
+#local=[7,1]
+#img=".i.Missao._FIGURAS.0"
+#tit="Vamos falar sobre Clima!"
+#foi=".i.YELzz1zz1.0.0"
+#[mapa_RO1.kf.texto]
+#tit="Estou preocupado com o descongelamento das geleiras. O efeito no planeta Terra será "
+#A="Emissão de gases"
+#B="Elevação do nível do mar"
+#C="Congelamento da camada de ozônio"
+#Z="B"
+# XXX@@@ --> missao yy autor gabi
+# XXX@@@ --> missao yy autor gabi FIM
+#[mapa0_ROOT]
+#Fc = {local=[0,3], tit="Criosfera", texto="Criosfera", foi=".i.pint"}
+#Gc = {local=[0,3], tit="Geodinâmica", texto="Geodinâmica", foi=".i.pint"}
+#Pc = {local=[0,3], tit="Perigo", texto="Perigo", foi=".i.pint"}
+#Dc = {local=[0,3], tit="Desastre", texto="Desastre", foi=".i.pint"}
+##Ep = {local=[0,1], img="https://imgur.com/sxAm5LA.png", y=400, tit="Busca por suprimentos!", texto="Buscas suprmentos", foi=".i.pint"}
+#Ep = {local=[0,1], img=".i.Missao._MAYSA.0", y=400, tit="Busca por suprimentos!", texto="Buscas suprmentos", foi=".i.pint"}
