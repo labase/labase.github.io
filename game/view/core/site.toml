@@ -1,0 +1,33 @@
+_="""Página do site do projeto Avantar.
+
+.. codeauthor:: Carlo Oliveira <carlo@nce.ufrj.br>
+
+Changelog
+---------
+.. versionadded::    23.11
+        🌱 Montagem inicial (06).
+"""
+#   **Open Source Notification:** This file is part of open source program **AVANTAR - LABASE**
+#   **Copyright © 2023  Carlo Oliveira** <carlo@nce.ufrj.br>,
+#   **SPDX-License-Identifier:** `GNU General Public License v3.0 or later <http://is.gd/3Udt>`_.
+#   `Labase <http://labase.selfip.org/>`_ - `NCE <https://portal.nce.ufrj.br>`_ - `UFRJ <https://ufrj.br/>`_.
+
+AMAP_0 = {BD=".body",H1=".h1", H4=".h4", DV=".div",AK=".a", IM=".img", SP=".span"}
+[ROOT]
+_1 = {MH="main-header", HR="hero", HB="hero-body",CT="container"}
+_2 = {CI="card-image", FG="image is-4by3", HB="hero-body",CT="container"}
+_3 = {CH="card-content-header", MC="main-content"} #, CARD=".CARD"}
+[AMACRO.CARD]
+class="column is-4"
+[AMACRO.CARD.CI_0000.FG_0000.AK_0000]
+href="/game/home.html"
+IM_0000={style="opacity:1; filter:brightness(100%)", alt="A V A N T A R 🐧"}
+[AMACRO.CARD.CH_0000]
+H4_0000={class="title is-4", AK_0001={href="", text="Uma Viagem F'Antártica"}}
+SP_0000={text="Uma Aventura Virtual Descobrindo a Ciência no Polo Sul"}
+[BD_ROOT.MH_Top.HR_Top.HB_Top.CT_Top.DV_PanelHeader]
+class="has-text-centered"
+H1_PanelTitle={class="title is-1 is-spaced has-background-info", text="A V A N T A R 🐧"}
+H1_PanelSubtitle={class="subtitle is-3", text="A V A N T A R 🐧"}
+[BD_ROOT.MC_Core.CT_Core.DV_Panel]
+class="columns is-multiline is-centered has-text-centered"
