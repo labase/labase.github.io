@@ -51,13 +51,17 @@ class Main:
             return getattr(self.br, tg) if hasattr(self.br, tg) else lambda **kw: self.nop(tag_=tg, **kw)
 
         self.a_map = {alias: function(tag) for alias, tag in kwargs.items()}
+        LG.log(4, "self.a_map", self.a_map)
 
     def parse_(self, tag_, **kwargs):
         _ = self.br
 
-        _tag, *_id = tag_.split("_")
+        def spl(a_atg):
+            return tag_.split("_")
+
+        _tag, *_id = spl(tag_)
         if _tag in self.a_map and kwargs:
-            return self.a_map[_tag](id=tag_, text={tg: self.parse_(tg, **kw) for tg, kw in kwargs.items() if
+            return self.a_map[_tag](id=tag_, text={spl(tg)[0]: self.parse_(tg, **kw) for tg, kw in kwargs.items() if
                                                    isinstance(kw, dict)})
 
             # self.a_map[_tag](id=tag_)
